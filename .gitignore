@@ -1,0 +1,7 @@
+# MAIN
+.vscode/
+.environment/
+# DJANGO
+*.pyc
+__pycache__/
+db.sqlite3
