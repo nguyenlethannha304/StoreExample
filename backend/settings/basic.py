@@ -37,7 +37,9 @@ DJANGO_APP = [
     'django.contrib.staticfiles',
 ]
 THIRD_PARTY_APPS = []
-PROJECT_APPS = []
+PROJECT_APPS = [
+    'apps.users.apps.UsersConfig'
+]
 INSTALLED_APPS = DJANGO_APP + THIRD_PARTY_APPS + PROJECT_APPS
 
 MIDDLEWARE = [
@@ -117,3 +119,10 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# MY CUSTOM
+AUTH_USER_MODEL = 'users.CustomUser'
+AUTHENTICATION_BACKENDS = [
+    'apps.users.custom_backend.PhoneAuthenticateBackend',
+    'apps.users.custom_backend.EmailAuthenticateBackend',
+]
