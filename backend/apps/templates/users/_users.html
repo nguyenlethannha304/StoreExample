@@ -1,0 +1,13 @@
+{% extends '_base.html' %}
+
+{% block super_css %}
+{% if form %}
+{% for css in form.media.render_css %}{{css}}{% endfor %}
+{% endif %}
+{% endblock super_css %}
+
+{% block super_js %}
+{% if form %}
+{% for js in form.media.render_js %}{{js}}{% endfor %}
+{% endif %}
+{% endblock super_js %}

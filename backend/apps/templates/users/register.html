@@ -1,0 +1,28 @@
+{% extends 'users/_users.html' %}
+
+{% block main %}
+    <form method='post'>
+        <h2>Sign In</h2>
+        {% csrf_token %}
+        <div class="email">
+            {{form.email.label_tag}}
+            {{form.email}}
+            {% if form.email.errors %}
+                {% for error in frm.email.errors %}
+                    <div class="error">{{error}}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="password">
+            {{form.password1.label_tag}}
+            {{form.password1}}
+        </div>
+        <div class="password">
+            {{form.password2.label_tag}}
+            {{form.password2}}
+        </div>
+        <div class="form-bottom">
+            <button type="submit">Register</button>
+        </div>
+    </form>
+{% endblock main %}

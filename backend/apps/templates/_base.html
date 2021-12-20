@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CSS Base-->
+    <link rel="stylesheet" type="text/css" href="{% static "css/_base.css" %}">
+    <!-- CSS added -->
+    {% block super_css %}{% endblock super_css %}
+    {% block css %}{% endblock css %}
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'users:logout' %}">Log out</a>
+            {% else %}
+            <a href="{% url 'users:login' %}">Log in</a>
+            {% endif %}
+        </nav>
+    </header>
+    <!-- Main -->
+    <main>
+        {% block main %}{% endblock main %}
+    </main>
+    <!-- Footer -->
+    <footer>
+    </footer>
+    <!--Javascript Base-->
+    <script src="{% static 'js/_base.js' %}"></script>
+    {% block super_js %}{% endblock super_js %}
+    {% block js %}{% endblock js %}
+    <!-- Javascript Added -->
+</body>
+
+</html>
