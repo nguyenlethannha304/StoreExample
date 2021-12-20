@@ -7,6 +7,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import PermissionsMixin, UserManager
 from ..utils.tools import validate_phonenumber
+from .address_name import CITY_NAME_CHOICES, PROVINCE_NAME_CHOICES
 # Create your models here.
 
 
@@ -28,14 +29,14 @@ class CustomUserManager(UserManager):
         extra_fields.setdefault('is_superuser', False)
         return self._create_user(username, password, **extra_fields)
 
-    def create_superuser(self, username, password=None, **extra_fields):
+    def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True')
-        return self._create_user(username, password, **extra_fields)
+        return self._create_user(email, password, **extra_fields)
 
     def create(self):
         raise ImproperlyConfigured(
@@ -45,9 +46,10 @@ class CustomUserManager(UserManager):
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
-    email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=15, unique=True,
-                             blank=True, validators=[validate_phonenumber])
+    email = models.EmailField(unique=True, error_messages={
+                              'unique': 'This email is already registed'}, db_index=True)
+    phone = models.CharField(max_length=12, unique=True, error_messages={'unique': 'This phone is already registed'},
+                             blank=True, validators=[validate_phonenumber], db_index=True, null=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
@@ -61,3 +63,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+
+class Address(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    address = models.CharField(max_length=255, blank=True)
+    city = models.CharField(
+        max_length=100, choices=CITY_NAME_CHOICES, blank=True)
+    province = models.CharField(
+        max_length=100, choices=PROVINCE_NAME_CHOICES, blank=True)
+    default_address = models.BooleanField()
