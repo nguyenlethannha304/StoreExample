@@ -1,34 +1,39 @@
-from django.contrib import auth
-from django.test import TestCase
-from django.test.client import FakePayload, RequestFactory
-from django.apps import apps
+from django.contrib.auth import get_user_model
+from django.test import TestCase, tag
+from django.test.client import RequestFactory
 from django.contrib.auth import authenticate
-UserModel = apps.get_model('users', 'CustomUser')
 
 
 def setUpModule():
+    global UserModel
+    UserModel = get_user_model()
+    # Create user for authentication tests
     user = UserModel.objects.create_user('normal_user@gmail.com', '12345678')
     user.phone = '+979311359'
     user.save()
+    # Request object for authenticate function's parameters
     global fake_request
     fake_request = RequestFactory()
 
 
 def tearDownModule():
-    UserModel.objects.get(email='normal_user@gmail.com').delete()
+    UserModel.objects.all().delete()
 
 
+@tag('user', 'user_backend')
 class TestPhoneAuthenticateBackend(TestCase):
     def test_authenticate(self):
         # Use phone number for authentication
-        user = authenticate(
-            fake_request, phone='+979311359', password='12345678')
-        self.assertTrue(user)
+        credentials = {'phone': '+979311359', 'password': '12345678'}
+        user = authenticate(fake_request, **credentials)
+        self.assertIsNotNone(user)
 
 
+@tag('user', 'user_backend')
 class TestEmailAuthenticateBackend(TestCase):
     def test_authenticate(self):
         # Use email for authentication
-        user = authenticate(
-            fake_request, email='normal_user@gmail.com', password='12345678')
-        self.assertTrue(user)
+        credentials = {'email': 'normal_user@gmail.com',
+                       'password': '12345678'}
+        user = authenticate(fake_request, **credentials)
+        self.assertIsNotNone(user)

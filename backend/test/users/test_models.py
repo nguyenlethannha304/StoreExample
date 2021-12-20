@@ -1,10 +1,14 @@
 from uuid import uuid4
 from django.apps import apps
-from django.test import TestCase
-
-UserModel = apps.get_model('users', 'CustomUser')
+from django.test import TestCase, tag
 
 
+def setUpModule():
+    global UserModel
+    UserModel = apps.get_model('users', ' CustomUser')
+
+
+@tag('user', 'user_model')
 class TestCustomUserModel(TestCase):
     def test_id_field(self):
         self.assertTrue(UserModel.id.field.primary_key)
@@ -21,6 +25,7 @@ class TestCustomUserModel(TestCase):
         self.assertFalse(UserModel.is_staff.field.default)
 
 
+@tag('user', 'user_model')
 class TestCustomUserManager(TestCase):
     def test_create_user(self):
         normal_user = UserModel.objects.create_user(
