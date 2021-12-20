@@ -8,9 +8,8 @@ from apps.users.forms import *
 
 
 def setUpModule():
-    global UserModel, user_app_name
+    global UserModel
     UserModel = get_user_model()
-    user_app_name = 'users'
     # Create user for test
     normal_user = UserModel.objects.create_user(
         'normal_user@gmail.com', '12345678')
@@ -24,7 +23,7 @@ def tearDownModule():
 class TestLoginView(TestCase):
     login_username = 'normal_user@gmail.com'
     login_password = '12345678'
-    login_url = reverse('%s:login' % (user_app_name))
+    login_url = reverse('users:login')
 
     def test_get_method(self):
         response = self.client.get(self.login_url)
@@ -50,7 +49,7 @@ class TestLoginView(TestCase):
 class TestUserCreationView(TestCase):
     new_username = 'new_user@gmail.com'
     new_password = '987654321'
-    register_url = reverse('%s:register' % (user_app_name))
+    register_url = reverse('users:register')
 
     def test_get_method(self):
         response = self.client.get(self.register_url)
@@ -71,7 +70,7 @@ class TestPasswordChangeView(TestCase):
     user_email = 'normal_user@gmail.com'
     old_password = '12345678'
     new_password = 'new_password'
-    change_password_url = reverse('%s:change_password' % (user_app_name))
+    change_password_url = reverse('users:change_password')
 
     @classmethod
     def setUpClass(cls):
@@ -95,17 +94,17 @@ class TestPasswordChangeView(TestCase):
             user_with_new_password.check_password(self.new_password))
 
 
-@tag('user', 'user_view')
-class TestProfileChangeView(TestCase):
-    user_email = 'normal_user@gmail.com'
-    password = '12345678'
-    profile_url = reverse('%s:profile' % (user_app_name))
+# @tag('user', 'user_view')
+# class TestProfileChangeView(TestCase):
+#     user_email = 'normal_user@gmail.com'
+#     password = '12345678'
+#     profile_url = reverse('users:profile')
 
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls.login_client = Client()
-        cls.login_client.login(email=cls.user_email, password=cls.password)
+#     @classmethod
+#     def setUpClass(cls):
+#         super().setUpClass()
+#         cls.login_client = Client()
+#         cls.login_client.login(email=cls.user_email, password=cls.password)
 
-    def test_get_method(self):
-        response = self.login_client.get(self.profile_url)
+#     def test_get_method(self):
+#         response = self.login_client.get(self.profile_url)

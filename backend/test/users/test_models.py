@@ -1,11 +1,12 @@
 from uuid import uuid4
 from django.apps import apps
 from django.test import TestCase, tag
+from django.contrib.auth import get_user_model
 
 
 def setUpModule():
     global UserModel
-    UserModel = apps.get_model('users', ' CustomUser')
+    UserModel = get_user_model()
 
 
 @tag('user', 'user_model')
