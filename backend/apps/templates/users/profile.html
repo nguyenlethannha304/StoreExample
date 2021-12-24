@@ -1,0 +1,50 @@
+{% extends 'users/_users.html' %}
+
+{% block main %}
+    <form id='id_profile_form' method='post'>
+
+        <div class="phone">
+            {{form.phone.label_tag}}
+            {{form.phone}}
+            {% if form.phone.errors %}
+                {% for error in form.phone.errors %}
+                    <div class="error">{{error}}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="address">
+            {{form.address.label_tag}}
+            {{form.address}}
+            {% if form.address.errors %}
+                {% for error in form.address.errors %}
+                    <div class="error">{{error}}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="city">
+            {{form.city.label_tag}}
+            {{form.city}}
+            {% if form.city.errors %}
+                {% for error in form.city.errors %}
+                    <div class="error">{{error}}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="province">
+            {{form.province.label_tag}}
+            {{form.province}}
+            {% if form.province.errors %}
+                {% for error in form.province.errors %}
+                    <div class="error">{{error}}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="form-bottom">
+            <button type='submit'>Save</button>
+        </div>
+    </form>
+{% endblock main %}

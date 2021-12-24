@@ -1,16 +1,12 @@
-let getChildrenByClass = (node, class_name) => {
-    class_name = '.' + class_name
-    return node.querySelectorAll(class_name)
-}
 // ELEMENT FUNCTION
-var createNode = (tagName, className, content = None) => {
+let createNode = (tagName, className, content = None) => {
     node = document.createElement(tagName)
     node.classList.add(className)
     if (content) { node.innerText = content }
     return node
 }
 // BASIC FORM FUNCTION
-var validField = (field, message = null) => {
+let validField = (field, message = null) => {
     if (field.classList.contains('invalid')) {
         field.classList.remove('invalid');
         removeErrorMessage(field)
@@ -21,7 +17,7 @@ var validField = (field, message = null) => {
     }
     return true
 }
-var invalidField = (field, message) => {
+let invalidField = (field, message) => {
     if (field.classList.contains('valid')) {
         field.classList.remove('valid');
         removeSuccessMessage(field)
@@ -32,15 +28,26 @@ var invalidField = (field, message) => {
 }
 let createMessage = (field, message, class_name) => {
     let parent = field.parentNode
-    if (getChildrenByClass(parent, class_name).length) { return }
-    else {
-        let child_with_message = createNode('p', class_name, message)
-        parent.appendChild(child_with_message)
+    let childrenMess = parent.querySelectorAll(`.${class_name}`)
+    let created = false
+    // Check if chilMessage existed
+    if (childrenMess != []) {
+        for (child of childrenMess) {
+            if (child.innerText == message) {
+                created = true
+                break
+            }
+        }
+    }
+    // If not create childMess
+    if (created == false) {
+        let childWithMess = createNode('p', class_name, message)
+        parent.appendChild(childWithMess)
     }
 }
 let removeMessage = (field, class_name) => {
     let parent = field.parentNode
-    let children = getChildrenByClass(parent, class_name)
+    let children = parent.querySelectorAll(`.${class_name}`)
     for (child of children) {
         parent.removeChild(child)
     }
@@ -59,7 +66,7 @@ let removeErrorMessage = (field) => {
 }
 // CSS FUNCTION
 const CSS_PROPERTY_VALUE_PATTERN = /([0-9.]*)(.*)/ //Get digits and everything followed
-var getCssValue = (element, property, getNumber = true) => {
+let getCssValue = (element, property, getNumber = true) => {
     let dataString = getComputedStyle(element).getPropertyValue(property)
     let dataArray = dataString.match(CSS_PROPERTY_VALUE_PATTERN)
     if (getNumber) {
@@ -68,7 +75,7 @@ var getCssValue = (element, property, getNumber = true) => {
         return dataArray[0]
     }
 }
-var convertToPixel = (number, unit) => {
+let convertToPixel = (number, unit) => {
     number = parseInt(number)
     if (unit == 'px') {
         return number

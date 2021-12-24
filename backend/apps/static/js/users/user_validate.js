@@ -2,8 +2,8 @@
 
 const EMAIL_PATTERN = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
 const PHONE_PATTERN = /^(\+84|0)(\d{9})$/g
-
-var validateUsername = (username) => {
+const CHECK_EMAIL_EXIST_API = '/api/users/check_email_exists'
+let validateUsername = (username) => {
     // Check username follow email or phone pattern
     if (username.value) {
         if (validateEmail(username.value)) { ; }
@@ -23,7 +23,7 @@ let validateEmail = (email_value) => {
 let checkEmailExists = (email_field) => {
     // Check if email is already registed
     let params = '?email=' + email_field.value
-    let request = new Request(`/users/api/check_email_exists/${params}`)
+    let request = new Request(`${CHECK_EMAIL_EXIST_API}/${params}`)
     fetch(request).then(res => {
         if (res.ok) { return res.json() }
     }).then(json_data => {
@@ -50,6 +50,14 @@ let uniformPhoneNumber = (phone_value) => {
     return phone_value
 }
 // Password Field
+let addPositionDirectionAttribute = (element, attribute, attrLength) => {
+    if (attribute == 'left' || attribute == 'right') {
+        attrLength = attrLength - getCssValue(element, 'width')
+    } else if (attribute == 'top' || attribute == 'bottom') {
+        attrLength = attrLength - getCssValue(element, 'height')
+    }
+    element.style[attribute] = `${attrLength}px`
+}
 let togglePassword = (passwordInput) => {
     if (passwordInput.type == 'password') {
         passwordInput.type = 'text'
