@@ -30,7 +30,7 @@ class AbstractUserView(AbstractBaseContext, View):
     def get_success_url(self):
         if self.redirect_url is not None:
             return self.redirect_url
-        redirect_to = self.request.POST.get(
+        redirect_to = self.request.GET.get(
             self.redirect_field_name, settings.REDIRECT_TO_HOMEPAGE
         )
         return redirect_to
@@ -150,6 +150,11 @@ class ProfileChangeView(AbstractUserView):
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         self.redirect_url = request.path
+
+    def get_form_kwargs(self):
+        kwargs = {}
+        kwargs['user'] = self.request.user
+        return super().get_form_kwargs(**kwargs)
 
     def form_valid(self, form):
         form.save()
