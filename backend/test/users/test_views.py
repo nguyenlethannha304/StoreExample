@@ -5,12 +5,10 @@ from django.test.client import Client
 from django.urls import reverse
 
 from apps.users.forms import *
+UserModel = get_user_model()
 
 
 def setUpModule():
-    global UserModel
-    UserModel = get_user_model()
-    # Create user for test
     normal_user = UserModel.objects.create_user(
         'normal_user@gmail.com', '12345678')
 
@@ -94,17 +92,33 @@ class TestPasswordChangeView(TestCase):
             user_with_new_password.check_password(self.new_password))
 
 
-# @tag('user', 'user_view')
-# class TestProfileChangeView(TestCase):
-#     user_email = 'normal_user@gmail.com'
-#     password = '12345678'
-#     profile_url = reverse('users:profile')
+@tag('user', 'user_view')
+class TestProfileChangeView(TestCase):
+    user_email = 'normal_user@gmail.com'
+    password = '12345678'
+    profile_url = reverse('users:profile')
 
-#     @classmethod
-#     def setUpClass(cls):
-#         super().setUpClass()
-#         cls.login_client = Client()
-#         cls.login_client.login(email=cls.user_email, password=cls.password)
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.login_client = Client()
+        cls.login_client.login(email=cls.user_email, password=cls.password)
 
-#     def test_get_method(self):
-#         response = self.login_client.get(self.profile_url)
+    def test_get_method(self):
+        response = self.login_client.get(self.profile_url)
+        self.assertTemplateUsed('users/profile.html')
+        context = response.context
+        self.assertTrue(isinstance(context['form'], ProfileChangeForm))
+
+    def test_post_method(self):
+        new_phone = '+84934923705'
+        data = {'phone': new_phone, 'address': '234 NTMK',
+                'city': 'CA', 'province': 'PA'}
+        response = self.login_client.post(
+            self.profile_url, data=data, follow=True)
+        user = UserModel.objects.get(email=self.user_email)
+        self.assertEqual(user.phone, new_phone)
+        address = user.address_set.first()
+        self.assertEqual(address.address, '234 NTMK')
+        self.assertEqual(address.city, 'CA')
+        self.assertEqual(address.province, 'PA')
