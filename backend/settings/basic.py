@@ -125,3 +125,4 @@ REDIRECT_TO_HOMEPAGE = '/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'apps', 'static'),
 ]
+LOGIN_URL = '/users/login/'
