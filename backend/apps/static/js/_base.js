@@ -68,8 +68,8 @@ var getCssValue = (element, property, getNumber = true) => {
         return dataArray[0]
     }
 }
-var convertToPixel = (number, unit) => {
-    number = parseInt(number)
+var convertToPixel = (stringNumber, unit) => {
+    number = parseInt(stringNumber)
     if (unit == 'px') {
         return number
     } else if (unit == 'rem') {
