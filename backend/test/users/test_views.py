@@ -5,13 +5,10 @@ from django.test.client import Client
 from django.urls import reverse
 
 from apps.users.forms import *
+UserModel = get_user_model()
 
 
 def setUpModule():
-    global UserModel, user_app_name
-    UserModel = get_user_model()
-    user_app_name = 'users'
-    # Create user for test
     normal_user = UserModel.objects.create_user(
         'normal_user@gmail.com', '12345678')
 
@@ -24,7 +21,7 @@ def tearDownModule():
 class TestLoginView(TestCase):
     login_username = 'normal_user@gmail.com'
     login_password = '12345678'
-    login_url = reverse('%s:login' % (user_app_name))
+    login_url = reverse('users:login')
 
     def test_get_method(self):
         response = self.client.get(self.login_url)
@@ -50,7 +47,7 @@ class TestLoginView(TestCase):
 class TestUserCreationView(TestCase):
     new_username = 'new_user@gmail.com'
     new_password = '987654321'
-    register_url = reverse('%s:register' % (user_app_name))
+    register_url = reverse('users:register')
 
     def test_get_method(self):
         response = self.client.get(self.register_url)
@@ -71,7 +68,7 @@ class TestPasswordChangeView(TestCase):
     user_email = 'normal_user@gmail.com'
     old_password = '12345678'
     new_password = 'new_password'
-    change_password_url = reverse('%s:change_password' % (user_app_name))
+    change_password_url = reverse('users:change_password')
 
     @classmethod
     def setUpClass(cls):
@@ -99,7 +96,7 @@ class TestPasswordChangeView(TestCase):
 class TestProfileChangeView(TestCase):
     user_email = 'normal_user@gmail.com'
     password = '12345678'
-    profile_url = reverse('%s:profile' % (user_app_name))
+    profile_url = reverse('users:profile')
 
     @classmethod
     def setUpClass(cls):
@@ -109,3 +106,19 @@ class TestProfileChangeView(TestCase):
 
     def test_get_method(self):
         response = self.login_client.get(self.profile_url)
+        self.assertTemplateUsed('users/profile.html')
+        context = response.context
+        self.assertTrue(isinstance(context['form'], ProfileChangeForm))
+
+    def test_post_method(self):
+        new_phone = '+84934923705'
+        data = {'phone': new_phone, 'address': '234 NTMK',
+                'city': 'CA', 'province': 'PA'}
+        response = self.login_client.post(
+            self.profile_url, data=data, follow=True)
+        user = UserModel.objects.get(email=self.user_email)
+        self.assertEqual(user.phone, new_phone)
+        address = user.address_set.first()
+        self.assertEqual(address.address, '234 NTMK')
+        self.assertEqual(address.city, 'CA')
+        self.assertEqual(address.province, 'PA')

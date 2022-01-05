@@ -14,7 +14,7 @@ def setUpModule():
     UserModel = get_user_model()
     # Create user for test
     user = UserModel.objects.create_user('normal_user@gmail.com', '12345678')
-    user.phone = "0979311359"
+    user.phone = "+84979311359"
     user.save()
     global fake_request
     fake_request = RequestFactory()

@@ -75,11 +75,11 @@ WSGI_APPLICATION = 'settings.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
+# Set up in local or production files
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
-
+# Only use min_length 8 chars
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
@@ -113,15 +113,20 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'apps', 'static'),
+]
 # MY CUSTOM
+# Use custom user model
 AUTH_USER_MODEL = 'users.CustomUser'
+# Authenticate by phone - email - default
 AUTHENTICATION_BACKENDS = [
     'apps.users.custom_backend.PhoneAuthenticateBackend',
     'apps.users.custom_backend.EmailAuthenticateBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 REDIRECT_TO_HOMEPAGE = '/'
+<<<<<<< HEAD
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'apps', 'static'),
 ]
@@ -136,3 +141,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+=======
+# Use custom login_url
+LOGIN_URL = '/users/login/'
+>>>>>>> test

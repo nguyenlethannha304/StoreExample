@@ -2,9 +2,18 @@
 
 
 {% block main %}
+
     <form id='id_login_form' method="post">
         <h2>Log in</h2>
+        
+        {% if form.errors %}
+            {% for error in form.errors %}
+                <div class="error">{{error}}</div>
+            {% endfor %}
+        {% endif %}
+
         {% csrf_token %}
+
         <div class="username">
             {{form.username.label_tag}}
             {{form.username}}
@@ -14,16 +23,19 @@
                 {% endfor %}
             {% endif %}
         </div>
+
         <div class="password">
             {{form.password.label_tag}}
             <div class="password">
-                <div class='show-password'></div>
+                <div class='password-show'></div>
                 {{form.password}}
             </div>
         </div>
+
         <div class="form-bottom">
             <button type='submit'>Log in</button>
             <a href="{% url 'users:register' %}">Sign in</a>
         </div>
     </form>
+
 {% endblock main %}

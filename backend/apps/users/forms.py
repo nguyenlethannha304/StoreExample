@@ -17,7 +17,7 @@ UserModel = get_user_model()
 
 
 def uniform_phone_field(phone):
-    if validate_phonenumber(phone) and not phone.startswith('+'):
+    if not phone.startswith('+'):
         return '+84' + phone[1:]
     return phone
 
@@ -33,18 +33,6 @@ def clean_username(username):
     else:
         # Parent function should raise ValidationError("Incorrect username format")
         raise ValidationError("Incorrect username format")
-
-
-class AbstractPhoneNumberHandling:
-
-    phone_field_name = 'phone'
-
-    def _post_clean(self):
-        phone = self.cleaned_data.get(self.phone_field_name)
-        if phone:
-            self.cleaned_data[self.phone_field_name] = uniform_phone_field(
-                phone)
-            super()._post_clean()
 
 
 class UserCreationForm(forms.ModelForm):
@@ -96,7 +84,7 @@ class UserCreationForm(forms.ModelForm):
         js = ('js/users/user_validate.js', 'js/users/register.js')
 
 
-class AuthenticationForm(AbstractPhoneNumberHandling, forms.Form):
+class AuthenticationForm(forms.Form):
     phone_field_name = 'username'
     username = CharField(
         label='Email or Phone',
@@ -137,6 +125,10 @@ class AuthenticationForm(AbstractPhoneNumberHandling, forms.Form):
         password = self.cleaned_data.get('password')
         if username is not None and password:
             if validate_phonenumber(username):
+                # Change phone input from "0\d{9}" to "+84\d{9}" format before authenticate
+                username = uniform_phone_field(
+                    username) if username.startswith('0') else username
+                # Authenticate
                 self.user_cache = self.authenticate_by_phonebackend(
                     username, password)
             elif validate_email(username):
@@ -185,21 +177,23 @@ class PasswordChangeForm(forms.Form):
         'password_incorrect': "The old password is incorrect"
     }
     old_password = forms.CharField(
-        label="Old password",
+        label="Old Password",
         strip=False,
         widget=forms.PasswordInput(
-            attrs={'autocomplete': 'current-password', 'autofocus': True})
+            attrs={'autocomplete': 'current-password', 'autofocus': True, 'placeholder': 'Old Password'})
     )
     new_password1 = forms.CharField(
-        label="New password",
+        label="New Password",
         strip=False,
-        widget=forms.PasswordInput(),
+        widget=forms.PasswordInput(
+            attrs={'placeholder': 'New Password'}),
         help_text=password_validation.password_validators_help_text_html()
     )
     new_password2 = forms.CharField(
-        label="Confirm new password",
+        label="Confirm New Password",
         strip=False,
-        widget=forms.PasswordInput()
+        widget=forms.PasswordInput(
+            attrs={'placeholder': 'Confirm New Password'}),
     )
 
     def __init__(self, user, *args, **kwargs):
@@ -230,10 +224,18 @@ class PasswordChangeForm(forms.Form):
             self.user.save()
         return self.user
 
+    class Media:
+        css = {
+            'all': ('css/users/user_form.css', 'css/users/change_password.css')
+        }
+        js = ('js/users/user_validate.js', 'js/users/change_password.js')
+
 
 class ProfileChangeForm(forms.Form):
-    phone = forms.CharField(max_length=12, required=None)
-    address = forms.CharField(max_length=255, required=None)
+    phone = forms.CharField(max_length=12, required=None,
+                            widget=forms.TextInput(attrs={'placeholder': 'Your phone number'}))
+    address = forms.CharField(max_length=255, required=None,
+                              widget=forms.TextInput(attrs={'placeholder': 'Your address'}))
     city = forms.ChoiceField(choices=CITY_NAME_CHOICES, required=None)
     province = forms.ChoiceField(choices=PROVINCE_NAME_CHOICES, required=None)
     user_fields = ('phone',)
@@ -252,7 +254,8 @@ class ProfileChangeForm(forms.Form):
 
     def clean_phone(self):
         phone = self.cleaned_data.get('phone')
-        return uniform_phone_field(phone)
+        if phone and validate_phonenumber(phone):
+            return uniform_phone_field(phone)
 
     def _post_clean(self):
         if self.has_changed():
@@ -280,10 +283,11 @@ class ProfileChangeForm(forms.Form):
         if getattr(self.address, 'did_change', False):
             self.address.save()
 
-
-class CustomProfileChangeForm(forms.Form):
-    def __init__(self, user, *args, **kwargs):
-        self.user = user
+    class Media:
+        css = {
+            'all': ('css/users/user_form.css', )
+        }
+        js = ('js/users/user_validate.js', 'js/users/profile.js')
 
 
 class AddressChangeForm(forms.ModelForm):

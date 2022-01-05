@@ -16,7 +16,7 @@ label {
 .valid {
     border-color: #8F8F9D;
 }
-.show-password {
+.password-show {
     position: absolute;
     /* left:calc(3rem + 208px - 1.8rem); */
     height: 1.8rem;
