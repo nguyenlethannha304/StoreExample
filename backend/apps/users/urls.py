@@ -14,6 +14,3 @@ urlpatterns = [
     path('logout/', view=logout_view, name='logout'),
     path('api/', include(api_url_patterns))
 ]
-api_users_urlpatterns = [
-    # path('users/')
-]
