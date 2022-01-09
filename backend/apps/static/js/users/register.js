@@ -1,5 +1,5 @@
 // {getCssValue, invalidField} = _base.js
-// {validateEmail, checkEmailExist} = users/user_validate.js
+// {validateEmail} = users/user_validate.js
 
 
 // Email field
@@ -37,5 +37,23 @@ if (passwordShows != []) {
     passwordShows.forEach((passwordShow) => {
         // left = calc(body.margin + form.padding + input.width - passwordShow.width)
         addPositionDirectionAttribute(passwordShow, 'left', attrLength)
+    })
+}
+let checkEmailExists = (email_field) => {
+    // Check if email is already registed
+    let params = '?email=' + email_field.value
+    let request = new Request(`${CHECK_EMAIL_EXIST_API}/${params}`)
+    fetch(request).then(res => {
+        if (res.ok) { return res.json() }
+    }).then(json_data => {
+        return json_data.exists
+    }).then(email_exist_boolean => {
+        if (!email_exist_boolean) {
+            let message = "You can use this email"
+            validField(email_field, message)
+        } else {
+            let message = "The email is already registed"
+            invalidField(email_field, message)
+        }
     })
 }

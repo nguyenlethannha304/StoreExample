@@ -20,24 +20,7 @@ let validateUsername = (username) => {
 let validateEmail = (email_value) => {
     return email_value.match(EMAIL_PATTERN)
 }
-let checkEmailExists = (email_field) => {
-    // Check if email is already registed
-    let params = '?email=' + email_field.value
-    let request = new Request(`${CHECK_EMAIL_EXIST_API}/${params}`)
-    fetch(request).then(res => {
-        if (res.ok) { return res.json() }
-    }).then(json_data => {
-        return json_data.exists
-    }).then(email_exist_boolean => {
-        if (!email_exist_boolean) {
-            let message = "You can use this email"
-            validField(email_field, message)
-        } else {
-            let message = "The email is already registed"
-            invalidField(email_field, message)
-        }
-    })
-}
+
 let validatePhone = (phone_value) => {
     return phone_value.match(PHONE_PATTERN)
 }
