@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import (
     authenticate, get_user_model, password_validation,
 )
-from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
+from django.core.exceptions import ImproperlyConfigured, ValidationError, NON_FIELD_ERRORS
 from django.forms.fields import CharField
 
 from django.forms.models import construct_instance, model_to_dict
@@ -37,6 +37,7 @@ def clean_username(username):
 
 class UserCreationForm(forms.ModelForm):
     error_messages = {
+        'registed': 'Email is already registed',
         'password_mismatch': "Two password input didn't match"
     }
     password1 = forms.CharField(
@@ -56,6 +57,14 @@ class UserCreationForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["email"].widget.attrs['autofocus'] = True
 
+    def clean_email(self, email):
+        user_exist = UserModel.objects.get(email=email).exists()
+        if user_exist is True:
+            raise ValidationError(
+                self.error_messages['registed'], code='registed')
+        else:
+            return email
+
     def clean(self):
         password1 = self.cleaned_data.get('password1')
         password2 = self.cleaned_data.get('password2')
@@ -65,6 +74,7 @@ class UserCreationForm(forms.ModelForm):
         return self.cleaned_data
 
     def save(self, commit=True):
+        assert self.errors, ("Cannot call `.save()` with invalid data")
         user = super().save(commit=False)
         user.set_password(self.cleaned_data['password2'])
         if commit:
@@ -218,6 +228,7 @@ class PasswordChangeForm(forms.Form):
         return self.cleaned_data
 
     def save(self, commit=True):
+        assert self.errors, ("Cannot call `.save()` with invalid data")
         password = self.cleaned_data['new_password2']
         self.user.set_password(password)
         if commit:
@@ -244,7 +255,7 @@ class ProfileChangeForm(forms.Form):
     def __init__(self, user, *args, **kwargs):
         self.user = user
         self.address = Address.objects.filter(
-            user=user.pk).get(default_address=True)
+            user=self.user.pk).get(default_address=True)
         # Get initial data for both instance
         initial_user = model_to_dict(self.user, self.user_fields)
         initial_adress = model_to_dict(
@@ -274,10 +285,7 @@ class ProfileChangeForm(forms.Form):
                     break
 
     def save(self):
-        if self.errors:
-            raise ValueError(
-                "The form could not be saved because the data didn't validate"
-            )
+        assert self.errors, ("Cannot call `.save()` with invalid data")
         if getattr(self.user, 'did_change', False):
             self.user.save()
         if getattr(self.address, 'did_change', False):

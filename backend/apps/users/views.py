@@ -14,7 +14,6 @@ from django.conf import settings
 from apps.core.views import AbstractBaseContext
 from django.http.response import JsonResponse
 from .forms import *
-from .forms import UserModel
 from ..utils.tools import validate_email
 
 dispatch_decorators = [sensitive_post_parameters(), csrf_protect, never_cache]

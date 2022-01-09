@@ -9,9 +9,6 @@ urlpatterns = [
     path('profile/', view=profile_change_view, name='profile'),
     path('logout/', view=logout_view, name='logout'),
 ]
-<<<<<<< HEAD
-=======
 api_users_urlpatterns = [
     path('check_email_exists/', view=check_email_exists),
 ]
->>>>>>> test
