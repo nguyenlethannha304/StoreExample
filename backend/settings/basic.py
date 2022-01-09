@@ -126,7 +126,6 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 REDIRECT_TO_HOMEPAGE = '/'
-<<<<<<< HEAD
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'apps', 'static'),
 ]
@@ -141,7 +140,3 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
-=======
-# Use custom login_url
-LOGIN_URL = '/users/login/'
->>>>>>> test

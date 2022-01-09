@@ -1,5 +1,5 @@
 from django.urls import include, path
-from apps.users.urls import api_users_urlpatterns
+from apps.token_api.urls import api_token_urlpatterns
 api_urlpatterns = [
-    path('users/', include(api_users_urlpatterns))
+    path('token/', include(api_token_urlpatterns))
 ]
