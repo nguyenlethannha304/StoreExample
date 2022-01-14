@@ -67,8 +67,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class Address(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    address = models.CharField(max_length=255, blank=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, )
+    street = models.CharField(max_length=255, blank=True)
     city = models.CharField(
         max_length=100, choices=CITY_NAME_CHOICES, blank=True)
     province = models.CharField(

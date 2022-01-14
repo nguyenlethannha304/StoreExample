@@ -1,4 +1,4 @@
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ImproperlyConfigured
 from django.http.response import HttpResponseRedirect
@@ -16,6 +16,7 @@ from django.http.response import JsonResponse
 from .forms import *
 from ..utils.tools import validate_email
 
+UserModel = get_user_model()
 dispatch_decorators = [sensitive_post_parameters(), csrf_protect, never_cache]
 
 
@@ -125,7 +126,7 @@ class PasswordChangeView(AbstractUserView):
 
     def get_form_kwargs(self):
         kwargs = {}
-        kwargs['user'] = self.request.user
+        kwargs['request'] = self.request
         return super().get_form_kwargs(**kwargs)
 
     def form_valid(self, form):
@@ -152,7 +153,7 @@ class ProfileChangeView(AbstractUserView):
 
     def get_form_kwargs(self):
         kwargs = {}
-        kwargs['user'] = self.request.user
+        kwargs['request'] = self.request
         return super().get_form_kwargs(**kwargs)
 
     def form_valid(self, form):

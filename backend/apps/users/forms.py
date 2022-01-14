@@ -57,8 +57,9 @@ class UserCreationForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["email"].widget.attrs['autofocus'] = True
 
-    def clean_email(self, email):
-        user_exist = UserModel.objects.get(email=email).exists()
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        user_exist = UserModel.objects.filter(email=email).exists()
         if user_exist is True:
             raise ValidationError(
                 self.error_messages['registed'], code='registed')
@@ -74,7 +75,7 @@ class UserCreationForm(forms.ModelForm):
         return self.cleaned_data
 
     def save(self, commit=True):
-        assert self.errors, ("Cannot call `.save()` with invalid data")
+        assert not self.errors, ("Cannot call `.save()` with invalid data")
         user = super().save(commit=False)
         user.set_password(self.cleaned_data['password2'])
         if commit:
@@ -206,8 +207,8 @@ class PasswordChangeForm(forms.Form):
             attrs={'placeholder': 'Confirm New Password'}),
     )
 
-    def __init__(self, user, *args, **kwargs):
-        self.user = user
+    def __init__(self, request, *args, **kwargs):
+        self.user = request.user
         super().__init__(*args, **kwargs)
 
     def clean_old_password(self):
@@ -228,7 +229,7 @@ class PasswordChangeForm(forms.Form):
         return self.cleaned_data
 
     def save(self, commit=True):
-        assert self.errors, ("Cannot call `.save()` with invalid data")
+        assert not self.errors, ("Cannot call `.save()` with invalid data")
         password = self.cleaned_data['new_password2']
         self.user.set_password(password)
         if commit:
@@ -245,22 +246,23 @@ class PasswordChangeForm(forms.Form):
 class ProfileChangeForm(forms.Form):
     phone = forms.CharField(max_length=12, required=None,
                             widget=forms.TextInput(attrs={'placeholder': 'Your phone number'}))
-    address = forms.CharField(max_length=255, required=None,
-                              widget=forms.TextInput(attrs={'placeholder': 'Your address'}))
+    street = forms.CharField(max_length=255, required=None,
+                             widget=forms.TextInput(attrs={'placeholder': 'Your address'}))
     city = forms.ChoiceField(choices=CITY_NAME_CHOICES, required=None)
     province = forms.ChoiceField(choices=PROVINCE_NAME_CHOICES, required=None)
     user_fields = ('phone',)
-    address_fields = ('address', 'city', 'province')
+    address_fields = ('street', 'city', 'province')
 
-    def __init__(self, user, *args, **kwargs):
-        self.user = user
-        self.address = Address.objects.filter(
-            user=self.user.pk).get(default_address=True)
-        # Get initial data for both instance
-        initial_user = model_to_dict(self.user, self.user_fields)
-        initial_adress = model_to_dict(
-            self.address, self.address_fields)
-        kwargs['initial'] = {**initial_user, **initial_adress}
+    def __init__(self, request, *args, **kwargs):
+        self.user = request.user
+        if self.user.is_authenticated:
+            self.address = Address.objects.filter(
+                user=self.user.pk).get(default_address=True)
+            # Get initial data for both instance
+            initial_user = model_to_dict(self.user, self.user_fields)
+            initial_adress = model_to_dict(
+                self.address, self.address_fields)
+            kwargs['initial'] = {**initial_user, **initial_adress}
         super().__init__(*args, **kwargs)
 
     def clean_phone(self):
@@ -285,7 +287,7 @@ class ProfileChangeForm(forms.Form):
                     break
 
     def save(self):
-        assert self.errors, ("Cannot call `.save()` with invalid data")
+        assert not self.errors, ("Cannot call `.save()` with invalid data")
         if getattr(self.user, 'did_change', False):
             self.user.save()
         if getattr(self.address, 'did_change', False):
@@ -301,4 +303,4 @@ class ProfileChangeForm(forms.Form):
 class AddressChangeForm(forms.ModelForm):
     class Meta:
         model = Address
-        fields = ('address', 'city', 'province')
+        fields = ('street', 'city', 'province')
