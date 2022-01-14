@@ -112,13 +112,13 @@ class TestProfileChangeView(TestCase):
 
     def test_post_method(self):
         new_phone = '+84934923705'
-        data = {'phone': new_phone, 'address': '234 NTMK',
+        data = {'phone': new_phone, 'street': '234 NTMK',
                 'city': 'CA', 'province': 'PA'}
         response = self.login_client.post(
             self.profile_url, data=data, follow=True)
         user = UserModel.objects.get(email=self.user_email)
         self.assertEqual(user.phone, new_phone)
         address = user.address_set.first()
-        self.assertEqual(address.address, '234 NTMK')
+        self.assertEqual(address.street, '234 NTMK')
         self.assertEqual(address.city, 'CA')
         self.assertEqual(address.province, 'PA')
