@@ -7,14 +7,10 @@ username.addEventListener('blur', () => {
     validateUsername(username)
 })
 let passwordInput = document.getElementById('id_password')
-let passwordShow = document.querySelector('.password-show')
-if (passwordShow) {
+let passwordIcon = document.querySelector('.password-icon')
+if (passwordIcon) {
     // Caculate css-left-attribute for passwordShow
     // left = calc(passwordInput.getBoundingClientRect().right - passwordShow.width)
     let attrLength = passwordInput.getBoundingClientRect().right
-    addPositionDirectionAttribute(passwordShow, 'left', attrLength)
-    // 
-    passwordShow.addEventListener('click', () => {
-        togglePassword(passwordInput)
-    })
+    addPositionDirectionAttribute(passwordIcon, 'left', attrLength)
 }

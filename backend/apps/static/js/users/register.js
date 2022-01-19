@@ -16,29 +16,18 @@ email.addEventListener('blur', () => {
         }
     }
 })
-// Add password toggle
-let passwordShow1 = document.querySelector('.password1')
-let passwordInput1 = document.getElementById('id_password1')
-passwordShow1.addEventListener('click', () => {
-    if (passwordInput1.type == 'password') { passwordInput1.type = 'text' }
-    else { passwordInput1.type = 'password' }
-})
-let passwordShow2 = document.querySelector('.password2')
-let passwordInput2 = document.getElementById('id_password2')
-passwordShow2.addEventListener('click', () => {
-    if (passwordInput2.type == 'password') { passwordInput2.type = 'text' }
-    else { passwordInput2.type = 'password' }
-})
 // Password fields
+let passwordInput1=  document.getElementById('id_password1')
 let attrLength = passwordInput1.getBoundingClientRect().right
-// Caculate css-left-attribute for passwordShow
-let passwordShows = document.querySelectorAll('.password-show')
-if (passwordShows != []) {
-    passwordShows.forEach((passwordShow) => {
-        // left = calc(body.margin + form.padding + input.width - passwordShow.width)
-        addPositionDirectionAttribute(passwordShow, 'left', attrLength)
+// Caculate css-left-attribute for passwordIcon
+let passwordIcons = document.querySelectorAll('.password-icon')
+if (passwordIcons != []) {
+    passwordIcons.forEach((passwordIcon) => {
+        // left = calc(body.margin + form.padding + input.width - passwordIcon.width)
+        addPositionDirectionAttribute(passwordIcon, 'left', attrLength)
     })
 }
+// Sub-functions
 let checkEmailExists = (email_field) => {
     // Check if email is already registed
     let params = '?email=' + email_field.value

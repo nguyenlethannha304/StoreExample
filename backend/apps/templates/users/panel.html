@@ -1,0 +1,22 @@
+{% extends '_base.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/users/panel.css' %}">
+{% endblock css %}
+{% block main %}
+<div class="user-information">
+    <div class="avatar-container">
+        <div class="avatar">
+            <div class="icon avatar__user"></div>
+        </div>
+    </div>
+    <div class="user-email">
+        <p>{{user.email}}</p>
+    </div>
+</div>
+<div class="list-item orders"><a href="">Orders</a></div>
+<div class="list-item cart"><a href="">Cart</a></div>
+<div class="list-item profile"><a href="{% url 'users:profile' %}">Profile</a></div>
+<div class="list-item change-password"><a href="{% url 'users:change_password' %}">Change password</a></div>
+<div class="list-item logout"><a href="{% url 'users:logout' %}">Log Out</a></div>
+{% endblock main %}

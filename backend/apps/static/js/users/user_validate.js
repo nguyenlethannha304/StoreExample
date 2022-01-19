@@ -48,3 +48,21 @@ let togglePassword = (passwordInput) => {
         passwordInput.type = 'password'
     }
 }
+// Toggle password-fields (Show <==> Hidden)
+let passwordContainers = document.querySelectorAll('.password-container')
+if(passwordContainers){
+    passwordContainers.forEach(container => {
+        let icon = container.querySelector('.password-icon')
+        let input = container.querySelector('input')
+        icon.addEventListener('click', () => {
+            container.classList.toggle('password-show')
+            container.classList.toggle('password-hidden')
+            if(container.classList.contains('password-show')){
+                input.type = 'text'
+            } else {
+                input.type = 'password'
+            }
+        })
+    }
+)
+}

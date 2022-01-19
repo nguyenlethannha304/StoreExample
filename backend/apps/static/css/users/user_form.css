@@ -1,25 +1,46 @@
-form {
+main form {
     margin: 1rem auto;
     padding: 2rem 2rem;
     background-color: var(--bs-light);
 }
-form div + div {
+
+form div+div {
     margin-top: 1rem;
 }
+
 h2 {
     text-align: center;
 }
+
 label {
     display: block;
     margin-bottom: 0.25rem;
 }
+
 .valid {
     border-color: #8F8F9D;
 }
-.password-show {
+
+/* Password fields */
+.password-hidden .__passwordHidden {
+    display: none;
+}
+
+.password-show .__passwordShow {
+    display: none;
+}
+
+.password-icon {
     position: absolute;
     /* left:calc(3rem + 208px - 1.8rem); */
     height: 1.8rem;
     width: 1.8rem;
-    background-color: black;
+}
+
+.icon {
+    margin-top: 0;
+}
+
+.password-icon>.icon>svg {
+    stroke-width: 1.25px;
 }

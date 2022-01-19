@@ -24,12 +24,26 @@
             {% endif %}
         </div>
 
-        <div class="password">
+        {% comment %} <div class="password">
             {{form.password.label_tag}}
             <div class="password">
                 <div class='password-show'></div>
                 {{form.password}}
             </div>
+        </div> {% endcomment %}
+
+        <div class="password-container password-hidden old-password">
+            {{form.password.label_tag}}
+            <div class="password-icon old-password-input">
+                <div class="icon __passwordHidden"></div>
+                <div class="icon __passwordShow"></div>
+            </div>
+            {{form.password}}
+            {% if form.password.errors %}
+                {% for error in form.password.errors %}
+                    <div class="error">{{error}}</div>
+                {% endfor %}
+            {% endif %}
         </div>
 
         <div class="form-bottom">

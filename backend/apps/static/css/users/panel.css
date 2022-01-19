@@ -1,0 +1,72 @@
+/* USER-INFORMATION */
+.user-information {
+    display: flex;
+    height: 6rem;
+    width: 100vw;
+    background-color: var(--bs-light);
+}
+
+.avatar-container {
+    display: flex;
+    width: 30vw;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar {
+    border: 1px black solid;
+    height: 5rem;
+    width: 5rem;
+    border-radius: 5rem;
+    background-color: var(--bs-white);
+}
+
+.avatar__user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar__user svg {
+    width: 70%;
+    height: 70%;
+    fill: var(--bs-light);
+}
+
+.user-email {
+    display: flex;
+    align-content: center;
+    width: 70vw;
+    height: 100%;
+}
+
+.user-email p {
+    font-size: 1.25rem;
+    text-align: center;
+}
+
+/*  */
+.list-item {
+    display: flex;
+    align-content: center;
+    width: 100vw;
+    height: 4rem;
+    padding: 0.5rem 1rem;
+    background: var(--bs-light);
+    border-top: 1px black solid;
+}
+
+.list-item a {
+    padding: 0.5rem 0rem;
+    width: 100%;
+    height: 100%;
+    text-decoration: None;
+    font-size: 1.25rem;
+    text-indent: 1rem;
+    color: black;
+}
+
+.logout {
+    border-bottom: 1px black solid;
+}

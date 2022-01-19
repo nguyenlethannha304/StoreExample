@@ -36,12 +36,11 @@
         {% block main %}{% endblock main %}
         <!-- Bottom Nav for mobile device -->
     </main>
-    <div class="mobile__nav">
+    <div class="mobile_bottom_nav">
         <a href="{% url 'core:home' %}" class="icon mobile__nav__home"></a>
         <a href="" class="icon mobile__nav__menubar"></a>
-        <a href="" class="icon mobile__nav__chat"></a>
         <a href="" class="icon mobile__nav__cart"></a>
-        <a href="{% url 'users:profile' %}" class="icon mobile__nav__user"></a>
+        <a href="{% url 'users:panel' %}" class="icon mobile__nav__user"></a>
     </div>
     <!-- Footer -->
     <footer>

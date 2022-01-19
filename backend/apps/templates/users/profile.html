@@ -14,10 +14,10 @@
         </div>
 
         <div class="address">
-            {{form.address.label_tag}}
-            {{form.address}}
-            {% if form.address.errors %}
-                {% for error in form.address.errors %}
+            {{form.street.label_tag}}
+            {{form.street}}
+            {% if form.street.errors %}
+                {% for error in form.street.errors %}
                     <div class="error">{{error}}</div>
                 {% endfor %}
             {% endif %}

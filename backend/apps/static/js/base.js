@@ -19,12 +19,12 @@ const iconDict = {
     'user':USER,
     'cart':CART,
     'x':X,
-    'password_show':PASSWORD_SHOW,
-    'password_hidden':PASSWORD_HIDDEN,
+    'passwordShow':PASSWORD_SHOW,
+    'passwordHidden':PASSWORD_HIDDEN,
 }
 // Create Icons (use className to create appropriate icons)
 let icons = document.querySelectorAll('.icon')
-let iconNamePattern = /__([a-z]+)$/; // e.g: classValue='icon nav__home' => iconName = 'home' (Get [1] of matchArray)
+let iconNamePattern = /__([a-zA-Z]+)$/; // e.g: classValue='icon nav__home' => iconName = 'home' (Get [1] of matchArray)
 icons.forEach(icon => {
     let classValues = icon.classList.value
     let iconName = classValues.match(iconNamePattern)[1]
