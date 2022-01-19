@@ -7,6 +7,7 @@ from django.utils.datastructures import MultiValueDict
 from apps.users.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm, ProfileChangeForm
 from apps.users.models import Address
 from apps.users.address_name import CITY_NAME_CHOICES, PROVINCE_NAME_CHOICES
+from test.utils import new_data_with_change
 UserModel = get_user_model()
 
 
@@ -26,11 +27,11 @@ def tearDownModule():
 
 @tag('user', 'user_form')
 class TestUserCreationForm(TestCase):
+    valid_data = {'email': 'user@gmail.com',
+                  'password1': '12345678', 'password2': '12345678'}
 
     def test_valid_form_and_create_user(self):
-        valid_data = MultiValueDict(
-            {'email': ['user@gmail.com'], 'password1': ['12345678'], 'password2': ['12345678']})
-        valid_form = UserCreationForm(data=valid_data)
+        valid_form = UserCreationForm(data=self.valid_data)
         self.assertTrue(valid_form.is_valid())  # Test valid form
         testing_user = valid_form.save()
         # Test user save to database
@@ -38,8 +39,8 @@ class TestUserCreationForm(TestCase):
 
     def test_invalid_form(self):
         # password1 != password2
-        invalid_data = MultiValueDict(
-            {'email': ['invalid_pass@gmail.com'], 'password1': ['not_match_pass'], 'password2': ['12345678']})
+        invalid_data = new_data_with_change(
+            self.valid_data, 'password1', 'mismatch_pass')
         invalid_form = UserCreationForm(data=invalid_data)
         self.assertFalse(invalid_form.is_valid())
         error_message = invalid_form.errors[NON_FIELD_ERRORS][0]
@@ -49,10 +50,9 @@ class TestUserCreationForm(TestCase):
 
 @tag('user', 'user_form')
 class TestAuthenticationForm(TestCase):
-    login_phone_data = MultiValueDict(
-        {'username': ['0979311359'], 'password': ['12345678']})
-    login_email_data = MultiValueDict(
-        {'username': ['testing_user@gmail.com'], 'password': ['12345678']})
+    login_phone_data = {'username': '0979311359', 'password': '12345678'}
+    login_email_data = {
+        'username': 'testing_user@gmail.com', 'password': '12345678'}
 
     def test_phone_login(self):
         form = AuthenticationForm(fake_request, data=self.login_phone_data)
@@ -67,8 +67,8 @@ class TestAuthenticationForm(TestCase):
 
 @tag('user', 'user_form')
 class TestPasswordChangeForm(TestCase):
-    valid_data = MultiValueDict({'old_password': ['12345678'],
-                                 'new_password1': ['87654321'], 'new_password2': ['87654321']})
+    valid_data = {'old_password': '12345678',
+                  'new_password1': '87654321', 'new_password2': '87654321'}
 
     @classmethod
     def setUpClass(cls):
@@ -91,8 +91,8 @@ class TestPasswordChangeForm(TestCase):
 
     def test_wrong_old_password(self):
         # old_password != user.password
-        invalid_data = copy.deepcopy(self.valid_data)
-        invalid_data['old_password'] = 'wrongpass'
+        invalid_data = new_data_with_change(
+            self.valid_data, 'old_password', 'incorrect_pass')
         invalid_form = PasswordChangeForm(
             self.custom_request, data=invalid_data)
         self.assertFalse(invalid_form.is_valid())
@@ -102,8 +102,8 @@ class TestPasswordChangeForm(TestCase):
 
     def test_new_pass_not_match(self):
         # new_password1 != new_password2
-        invalid_data = copy.deepcopy(self.valid_data)
-        invalid_data['new_password1'] = 'notmatchpass'
+        invalid_data = new_data_with_change(
+            self.valid_data, 'new_password1', 'mismatch_pass')
         invalid_form = PasswordChangeForm(
             self.custom_request, data=invalid_data)
         self.assertFalse(invalid_form.is_valid())

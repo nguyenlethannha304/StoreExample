@@ -1,10 +1,12 @@
+from wsgiref.util import request_uri
 from django.contrib.auth.models import User
 from django.test import TestCase, tag
 from django.contrib.auth import get_user_model
 from django.test.client import Client
 from django.urls import reverse
-
+from django.conf import settings
 from apps.users.forms import *
+from test.utils import test_redirect_to_login
 UserModel = get_user_model()
 
 
@@ -76,6 +78,12 @@ class TestPasswordChangeView(TestCase):
         cls.login_client = Client()
         cls.login_client.login(email=cls.user_email, password=cls.old_password)
 
+    def test_view_must_login(self):
+        test_redirect_to_login(
+            method='get', request_url=self.change_password_url)
+        test_redirect_to_login(
+            method='post', request_url=self.change_password_url)
+
     def test_get_method(self):
         response = self.login_client.get(self.change_password_url)
         self.assertTemplateUsed(response, 'users/change_password.html')
@@ -104,6 +112,10 @@ class TestProfileChangeView(TestCase):
         cls.login_client = Client()
         cls.login_client.login(email=cls.user_email, password=cls.password)
 
+    def test_view_must_login(self):
+        test_redirect_to_login(method='get', request_url=self.profile_url)
+        test_redirect_to_login(method='post', request_url=self.profile_url)
+
     def test_get_method(self):
         response = self.login_client.get(self.profile_url)
         self.assertTemplateUsed('users/profile.html')
@@ -122,3 +134,19 @@ class TestProfileChangeView(TestCase):
         self.assertEqual(address.street, '234 NTMK')
         self.assertEqual(address.city, 'CA')
         self.assertEqual(address.province, 'PA')
+
+
+@tag('user', 'user_view')
+class TestUserPanelView(TestCase):
+    panel_url = reverse('users:panel')
+
+    def setUp(self):
+        self.client = Client()
+        user = UserModel.objects.get(email='normal_user@gmail.com')
+        self.client.force_login(user)
+
+    def test_get_method_must_login(self):
+        test_redirect_to_login(method='get', request_url=self.panel_url)
+
+    def test_get_method(self):
+        response = self.client.get(self.panel_url)

@@ -1,9 +1,10 @@
 from apps.users.api.serializers import *
+from backend.test.utils import new_data_with_change
 from rest_framework import serializers
 from rest_framework.test import APIRequestFactory, APITestCase
 from django.test import tag
 from django.contrib.auth import get_user_model
-from test.utils import change_data_to_invalid
+from test.utils import new_data_with_change
 from django.contrib.auth.models import AnonymousUser
 from apps.users.forms import uniform_phone_field
 UserModel = get_user_model()
@@ -36,7 +37,7 @@ class TestUserCreationSerializer(APITestCase):
             email='new_user@gmail.com').exists())
 
     def test_create_user_with_mismatch_password(self):
-        invalid_data = change_data_to_invalid(
+        invalid_data = new_data_with_change(
             self.valid_data, 'password1', '87654321')
         serializer = UserCreationSerializer(data=invalid_data)
         # Check form invalid
@@ -46,7 +47,7 @@ class TestUserCreationSerializer(APITestCase):
         self.assertEqual(error.code, 'password_mismatch')
 
     def test_create_duplicate_user(self):
-        invalid_data = change_data_to_invalid(
+        invalid_data = new_data_with_change(
             self.valid_data, 'email', 'testing_user@gmail.com')
         serializer = UserCreationSerializer(data=invalid_data)
         # Check form invalid
@@ -87,7 +88,7 @@ class TestPasswordChangeSerializer(APITestCase):
             self.valid_data['new_password1']))
 
     def test_error_incorect_old_password(self):
-        invalid_data = change_data_to_invalid(
+        invalid_data = new_data_with_change(
             self.valid_data, 'old_password', 'incorrectpassword')
         serializer = PasswordChangeSerializer(self.request, data=invalid_data)
         # Check form invalid
@@ -97,7 +98,7 @@ class TestPasswordChangeSerializer(APITestCase):
         self.assertEqual(error.code, 'password_incorrect')
 
     def test_error_mismatch_password(self):
-        invalid_data = change_data_to_invalid(
+        invalid_data = new_data_with_change(
             self.valid_data, 'new_password1', 'mismatch_pass')
         serializer = PasswordChangeSerializer(self.request, data=invalid_data)
         # Check form invalid
@@ -107,7 +108,7 @@ class TestPasswordChangeSerializer(APITestCase):
         self.assertEqual(error.code, 'password_mismatch')
 
 
-@tag('user', 'user_api_serializer', 'cr')
+@tag('user', 'user_api_serializer')
 class TestProfileSerializer(APITestCase):
     def setUp(self):
         self.user = UserModel.objects.get(email='testing_user@gmail.com')
