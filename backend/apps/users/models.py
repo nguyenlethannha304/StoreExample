@@ -49,7 +49,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, error_messages={
                               'unique': 'This email is already registed'}, db_index=True)
     phone = models.CharField(max_length=12, unique=True, error_messages={'unique': 'This phone is already registed'},
-                             blank=True, validators=[validate_phonenumber], db_index=True, null=True)
+                             blank=True, validators=[validate_phonenumber], db_index=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 

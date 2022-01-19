@@ -186,6 +186,18 @@ class LogoutView(View):
 logout_view = LogoutView.as_view()
 
 
+@method_decorator(login_required, name='dispatch')
+class UserPanelView(View):
+    template_name = 'users/panel.html'
+
+    def get(self, request, *args, **kwargs):
+        context = {'user': request.user}
+        return render(request, self.template_name, context)
+
+
+user_panel_view = UserPanelView.as_view()
+
+
 def check_email_exists(request):
     email_value = request.GET.get('email')
     if validate_email(email_value):
