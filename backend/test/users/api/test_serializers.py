@@ -1,5 +1,4 @@
 from apps.users.api.serializers import *
-from backend.test.utils import new_data_with_change
 from rest_framework import serializers
 from rest_framework.test import APIRequestFactory, APITestCase
 from django.test import tag
