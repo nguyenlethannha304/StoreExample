@@ -1,4 +1,4 @@
-<div><a routerLink="/" [innerHTML]="homeIcon | safeIconHTML"></a></div>
-<div><a routerLink="/menu" [innerHTML]="menubarIcon | safeIconHTML"></a></div>
-<div><a routerLink="/cart" [innerHTML]="cartIcon | safeIconHTML"></a></div>
-<div><a routerLink="/users" [innerHTML]="userIcon | safeIconHTML"></a></div>
+<div (click)="navi.navigateTo('home')" [innerHTML]="homeIcon | safeIconHTML"></div>
+<div (click)="navi.navigateTo('menuBar')" [innerHTML]="menubarIcon | safeIconHTML"></div>
+<div (click)="navi.navigateTo('cart')" [innerHTML]="cartIcon | safeIconHTML"></div>
+<div (click)="navi.navigateTo('users:panel')" [innerHTML]="userIcon | safeIconHTML"></div>

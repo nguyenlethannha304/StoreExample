@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import {
   homeIcon,
   menubarIcon,
   cartIcon,
   userIcon,
 } from 'src/app/shared/icons/icons';
-import { getUrlFromName } from 'src/app/shared/navigate/navigate-functions';
+import { NavigateService } from 'src/app/shared/navigate/navigate.service';
 @Component({
   selector: 'app-mobile-bottom-nav',
   templateUrl: './mobile-bottom-nav.component.html',
@@ -22,11 +21,7 @@ export class MobileBottomNavComponent implements OnInit {
   menubarIcon = menubarIcon;
   cartIcon = cartIcon;
   userIcon = userIcon;
-  constructor(private route: Router) {}
+  constructor(public navi: NavigateService) {}
 
   ngOnInit(): void {}
-  navigateTo(viewName: string) {
-    let url = getUrlFromName(viewName);
-    this.route.navigate([url]);
-  }
 }
