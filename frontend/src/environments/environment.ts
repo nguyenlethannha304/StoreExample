@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  accessTokenExpire: 10 * 60 * 1000, // 10 mins
+  refreshTokenExpire: 7 * 24 * 60 * 60 * 1000, // 7 days
 };
 
 /*

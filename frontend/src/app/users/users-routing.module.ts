@@ -8,23 +8,23 @@ import { UserPanelComponent } from './user-panel/user-panel.component';
 
 const routes: Routes = [
   {
-    path: 'login',
+    path: 'dang-nhap',
     component: LoginComponent,
   },
   {
-    path: 'logout',
+    path: 'dang-xuat',
     component: LogoutComponent,
   },
   {
-    path: 'register',
+    path: 'dang-ky',
     component: RegisterComponent,
   },
   {
-    path: 'profile',
+    path: 'thong-tin-tai-khoan',
     component: ProfileComponent,
   },
   {
-    path: 'panel',
+    path: '',
     component: UserPanelComponent,
   },
 ];

@@ -9,3 +9,8 @@ __pycache__/
 db.sqlite3
 # Node Module
 frontend/node_modules/
+# Blue_print
+/Blue_print/*
+!/Blue_print/mobile.xd
+!/Blue_print/web.xd
+!/Blue_print/icons/

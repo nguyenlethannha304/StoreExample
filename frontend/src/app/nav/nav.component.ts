@@ -1,15 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { searchIcon } from '../shared/icons/icons';
+import { resizeIcon } from '../shared/icons/icon-functions';
 
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.css']
+  styleUrls: ['./nav.component.css'],
 })
-export class NavComponent implements OnInit {
+export class NavComponent implements OnInit, AfterViewInit {
+  @ViewChild('iconContainer') searchIconContainerRef!: ElementRef;
+  searchIcon = searchIcon;
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
+  ngOnInit(): void {}
+  ngAfterViewInit(): void {
+    resizeIcon(this.searchIconContainerRef, '1.125rem');
   }
-
 }

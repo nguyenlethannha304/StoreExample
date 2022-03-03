@@ -1,6 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
-  --bs-background: var(--bs-gray-500);
+  --bs-blue-light: 210, 100%, 52%;
+  --bs-blue: 210, 100%, 50%;
+  --bs-background: var(--bs-blue-light);
+}
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  height: 100%;
+}
+.btn-custom-1 {
+  width: 7.5rem;
+  height: 3rem;
+  font-size: 0.5rem;
 }
 svg {
   width: 100%;

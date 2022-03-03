@@ -8,6 +8,8 @@ import { NavComponent } from './nav/nav.component';
 import { FooterComponent } from './footer/footer.component';
 import { MobileBottomNavComponent } from './nav/mobile-bottom-nav/mobile-bottom-nav.component';
 import { SafeIconHTMLPipe } from './shared/pipe/safe-html.pipe';
+import { HomeComponent } from './common-pages/home/home.component';
+import { AboutComponent } from './common-pages/about/about.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +19,8 @@ import { SafeIconHTMLPipe } from './shared/pipe/safe-html.pipe';
     MobileBottomNavComponent,
     FooterComponent,
     SafeIconHTMLPipe,
+    HomeComponent,
+    AboutComponent,
   ],
   imports: [BrowserModule, AppRoutingModule],
   providers: [],
