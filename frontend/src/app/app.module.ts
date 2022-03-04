@@ -7,9 +7,9 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { NavComponent } from './nav/nav.component';
 import { FooterComponent } from './footer/footer.component';
 import { MobileBottomNavComponent } from './nav/mobile-bottom-nav/mobile-bottom-nav.component';
-import { SafeIconHTMLPipe } from './shared/pipe/safe-html.pipe';
 import { HomeComponent } from './common-pages/home/home.component';
 import { AboutComponent } from './common-pages/about/about.component';
+import { ShareModule } from './shared/share.module';
 
 @NgModule({
   declarations: [
@@ -18,11 +18,10 @@ import { AboutComponent } from './common-pages/about/about.component';
     NavComponent,
     MobileBottomNavComponent,
     FooterComponent,
-    SafeIconHTMLPipe,
     HomeComponent,
     AboutComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [BrowserModule, AppRoutingModule, ShareModule],
   providers: [],
   bootstrap: [AppComponent],
 })
