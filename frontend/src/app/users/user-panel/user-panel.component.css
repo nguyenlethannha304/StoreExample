@@ -1,0 +1,7 @@
+div {
+  width: 100vw;
+}
+#user-infor {
+  height: 5.75rem;
+  background-color: hsl(var(--bs-blue-light) / 0.4);
+}

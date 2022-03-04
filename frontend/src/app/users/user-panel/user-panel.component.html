@@ -1,1 +1,9 @@
-<p>user-panel works!</p>
+<div id="user-infor" class="flex">
+    <div id="avatar" [innerHTML]="userIcon | safeIconHTML"></div>
+    <div id="user-email"></div>
+</div>
+<div id="profile" (click)="navSer.navigateTo('users:profile')"><p>Thông Tin Cá Nhân</p></div>
+<div id="cart"><p>Giỏ hàng</p></div>
+<div id="change-password" (click)="navSer.navigateTo('users:changePassword')"><p>Đổi Mật Khẩu</p></div>
+<div id="item-liked"><p>Yêu Thích/p></div>
+<div id="logout" (click)="navSer.navigateTo('users:logout')"><p>Đăng Xuất</p></div>

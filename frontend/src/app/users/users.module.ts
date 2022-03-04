@@ -7,6 +7,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { RegisterComponent } from './register/register.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { UserPanelComponent } from './user-panel/user-panel.component';
+import { SafeIconHTMLPipe } from '../shared/pipe/safe-html.pipe';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,7 @@ import { UserPanelComponent } from './user-panel/user-panel.component';
     ProfileComponent,
     RegisterComponent,
     ChangePasswordComponent,
-    UserPanelComponent
+    UserPanelComponent,
   ],
   imports: [CommonModule, UserRoutingModule],
 })
