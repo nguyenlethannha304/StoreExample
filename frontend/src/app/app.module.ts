@@ -10,6 +10,7 @@ import { MobileBottomNavComponent } from './nav/mobile-bottom-nav/mobile-bottom-
 import { HomeComponent } from './common-pages/home/home.component';
 import { AboutComponent } from './common-pages/about/about.component';
 import { ShareModule } from './shared/share.module';
+import { LoginComponent } from './common-pages/login/login.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ShareModule } from './shared/share.module';
     FooterComponent,
     HomeComponent,
     AboutComponent,
+    LoginComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, ShareModule],
   providers: [],

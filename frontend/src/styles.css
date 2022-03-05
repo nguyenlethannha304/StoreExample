@@ -1,8 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
-  --bs-blue-light: 210, 100%, 52%;
-  --bs-blue: 210, 100%, 50%;
-  --bs-background: var(--bs-blue-light);
+  --cl-blue-light: 210, 100%, 52%;
+  --cl-blue: 210, 100%, 50%;
+  --cl-background: var(--cl-blue-light);
 }
 .icon-container {
   display: flex;
@@ -10,13 +10,79 @@
   justify-items: center;
   height: 100%;
 }
-.btn-custom-1 {
-  width: 7.5rem;
-  height: 3rem;
-  font-size: 0.5rem;
-}
 svg {
   width: 100%;
   height: 100%;
   fill: var(--bs-light);
+}
+.color-cl-blue-light {
+  color: hsl(var(--cl-blue-light));
+}
+.color-cl-blue {
+  color: hsl(var(--cl-blue));
+}
+.background-cl-blue-light {
+  background-color: hsl(var(--cl-blue-light));
+}
+.background-cl-blue {
+  background-color: hsl(var(--cl-blue));
+}
+/************ 
+FORM SECTION
+ ************/
+.form-custom {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 50vh;
+}
+.input-container {
+  width: 65%;
+}
+.input-container > * {
+  margin-bottom: 0.25rem;
+}
+.input-container > label {
+  display: block;
+  font-weight: 500;
+  color: hsl(var(--cl-blue-light));
+}
+.input-container > .error {
+  color: rgba(var(--bs-danger-rgb), 0.9);
+}
+.input-custom {
+  border: 1px solid;
+  border-color: hsl(var(--cl-blue-light));
+  color: hsl(var(--cl-blue-light), 0.7);
+  border-radius: 0.3rem;
+  font-size: 1rem;
+  text-indent: 0.5rem;
+  height: 2rem;
+  width: 100%;
+}
+.button-custom {
+  display: inline-block;
+  border: 2px solid;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  height: 2.5rem;
+  width: 7rem;
+}
+.button-custom.primary {
+  background-color: hsl(var(--cl-blue-light));
+  color: var(--bs-white);
+}
+.button-custom.primary:hover {
+  background-color: hsl(var(--cl-blue-light), 0.7);
+}
+.button-custom.secondary {
+  background-color: var(--bs-white);
+  color: hsl(var(--cl-blue-light));
+}
+.button-custom.secondary:hover {
+  background-color: var(--bs-gray-200);
+}
+button + button {
+  margin-left: 1rem;
 }

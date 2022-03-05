@@ -13,7 +13,7 @@ import { NavigateService } from 'src/app/shared/navigate/navigate.service';
   host: {
     class: 'fixed-bottom d-flex align-items-center d-sm-none p-2',
     style:
-      'height:4rem; width:100vw; background-color:hsl(var(--bs-background))',
+      'height:4rem; width:100vw; background-color:hsl(var(--cl-background))',
   },
 })
 export class MobileBottomNavComponent implements OnInit {

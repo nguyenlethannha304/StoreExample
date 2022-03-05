@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserRoutingModule } from './users-routing.module';
-import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RegisterComponent } from './register/register.component';
@@ -11,7 +10,6 @@ import { ShareModule } from '../shared/share.module';
 
 @NgModule({
   declarations: [
-    LoginComponent,
     LogoutComponent,
     ProfileComponent,
     RegisterComponent,

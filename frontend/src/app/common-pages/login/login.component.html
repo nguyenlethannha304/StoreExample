@@ -1,0 +1,15 @@
+<h1 class="color-cl-blue-light mb-4">Đăng Nhập</h1>
+<div appInputContainer id="username" >
+    <label for="username-input">Email hoặc Điện thoại</label>
+    <div class="error"></div>
+    <input id="username-input" appInputElement type="text">
+</div>
+<div appInputContainer id="password">
+    <label for="password-input">Mật khẩu</label>
+    <div class="error"></div>
+    <input appInputElement type="password">
+</div>
+<div class="button-container">
+    <button [appButtonElement]="'primary'">Đăng nhập</button>
+    <button [appButtonElement]="'secondary'" (click)="navSer.navigateTo('users:register')">Đăng ký</button>
+</div>
