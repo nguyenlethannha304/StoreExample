@@ -61,6 +61,7 @@ FORM SECTION
   height: 2rem;
   width: 100%;
 }
+/* Button Element Directive */
 .button-custom {
   display: inline-block;
   border: 2px solid;
@@ -85,4 +86,23 @@ FORM SECTION
 }
 button + button {
   margin-left: 1rem;
+}
+/* HideShowInput Directive */
+.hide-show-input {
+  width: 2rem;
+  height: 2rem;
+}
+.hide-show-input > svg {
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+.hide-show-input > svg:first-child {
+  display: block;
+}
+.hide-show-input.show-input > svg:last-child {
+  display: block;
+}
+.hide-show-input.show-input > svg:first-child {
+  display: none;
 }

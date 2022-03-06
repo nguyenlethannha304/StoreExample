@@ -1,7 +1,7 @@
 import { Directive, HostBinding } from '@angular/core';
 
 @Directive({
-  selector: '[appInputContainer]',
+  selector: 'div[InputContainer]',
 })
 export class InputContainerDirective {
   constructor() {}

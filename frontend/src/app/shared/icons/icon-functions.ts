@@ -1,13 +1,22 @@
 import { ElementRef } from '@angular/core';
-export const positionIconToSideContainer = (
-  container: ElementRef,
-  icon: ElementRef,
-  side: string = 'right',
-  distance: string = '1rem'
+export const positionIconIntoElement = (
+  targetElement: HTMLElement,
+  iconContainer: HTMLElement,
+  side: string = 'right'
 ) => {
-  let containerElement = container.nativeElement;
-  let iconElement = icon.nativeElement;
-  iconElement.style[side] = distance;
+  //This function is called afterViewInit
+  //iconContainer must be absolute position before ViewInit (prevent it taking space during rendering)
+  if (iconContainer.style['position'] != 'absolute') {
+    throw Error(`${iconContainer} must be absolute position`);
+  }
+  let targetPositionInfo: DOMRect = targetElement.getBoundingClientRect();
+  let screenWidth: number = window.innerWidth;
+  iconContainer.style['top'] = `${targetPositionInfo.top}px`;
+  if (side == 'right') {
+    iconContainer.style['right'] = `${
+      screenWidth - targetPositionInfo.right + 8
+    }px`;
+  }
 };
 export const resizeIcon = (
   iconContainerRef: ElementRef,

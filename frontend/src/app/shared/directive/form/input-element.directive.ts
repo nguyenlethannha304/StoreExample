@@ -1,7 +1,7 @@
 import { Directive, ElementRef, HostBinding, Input } from '@angular/core';
 
 @Directive({
-  selector: '[appInputElement]',
+  selector: 'input[InputElement]',
 })
 export class InputElementDirective {
   constructor() {}

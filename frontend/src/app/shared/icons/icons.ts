@@ -8,3 +8,7 @@ export const userIcon =
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" stroke="#231f20" stroke-width=".25"><path d="M30.06,29.92c-1.51-9.72-4-12.36-6-12.92-2.33-.64-3.66,1.55-8,1.55s-5.73-2.2-8-1.55c-2,.56-4.51,3.21-6,12.92Z" stroke-miterlimit="10"/><circle cx="16" cy="8.99" r="6.94"/></svg>';
 export const searchIcon =
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" stroke="#231f20"><path d="M21.14,20.21a10.94,10.94,0,1,0-1,1L29.05,30l1-.84ZM13,22.14a9.21,9.21,0,1,1,9.21-9.21A9.21,9.21,0,0,1,13,22.14Z" stroke-miterlimit="10" stroke-width=".25"/></svg>';
+export const hideInputIcon =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" stroke="#231f20" stroke-width=".25"><path d="M2 15.93c0-3 7.58-6.06 14.07-6S30.05 13 30 16s-7.57 6-14 6-14-3-14-6.07z" stroke-miterlimit="10"/><circle cx="16" cy="15.96" r="2.99"/></svg>';
+export const showInputIcon =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" stroke="#231f20" stroke-width=".25"><path d="M2 16c0-3.07 7.55-6.08 14-6s14 3.08 14 6.12-7.6 6-14.07 6S2 19 2 16z" stroke-miterlimit="10"/><circle cx="16" cy="16" r="2.99"/><path d="M27.95 5.99L4.05 25.97" stroke-miterlimit="10"/></svg>';

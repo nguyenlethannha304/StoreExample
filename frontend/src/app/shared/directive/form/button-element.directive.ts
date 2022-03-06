@@ -1,12 +1,12 @@
 import { Directive, ElementRef, HostBinding, Input } from '@angular/core';
 
 @Directive({
-  selector: '[appButtonElement]',
+  selector: 'button[ButtonElement]',
 })
 export class ButtonElementDirective {
   constructor() {}
-  @Input() appButtonElement: string;
+  @Input() ButtonElement: string;
   @HostBinding('class') get classes() {
-    return 'button-custom' + ' ' + this.appButtonElement;
+    return 'button-custom' + ' ' + this.ButtonElement;
   }
 }
