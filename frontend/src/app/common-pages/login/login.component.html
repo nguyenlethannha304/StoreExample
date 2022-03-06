@@ -1,16 +1,16 @@
 <h1 class="color-cl-blue-light mb-4">Đăng Nhập</h1>
 <div InputContainer id="username" >
-    <label for="username-input">Email hoặc Điện thoại</label>
+    <label for="username-input">Email hoặc Điện Thoại</label>
     <div class="error"></div>
     <input InputElement id="username-input" type="text">
 </div>
 <div InputContainer id="password">
-    <label for="password-input">Mật khẩu</label>
+    <label for="password-input">Mật Khẩu</label>
     <div class="error"></div>
     <input #password InputElement type="password">
     <div HideShowInput [TargetElement]="password"></div>
 </div>
 <div class="button-container">
-    <button [ButtonElement]="'primary'">Đăng nhập</button>
-    <button [ButtonElement]="'secondary'" (click)="navSer.navigateTo('users:register')">Đăng ký</button>
+    <button [ButtonElement]="'primary'">Đăng Nhập</button>
+    <button [ButtonElement]="'secondary'" (click)="navSer.navigateTo('users:register')">Đăng Ký</button>
 </div>

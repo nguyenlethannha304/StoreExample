@@ -1,1 +1,22 @@
-<p>register works!</p>
+<h1 class="color-cl-blue-light mb-4">Đăng ký</h1>
+<div InputContainer id="email">
+    <label for="email-input">Email</label>
+    <div class="error"></div>
+    <input InputElement type="text">
+</div>
+<div InputContainer id="password">
+    <label for="password-input">Mật Khẩu Mới</label>
+    <div class="error"></div>
+    <div HideShowInput [TargetElement]="password"></div>
+    <input #password InputElement type="password">
+</div>
+<div InputContainer id="confirm-password">
+    <label for="confirm-password-input">Xác Nhận Mật Khẩu</label>
+    <div class="error"></div>
+    <div HideShowInput [TargetElement]="confirmPassword"></div>
+    <input #confirmPassword InputElement type="password">
+</div>
+<div class="button-container">
+    <button [ButtonElement]="'primary'">Đăng Ký</button>
+    <button [ButtonElement]="'secondary'" (click)="location.back()">Huỷ</button>
+</div>

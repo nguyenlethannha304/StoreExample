@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 import { LogoutComponent } from './logout/logout.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RegisterComponent } from './register/register.component';
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: 'thong-tin-tai-khoan',
     component: ProfileComponent,
+  },
+  {
+    path: 'doi-mat-khau',
+    component: ChangePasswordComponent,
   },
   {
     path: '',

@@ -1,0 +1,6 @@
+:host {
+  display: block;
+  background-color: hsl(var(--cl-blue), 0.7);
+  color: white;
+  height: 40vh;
+}
