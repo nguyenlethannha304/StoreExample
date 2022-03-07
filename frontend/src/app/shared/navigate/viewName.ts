@@ -3,10 +3,10 @@ export const viewNameObject = {
   about: 'about',
   cart: 'cart',
   menuBar: 'menuBar',
-  login: 'dang-nhap',
   //Users module
   users: {
     name: 'users',
+    login: 'dang-nhap',
     profile: 'thong-tin-tai-khoan',
     changePassword: 'doi-mat-khau',
     logout: 'dang-xuat',

@@ -4,6 +4,7 @@ import { UserRoutingModule } from './users-routing.module';
 import { LogoutComponent } from './logout/logout.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { UserPanelComponent } from './user-panel/user-panel.component';
 import { ShareModule } from '../shared/share.module';
@@ -14,13 +15,12 @@ import { PanelRowDirective } from './shared/directive/panel-row.directive';
     LogoutComponent,
     ProfileComponent,
     RegisterComponent,
+    LoginComponent,
     ChangePasswordComponent,
     UserPanelComponent,
     PanelRowDirective,
   ],
   imports: [CommonModule, UserRoutingModule, ShareModule],
-  exports: [
-    PanelRowDirective
-  ],
+  exports: [PanelRowDirective],
 })
 export class UsersModule {}

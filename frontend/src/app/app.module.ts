@@ -8,7 +8,6 @@ import { NotFoundComponent } from './common-pages/not-found/not-found.component'
 import { HomeComponent } from './common-pages/home/home.component';
 import { AboutComponent } from './common-pages/about/about.component';
 import { ShareModule } from './shared/share.module';
-import { LoginComponent } from './common-pages/login/login.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +15,6 @@ import { LoginComponent } from './common-pages/login/login.component';
     NotFoundComponent,
     HomeComponent,
     AboutComponent,
-    LoginComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, ShareModule],
   providers: [],
