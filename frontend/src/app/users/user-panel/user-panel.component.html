@@ -3,8 +3,8 @@
     <div id="user-email" class="ms-3 mt-3"><p class="fs-6">Thông tin tài khoản</p>
     <p>Email: abc@gmail.com</p></div>
 </div>
-<div id="profile" class="custom" (click)="navSer.navigateTo('users:profile')"><p>Thông Tin Cá Nhân</p></div>
-<div id="cart" class="custom"><p>Giỏ hàng</p></div>
-<div id="change-password" class="custom" (click)="navSer.navigateTo('users:changePassword')"><p>Đổi Mật Khẩu</p></div>
-<div id="item-liked" class="custom"><p>Yêu Thích</p></div>
-<div id="logout" class="custom" (click)="navSer.navigateTo('users:logout')"><p>Đăng Xuất</p></div>
+<div PanelRow id="profile"  (click)="navSer.navigateTo('users:profile')"><p>Thông Tin Cá Nhân</p></div>
+<div PanelRow id="cart" ><p>Giỏ hàng</p></div>
+<div PanelRow id="change-password"  (click)="navSer.navigateTo('users:changePassword')"><p>Đổi Mật Khẩu</p></div>
+<div PanelRow id="item-liked" ><p>Yêu Thích</p></div>
+<div PanelRow id="logout" (click)="navSer.navigateTo('users:logout')"><p>Đăng Xuất</p></div>

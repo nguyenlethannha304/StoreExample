@@ -9,4 +9,7 @@ export class ButtonElementDirective {
   @HostBinding('class') get classes() {
     return 'button-custom' + ' ' + this.ButtonElement;
   }
+  @HostBinding('type') get type() {
+    return 'button';
+  }
 }

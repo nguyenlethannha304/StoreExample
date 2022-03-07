@@ -5,7 +5,6 @@ import { NavigateService } from 'src/app/shared/navigate/navigate.service';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  host: { class: 'form-custom' },
 })
 export class LoginComponent implements OnInit {
   constructor(public navSer: NavigateService) {}

@@ -1,1 +1,29 @@
-<p>profile works!</p>
+<form action="" class="form-custom">
+    <h1 class="color-cl-blue-light mb-4">Thông Tin Cá Nhân</h1>
+    <div InputContainer id="phone" >
+        <label for="phone-input">Điện Thoại</label>
+        <div class="error"></div>
+        <input InputElement id="phone-input" type="text">
+    </div>
+    <div InputContainer id="address">
+        <label for="address-input">Địa Chỉ</label>
+        <div class="error"></div>
+        <input #address InputElement type="text">
+    </div>
+    <div style="width:65%" class="d-flex">
+        <div InputContainer class="half-input-container">
+            <label for="address-input">Thành Phố</label>
+            <div class="error"></div>
+            <input #address InputElement type="text">
+        </div>
+        <div InputContainer class="half-input-container">
+            <label for="address-input">Tỉnh</label>
+            <div class="error"></div>
+            <input #address InputElement type="text">
+        </div>
+    </div>
+    <div class="button-container">
+        <button [ButtonElement]="'primary'">Lưu</button>
+        <button [ButtonElement]="'secondary'" (click)="location.back()">Huỷ</button>
+    </div>
+</form>

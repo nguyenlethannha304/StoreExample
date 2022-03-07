@@ -7,6 +7,7 @@ import { RegisterComponent } from './register/register.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { UserPanelComponent } from './user-panel/user-panel.component';
 import { ShareModule } from '../shared/share.module';
+import { PanelRowDirective } from './shared/directive/panel-row.directive';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,11 @@ import { ShareModule } from '../shared/share.module';
     RegisterComponent,
     ChangePasswordComponent,
     UserPanelComponent,
+    PanelRowDirective,
   ],
   imports: [CommonModule, UserRoutingModule, ShareModule],
+  exports: [
+    PanelRowDirective
+  ],
 })
 export class UsersModule {}

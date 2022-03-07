@@ -40,6 +40,12 @@ FORM SECTION
 .input-container {
   width: 65%;
 }
+.half-input-container {
+  width: 50%;
+}
+.half-input-container + .half-input-container {
+  margin-left: 1rem;
+}
 .input-container > * {
   margin-bottom: 0.25rem;
 }

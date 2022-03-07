@@ -6,7 +6,6 @@ import { NavigateService } from 'src/app/shared/navigate/navigate.service';
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
-  host: { class: 'form-custom' },
 })
 export class RegisterComponent implements OnInit {
   constructor(public location: Location) {}
