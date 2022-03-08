@@ -1,6 +1,7 @@
 <form class="form-custom" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <h1 class="color-cl-blue-light mb-4">Đăng Nhập</h1>
-    <div class="error"></div>
+    <div id="form-errors" class="error"></div>
+    <!-- username Input -->
     <div InputContainer id="username" >
         <label for="username-input">Email hoặc Điện Thoại</label>
         <div *ngIf="username.invalid && username.dirty && username.touched" class="error">
@@ -10,6 +11,7 @@
         </div>
         <input InputElement formControlName="username" id="username-input" type="text" required>
     </div>
+    <!-- password Input -->
     <div InputContainer id="password">
         <label for="password-input">Mật Khẩu</label>
         <div *ngIf="password.invalid && password.dirty && password.touched" class="error">
@@ -20,6 +22,7 @@
         <input #passwordEle InputElement type="password" id="password-input" formControlName="password" required>
         <div HideShowInput [TargetElement]="passwordEle"></div>
     </div>
+    <!-- Buttons -->
     <div class="button-container">
         <button [ButtonElement]="'primary'" Type="submit">Đăng Nhập</button>
         <button [ButtonElement]="'secondary'" (click)="navSer.navigateTo('users:register')">Đăng Ký</button>

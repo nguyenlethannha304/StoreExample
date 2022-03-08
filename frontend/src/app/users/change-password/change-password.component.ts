@@ -22,10 +22,7 @@ export class ChangePasswordComponent implements OnInit {
       newPass: new FormControl('', isPasswordValid()),
       confirmPass: new FormControl('', isPasswordValid()),
     },
-    {
-      validators: isTwoPasswordSame('newPass', 'confirmPass'),
-      updateOn: 'blur',
-    }
+    isTwoPasswordSame('newPass', 'confirmPass')
   );
   get oldPass(): AbstractControl {
     return this.changePassForm.get('oldPass');
