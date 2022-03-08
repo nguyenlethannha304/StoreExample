@@ -1,5 +1,43 @@
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+export const isTwoPasswordSame = (
+  firstPassName: string,
+  secondPassName: string
+) => {
+  return (control: AbstractControl): ValidationErrors | null => {
+    let firstPassControl = control.get(firstPassName);
+    let secondPassControl = control.get(secondPassName);
+    if (firstPassControl.value !== secondPassControl.value) {
+      return { password: 'Mật khẩu mới và xác nhận mật khẩu không trùng nhau' };
+    }
+    return null;
+  };
+};
+export const isEmailValid = (): ValidatorFn => {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (isEmail(control.value)) {
+      return null;
+    }
+    return { Email: 'Địa chỉ Email không hợp lệ' };
+  };
+};
+export const isPhoneNumberValid = (): ValidatorFn => {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (isPhoneNumber(control.value)) {
+      return null;
+    }
+    return { phoneNumber: 'Số điện thoại không hợp lệ' };
+  };
+};
+export const isPasswordValid = (): ValidatorFn => {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (control.value.length >= 8) {
+      return null;
+    }
+    return { password: 'Mật khẩu phải ít nhất 8 ký tự' };
+  };
+};
 export const isPhoneNumber = (phone: string): boolean => {
-  const PHONE_PATTERN: RegExp = /(+84|0)\d{9}/;
+  const PHONE_PATTERN: RegExp = /(\+84|0)\d{9}/;
   return PHONE_PATTERN.test(phone);
 };
 export const isEmail = (email: string): boolean => {

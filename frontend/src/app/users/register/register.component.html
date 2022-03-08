@@ -1,22 +1,38 @@
-<form class="form-custom">
+<form class="form-custom" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
     <h1 class="color-cl-blue-light mb-4">Đăng ký</h1>
+    <!-- Email Input -->
     <div InputContainer id="email">
         <label for="email-input">Email</label>
-        <div class="error"></div>
-        <input InputElement type="text">
+        <div *ngIf="email.invalid && email.dirty && email.touched" class="error">
+            <p *ngFor="let errorKey of (email.errors | objectToKeys)">
+                {{email.errors[errorKey]}}
+            </p>
+        </div>
+        <input formControlName="email" id="email-input" InputElement type="text">
     </div>
+    <!-- Password Input -->
     <div InputContainer id="password">
         <label for="password-input">Mật Khẩu Mới</label>
-        <div class="error"></div>
+        <div *ngIf="pass.invalid && pass.dirty && pass.touched" class="error">
+            <p *ngFor="let errorKey of (pass.errors | objectToKeys)">
+                {{pass.errors[errorKey]}}
+            </p>
+        </div>
         <div HideShowInput [TargetElement]="password"></div>
-        <input #password InputElement type="password">
+        <input #password InputElement id="password-input" type="password" formControlName="pass">
     </div>
+    <!-- ConfirmPass Input -->
     <div InputContainer id="confirm-password">
         <label for="confirm-password-input">Xác Nhận Mật Khẩu</label>
-        <div class="error"></div>
+        <div *ngIf="confirmPass.invalid && confirmPass.dirty && confirmPass.touched" class="error">
+            <p *ngFor="let errorKey of (confirmPass.errors | objectToKeys)">
+                {{confirmPass.errors[errorKey]}}
+            </p>
+        </div>
         <div HideShowInput [TargetElement]="confirmPassword"></div>
-        <input #confirmPassword InputElement type="password">
+        <input #confirmPassword InputElement  id="confirm-password-input" type="password" formControlName=""confirmPass>
     </div>
+    <!-- Buttons -->
     <div class="button-container">
         <button [ButtonElement]="'primary'">Đăng Ký</button>
         <button [ButtonElement]="'secondary'" (click)="location.back()">Huỷ</button>

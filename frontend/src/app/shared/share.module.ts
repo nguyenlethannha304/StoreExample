@@ -8,6 +8,7 @@ import { HideShowInputDirective } from './directive/form/hide-show.directive';
 import { NavComponent } from './components/nav/nav.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { MobileBottomNavComponent } from './components/nav/mobile-bottom-nav/mobile-bottom-nav.component';
+import { ObjectToKeysPipe } from './pipe/object-to-keys.pipe';
 @NgModule({
   declarations: [
     SafeIconHTMLPipe,
@@ -18,6 +19,7 @@ import { MobileBottomNavComponent } from './components/nav/mobile-bottom-nav/mob
     NavComponent,
     MobileBottomNavComponent,
     FooterComponent,
+    ObjectToKeysPipe,
   ],
   exports: [
     SafeIconHTMLPipe,
@@ -28,6 +30,7 @@ import { MobileBottomNavComponent } from './components/nav/mobile-bottom-nav/mob
     NavComponent,
     MobileBottomNavComponent,
     FooterComponent,
+    ObjectToKeysPipe,
   ],
   imports: [CommonModule],
 })

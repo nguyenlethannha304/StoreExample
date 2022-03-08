@@ -1,18 +1,27 @@
-<form class="form-custom">
+<form class="form-custom" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <h1 class="color-cl-blue-light mb-4">Đăng Nhập</h1>
+    <div class="error"></div>
     <div InputContainer id="username" >
         <label for="username-input">Email hoặc Điện Thoại</label>
-        <div class="error"></div>
-        <input InputElement id="username-input" type="text">
+        <div *ngIf="username.invalid && username.dirty && username.touched" class="error">
+            <p *ngFor="let errorKey of (username.errors | objectToKeys)">
+                {{username.errors[errorKey]}}
+            </p>
+        </div>
+        <input InputElement formControlName="username" id="username-input" type="text" required>
     </div>
     <div InputContainer id="password">
         <label for="password-input">Mật Khẩu</label>
-        <div class="error"></div>
-        <input #password InputElement type="password">
-        <div HideShowInput [TargetElement]="password"></div>
+        <div *ngIf="password.invalid && password.dirty && password.touched" class="error">
+            <p *ngFor="let errorKey of (password.errors | objectToKeys)">
+                {{password.errors[errorKey]}}
+            </p>
+        </div>
+        <input #passwordEle InputElement type="password" id="password-input" formControlName="password" required>
+        <div HideShowInput [TargetElement]="passwordEle"></div>
     </div>
     <div class="button-container">
-        <button [ButtonElement]="'primary'">Đăng Nhập</button>
+        <button [ButtonElement]="'primary'" Type="submit">Đăng Nhập</button>
         <button [ButtonElement]="'secondary'" (click)="navSer.navigateTo('users:register')">Đăng Ký</button>
     </div>
 </form>

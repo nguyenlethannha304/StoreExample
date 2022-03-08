@@ -9,6 +9,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 import { UserPanelComponent } from './user-panel/user-panel.component';
 import { ShareModule } from '../shared/share.module';
 import { PanelRowDirective } from './shared/directive/panel-row.directive';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,7 @@ import { PanelRowDirective } from './shared/directive/panel-row.directive';
     UserPanelComponent,
     PanelRowDirective,
   ],
-  imports: [CommonModule, UserRoutingModule, ShareModule],
+  imports: [CommonModule, UserRoutingModule, ShareModule, ReactiveFormsModule],
   exports: [PanelRowDirective],
 })
 export class UsersModule {}

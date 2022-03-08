@@ -57,6 +57,9 @@ FORM SECTION
 .input-container > .error {
   color: rgba(var(--bs-danger-rgb), 0.9);
 }
+.error > p {
+  margin-bottom: 0.25rem;
+}
 .input-custom {
   border: 1px solid;
   border-color: hsl(var(--cl-blue-light));

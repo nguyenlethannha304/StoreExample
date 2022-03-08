@@ -6,10 +6,11 @@ import { Directive, ElementRef, HostBinding, Input } from '@angular/core';
 export class ButtonElementDirective {
   constructor() {}
   @Input() ButtonElement: string;
+  @Input() Type = 'button';
   @HostBinding('class') get classes() {
     return 'button-custom' + ' ' + this.ButtonElement;
   }
   @HostBinding('type') get type() {
-    return 'button';
+    return this.Type;
   }
 }

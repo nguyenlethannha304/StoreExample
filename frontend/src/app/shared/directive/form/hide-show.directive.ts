@@ -15,11 +15,14 @@ export class HideShowInputDirective implements AfterViewInit {
   // toggle input type between password and text
   constructor(private el: ElementRef) {
     el.nativeElement.innerHTML = showInputIcon + hideInputIcon;
-    el.nativeElement.style['position'] = 'absolute';
   }
   @Input() TargetElement: HTMLInputElement;
   ngAfterViewInit(): void {
-    positionIconIntoElement(this.TargetElement, this.el.nativeElement);
+    positionIconIntoElement(
+      this.el.nativeElement.parentNode,
+      this.el.nativeElement,
+      'right bottom'
+    );
   }
 
   @HostBinding('class') get class() {

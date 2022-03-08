@@ -1,20 +1,24 @@
-<form action="" class="form-custom">
+<form action="" class="form-custom" formGroupName="profileForm">
     <h1 class="color-cl-blue-light mb-4">Thông Tin Cá Nhân</h1>
     <div InputContainer id="phone" >
         <label for="phone-input">Điện Thoại</label>
-        <div class="error"></div>
+        <div *ngIf="phone.invalid && phone.dirty && phone.touched" class="error">
+            <p *ngFor="let errorKey of (phone.errors | objectToKeys)">
+                {{phone.errors[errorKey]}}
+            </p>
+        </div>
         <input InputElement id="phone-input" type="text">
     </div>
     <div InputContainer id="address">
         <label for="address-input">Địa Chỉ</label>
         <div class="error"></div>
-        <input #address InputElement type="text">
+        <input #address InputElement type="text" formControlName="address">
     </div>
     <div style="width:65%" class="d-flex">
         <div InputContainer class="half-input-container">
-            <label for="address-input">Thành Phố</label>
+            <label for="province-input">Tỉnh</label>
             <div class="error"></div>
-            <input #address InputElement type="text">
+            <input #address InputElement type="text" formControlName="province">
         </div>
         <div InputContainer class="half-input-container">
             <label for="address-input">Tỉnh</label>

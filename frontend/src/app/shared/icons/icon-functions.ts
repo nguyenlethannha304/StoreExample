@@ -4,18 +4,18 @@ export const positionIconIntoElement = (
   iconContainer: HTMLElement,
   side: string = 'right'
 ) => {
+  let sides = side.split(' ');
   //This function is called afterViewInit
   //iconContainer must be absolute position before ViewInit (prevent it taking space during rendering)
-  if (iconContainer.style['position'] != 'absolute') {
-    throw Error(`${iconContainer} must be absolute position`);
-  }
-  let targetPositionInfo: DOMRect = targetElement.getBoundingClientRect();
-  let screenWidth: number = window.innerWidth;
-  iconContainer.style['top'] = `${targetPositionInfo.top}px`;
-  if (side == 'right') {
-    iconContainer.style['right'] = `${
-      screenWidth - targetPositionInfo.right + 8
-    }px`;
+  targetElement.style['position'] = 'relative';
+  iconContainer.style['position'] = 'absolute';
+  for (let side of sides) {
+    if (side == 'bottom' || side == 'top') {
+      iconContainer.style[side] = '0';
+    }
+    if (side == 'right' || side == 'left') {
+      iconContainer.style[side] = `0.5rem`;
+    }
   }
 };
 export const resizeIcon = (
