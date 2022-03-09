@@ -1,4 +1,10 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostBinding,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -6,6 +12,9 @@ import {
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { AuthTokenService } from 'src/app/shared/auth/auth-token.service';
+import { AuthError } from 'src/app/shared/interface/token';
 import { NavigateService } from 'src/app/shared/navigate/navigate.service';
 import {
   isPhoneNumberValid,
@@ -18,9 +27,17 @@ import {
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  constructor(public navSer: NavigateService) {}
-  ngOnInit(): void {}
+  constructor(
+    public navSer: NavigateService,
+    private authTokenSer: AuthTokenService,
+    private route: ActivatedRoute
+  ) {}
+  ngOnInit(): void {
+    this.redirectAfterLogin = this.route.snapshot.queryParams['next'];
+  }
   // FORM SECTION
+  @ViewChild('formError') formErrorContainer: ElementRef;
+  redirectAfterLogin: string = '/'; //default redirect to homepage
   loginForm: FormGroup = new FormGroup({
     username: new FormControl('', isUsernameValid()),
     password: new FormControl('', isPasswordValid()),
@@ -31,7 +48,23 @@ export class LoginComponent implements OnInit {
   get password() {
     return this.loginForm.get('password');
   }
-  onSubmit() {}
+  showErrorForm = (body: AuthError) => {
+    this.formErrorContainer.nativeElement.innerHTML =
+      '<p>Tên đăng nhập hoặc Mật khẩu không đúng</p>';
+  };
+  onSubmit() {
+    if (this.loginForm.valid) {
+      let username = this.username.value;
+      let password = this.password.value;
+      console.log(this.redirectAfterLogin);
+      this.authTokenSer.login(
+        username,
+        password,
+        this.showErrorForm,
+        this.redirectAfterLogin
+      );
+    }
+  }
 }
 
 // Username validate

@@ -9,6 +9,7 @@ import { NavComponent } from './components/nav/nav.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { MobileBottomNavComponent } from './components/nav/mobile-bottom-nav/mobile-bottom-nav.component';
 import { ObjectToKeysPipe } from './pipe/object-to-keys.pipe';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     SafeIconHTMLPipe,
@@ -32,6 +33,6 @@ import { ObjectToKeysPipe } from './pipe/object-to-keys.pipe';
     FooterComponent,
     ObjectToKeysPipe,
   ],
-  imports: [CommonModule],
+  imports: [CommonModule, HttpClientModule],
 })
 export class ShareModule {}

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from '../shared/auth/auth.guard';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
@@ -15,6 +16,7 @@ const routes: Routes = [
   {
     path: 'dang-xuat',
     component: LogoutComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'dang-ky',
@@ -23,14 +25,17 @@ const routes: Routes = [
   {
     path: 'thong-tin-tai-khoan',
     component: ProfileComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'doi-mat-khau',
     component: ChangePasswordComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: '',
     component: UserPanelComponent,
+    canActivate: [AuthGuard],
   },
 ];
 

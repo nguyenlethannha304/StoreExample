@@ -54,11 +54,12 @@ FORM SECTION
   font-weight: 500;
   color: hsl(var(--cl-blue-light));
 }
-.input-container > .error {
+.error {
   color: rgba(var(--bs-danger-rgb), 0.9);
 }
 .error > p {
   margin-bottom: 0.25rem;
+  max-width: 100%;
 }
 .input-custom {
   border: 1px solid;

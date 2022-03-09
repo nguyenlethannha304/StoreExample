@@ -4,8 +4,9 @@
 
 export const environment = {
   production: false,
-  accessTokenExpire: 10 * 60 * 1000, // 10 mins
-  refreshTokenExpire: 7 * 24 * 60 * 60 * 1000, // 7 days
+  api: 'http://127.0.0.1:8000/api',
+  accessTokenExpireIn: 5 * 60 * 1000, // 5 mins
+  refreshTokenExpireIn: 1 * 24 * 60 * 60 * 1000, // 1 days
 };
 
 /*
