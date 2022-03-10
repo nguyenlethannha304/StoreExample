@@ -57,7 +57,9 @@ export class AuthTokenService {
   }
   set accessToken(value: string) {
     this._accessToken = value;
-    this._accessTokenSetTime = new Date().getTime();
+    if (value != '') {
+      this._accessTokenSetTime = new Date().getTime();
+    }
   }
   get accessToken$(): Observable<string> {
     if (this.accessToken != '' && !this.isTokenExpire('access')) {
@@ -86,13 +88,15 @@ export class AuthTokenService {
   }
   set refreshToken(value: string) {
     this._refreshToken = value;
-    this._refreshTokenSetTime = new Date().getTime();
-    // Save to local storage
-    window.localStorage.setItem('refresh-token', this._refreshToken);
-    window.localStorage.setItem(
-      'refresh-token-set-time',
-      this._refreshTokenSetTime.toString()
-    );
+    if (value != '') {
+      // Save to local storage
+      this._refreshTokenSetTime = new Date().getTime();
+      window.localStorage.setItem('refresh-token', this._refreshToken);
+      window.localStorage.setItem(
+        'refresh-token-set-time',
+        this._refreshTokenSetTime.toString()
+      );
+    }
   }
   isTokenExpire = (type: 'access' | 'refresh'): boolean => {
     let duration = 0;

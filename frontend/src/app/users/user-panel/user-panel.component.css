@@ -20,7 +20,7 @@ div {
   display: flex;
   align-items: center;
   background-color: hsl(var(--cl-blue-light), 0.3);
-  height: 14vh;
+  height: 10vh;
 }
 .panel-row p {
   width: 100%;

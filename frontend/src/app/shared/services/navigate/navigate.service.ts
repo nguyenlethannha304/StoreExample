@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { viewNameObject } from './viewName';
-//Service allow navigate website via constant name in viewNameObject
+
 @Injectable({
   providedIn: 'root',
 })
 export class NavigateService {
+  //Service allow navigate website via constant name in viewNameObject
   constructor(private route: Router) {}
   navigateTo(viewName: string) {
     let url = this.getUrlFromName(viewName);

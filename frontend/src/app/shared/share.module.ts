@@ -10,29 +10,34 @@ import { FooterComponent } from './components/footer/footer.component';
 import { MobileBottomNavComponent } from './components/nav/mobile-bottom-nav/mobile-bottom-nav.component';
 import { ObjectToKeysPipe } from './pipe/object-to-keys.pipe';
 import { HttpClientModule } from '@angular/common/http';
+import { httpInterceptorProviders } from './interceptors';
+import { MessageComponent } from './components/message/message.component';
 @NgModule({
   declarations: [
+    MessageComponent,
+    NavComponent,
+    FooterComponent,
     SafeIconHTMLPipe,
     InputElementDirective,
     ButtonElementDirective,
     InputContainerDirective,
     HideShowInputDirective,
-    NavComponent,
     MobileBottomNavComponent,
-    FooterComponent,
     ObjectToKeysPipe,
   ],
   exports: [
+    MessageComponent,
+    NavComponent,
+    FooterComponent,
     SafeIconHTMLPipe,
     InputElementDirective,
     ButtonElementDirective,
     InputContainerDirective,
     HideShowInputDirective,
-    NavComponent,
     MobileBottomNavComponent,
-    FooterComponent,
     ObjectToKeysPipe,
   ],
+  providers: [httpInterceptorProviders],
   imports: [CommonModule, HttpClientModule],
 })
 export class ShareModule {}

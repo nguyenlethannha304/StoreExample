@@ -15,6 +15,7 @@ import { AuthTokenService } from './auth-token.service';
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
+  // Require user login
   constructor(
     private authTokenSer: AuthTokenService,
     private router: Router,

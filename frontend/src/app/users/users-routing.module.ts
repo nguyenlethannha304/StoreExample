@@ -16,7 +16,6 @@ const routes: Routes = [
   {
     path: 'dang-xuat',
     component: LogoutComponent,
-    canActivate: [AuthGuard],
   },
   {
     path: 'dang-ky',

@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  HostBinding,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -15,7 +9,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { AuthTokenService } from 'src/app/shared/auth/auth-token.service';
 import { AuthError } from 'src/app/shared/interface/token';
-import { NavigateService } from 'src/app/shared/navigate/navigate.service';
+import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
 import {
   isPhoneNumberValid,
   isEmailValid,
@@ -56,7 +50,6 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       let username = this.username.value;
       let password = this.password.value;
-      console.log(this.redirectAfterLogin);
       this.authTokenSer.login(
         username,
         password,

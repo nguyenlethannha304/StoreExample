@@ -19,7 +19,6 @@ import { httpInterceptorProviders } from './shared/interceptors';
     AboutComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, ShareModule],
-  providers: [httpInterceptorProviders],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

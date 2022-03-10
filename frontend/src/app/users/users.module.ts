@@ -10,6 +10,7 @@ import { UserPanelComponent } from './user-panel/user-panel.component';
 import { ShareModule } from '../shared/share.module';
 import { PanelRowDirective } from './shared/directive/panel-row.directive';
 import { ReactiveFormsModule } from '@angular/forms';
+import { httpInterceptorProviders } from '../shared/interceptors';
 
 @NgModule({
   declarations: [
