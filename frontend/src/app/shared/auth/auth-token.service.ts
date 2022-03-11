@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { catchError, Observable, of, map, tap } from 'rxjs';
-import { NavigateService } from '../navigate/navigate.service';
+import { NavigateService } from '../services/navigate/navigate.service';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { AuthError, TokenPair } from '../interface/token';

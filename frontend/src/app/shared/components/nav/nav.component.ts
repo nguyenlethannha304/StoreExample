@@ -5,8 +5,8 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { searchIcon } from '../../icons/icons';
-import { resizeIcon } from '../../icons/icon-functions';
+import { searchIcon } from '../../services/icons/icons';
+import { resizeIcon } from '../../services/icons/icon-functions';
 
 @Component({
   selector: 'app-nav',

@@ -6,9 +6,8 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
-import { map, mapTo, Observable, of } from 'rxjs';
-import { NavigateService } from '../navigate/navigate.service';
-import { viewNameObject } from '../navigate/viewName';
+import { map, Observable, of } from 'rxjs';
+import { NavigateService } from '../services/navigate/navigate.service';
 import { AuthTokenService } from './auth-token.service';
 
 @Injectable({

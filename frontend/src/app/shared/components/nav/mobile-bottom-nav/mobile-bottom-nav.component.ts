@@ -4,8 +4,8 @@ import {
   menubarIcon,
   cartIcon,
   userIcon,
-} from 'src/app/shared/icons/icons';
-import { NavigateService } from 'src/app/shared/navigate/navigate.service';
+} from 'src/app/shared/services/icons/icons';
+import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
 @Component({
   selector: 'app-mobile-bottom-nav',
   templateUrl: './mobile-bottom-nav.component.html',

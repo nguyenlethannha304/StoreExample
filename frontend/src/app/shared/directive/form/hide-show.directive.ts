@@ -6,8 +6,8 @@ import {
   HostListener,
   Input,
 } from '@angular/core';
-import { hideInputIcon, showInputIcon } from '../../icons/icons';
-import { positionIconIntoElement } from '../../icons/icon-functions';
+import { hideInputIcon, showInputIcon } from '../../services/icons/icons';
+import { positionIconIntoElement } from '../../services/icons/icon-functions';
 @Directive({
   selector: 'div[HideShowInput]',
 })
