@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { delay, Observable, of } from 'rxjs';
-
+import { Subject } from 'rxjs';
+import { Message } from '../../interface/message';
+import { successIcon, errorIcon } from '../icons/icons';
 @Injectable({
   providedIn: 'root',
 })
 export class MessageService {
-  messageLevel = {
+  levels = {
     Sucess: 1,
     Debug: 10,
     Info: 20,
@@ -13,10 +14,14 @@ export class MessageService {
     Error: 40,
     Critical: 50,
   };
-  message$: Observable<[string, number]>;
+  icons = {
+    success: successIcon,
+    error: errorIcon,
+  };
+  messageSubject = new Subject<Message>();
   constructor() {}
-  emitMessage = (message: string, level: number) => {
+  emitMessage = (content: string, level: number) => {
     // level:{1:SUCCESS, 10:DEBUG, 20:INFO, 30:WARNING, 40:ERROR, 50:CRITICAL}
-    this.message$ = of([message, level]);
+    this.messageSubject.next({ content, level });
   };
 }
