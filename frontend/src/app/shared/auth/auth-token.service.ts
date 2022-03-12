@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { catchError, Observable, of, map, tap } from 'rxjs';
 import { NavigateService } from '../services/navigate/navigate.service';
-import { environment } from 'src/environments/environment';
+import { environment as e } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { AuthError, TokenPair } from '../interface/token';
 import { Router } from '@angular/router';
 import { AccessToken } from '../interface/token';
-const e = environment;
 @Injectable({
   providedIn: 'root',
 })

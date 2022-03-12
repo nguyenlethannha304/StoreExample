@@ -1,13 +1,13 @@
 import { ElementRef, Renderer2 } from '@angular/core';
 export const positionIconIntoElement = (
-  targetElement: HTMLElement,
+  Element: HTMLElement,
   iconContainer: HTMLElement,
   side: string = 'right'
 ) => {
   let sides = side.split(' ');
   //This function is called afterViewInit
   //iconContainer must be absolute position before ViewInit (prevent it taking space during rendering)
-  targetElement.style['position'] = 'relative';
+  Element.style['position'] = 'relative';
   iconContainer.style['position'] = 'absolute';
   for (let side of sides) {
     if (side == 'bottom' || side == 'top') {
@@ -18,33 +18,15 @@ export const positionIconIntoElement = (
     }
   }
 };
-export const resizeIcon = (
-  iconContainerRef: ElementRef,
-  size: string = '1.5rem' //24px
+export const renderIconToView = (
+  iconString: string,
+  parentElement: HTMLElement,
+  render: Renderer2
 ) => {
-  let icon = iconContainerRef.nativeElement.querySelector('svg');
-  icon.style['width'] = icon.style['height'] = size;
-};
-export const createIconElement = (iconString: string, render: Renderer2) => {
-  return new CreateIcon(iconString, render).process();
+  let icon = new CreateIcon(iconString, render).process();
+  render.appendChild(parentElement, icon);
 };
 
-const createSvgElement = (
-  iconString: string,
-  render: Renderer2,
-  positionEndOfOpenSVGTag: number
-) => {
-  let svgElement = render.createElement('svg');
-  let firstTag = iconString.slice(4, positionEndOfOpenSVGTag);
-  let attributeValueArray = firstTag.match(ATTRIBUTE_VALUE_REGREX);
-  for (let item of attributeValueArray) {
-    let attributeValue = item.split('=');
-    let attribute = attributeValue[0];
-    let value = attributeValue[1].slice(1, attributeValue[1].length - 1); //Remove "" both sides
-    render.setAttribute(svgElement, attribute, value);
-  }
-  return svgElement;
-};
 const ATTRIBUTE_VALUE_REGREX = /(\w)+=\"(.)+?\"/g;
 const TagSignalRegrex = /<\/|\/>|<|>/g;
 class CreateIcon {
@@ -52,10 +34,10 @@ class CreateIcon {
   preCursor: number = 0;
   curCursor: number = 0;
   svgElement: HTMLElement;
-  trackingOpening: Array<string>;
-  elementArray: Array<unknown>;
+  trackingOpening: Array<string> = [];
+  elementArray: Array<unknown> = [];
   constructor(private iconString: string, private render: Renderer2) {
-    this.svgElement = this.render.createElement('svg');
+    this.svgElement = this.render.createElement('svg', 'svg');
     this.trackingOpening.push('svg');
     this.elementArray.push(this.svgElement);
     this.firstStep();
@@ -67,14 +49,14 @@ class CreateIcon {
     this.curCursor = this.iconString.search('>');
     let attributeString = this.iconString.slice(this.preCursor, this.curCursor);
     this.assignAttributeForElement(this.svgElement, attributeString);
-    this.preCursor = this.curCursor + 1;
   }
   process(): HTMLElement {
     this.firstStep();
-    while (this.iconString.slice(this.curCursor + 1) != '') {
+    while (this.curCursor + 1 < this.iconString.length) {
       this.preCursor = this.curCursor + 1;
-      this.curCursor = this.iconString.slice(this.preCursor).search('>');
-      if (this.iconString.slice(this.preCursor, this.preCursor + 2) == '<\\') {
+      let newString = this.iconString.slice(this.preCursor);
+      this.curCursor = newString.search('>') + this.preCursor;
+      if (this.iconString.slice(this.preCursor, this.preCursor + 2) == '</') {
         this.process_closing_tag();
       } else {
         this.process_opening_tag();
@@ -83,19 +65,19 @@ class CreateIcon {
     return this.svgElement;
   }
   process_opening_tag() {
-    let elementName = this.iconString
-      .slice(this.preCursor)
-      .match(/^<\w+/)[0]
-      .slice(1);
-    let element = this.render.createElement(`${elementName}`);
+    let newString = this.iconString.slice(this.preCursor);
+    let elementName = newString.match(/^<\w+/)[0].slice(1);
+    let element = this.render.createElement(`${elementName}`, 'svg');
     let attributeString = this.iconString.slice(this.preCursor, this.curCursor);
     this.assignAttributeForElement(element, attributeString);
     this.render.appendChild(
       this.elementArray[this.elementArrayLength - 1],
       element
     );
-    this.trackingOpening.push(`${elementName}`);
-    this.elementArray.push(element);
+    if (!this.is_self_tag()) {
+      this.trackingOpening.push(`${elementName}`);
+      this.elementArray.push(element);
+    }
   }
   process_closing_tag() {
     let elementName = this.iconString.slice(this.preCursor + 2, this.curCursor);
@@ -110,11 +92,18 @@ class CreateIcon {
   }
   assignAttributeForElement(element: HTMLElement, attributeString: string) {
     let attributeArray = attributeString.match(ATTRIBUTE_VALUE_REGREX);
-    for (let item of attributeArray) {
-      let attributeValue = item.split('=');
-      let attribute = attributeValue[0];
-      let value = attributeValue[1].slice(1, attributeValue[1].length - 1); //Remove "" both sides
-      this.render.setAttribute(element, attribute, value);
+    if (attributeArray !== null) {
+      for (let item of attributeArray) {
+        let attributeValue = item.split('=');
+        let attribute = attributeValue[0];
+        let value = attributeValue[1].slice(1, attributeValue[1].length - 1); //Remove "" both sides
+        this.render.setAttribute(element, attribute, value);
+      }
     }
+  }
+  is_self_tag() {
+    return (
+      this.iconString.slice(this.curCursor - 1, this.curCursor + 1) == '/>'
+    );
   }
 }

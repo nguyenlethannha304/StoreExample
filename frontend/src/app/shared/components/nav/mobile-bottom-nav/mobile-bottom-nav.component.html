@@ -1,4 +1,4 @@
-<div (click)="navi.navigateTo('home')" [innerHTML]="homeIcon | safeIconHTML"></div>
-<div (click)="navi.navigateTo('menuBar')" [innerHTML]="menubarIcon | safeIconHTML"></div>
-<div (click)="navi.navigateTo('cart')" [innerHTML]="cartIcon | safeIconHTML"></div>
-<div (click)="navi.navigateTo('users:panel')" [innerHTML]="userIcon | safeIconHTML"></div>
+<div #homeContainer (click)="navi.navigateTo('home')"></div>
+<div #menuBarContainer (click)="navi.navigateTo('menuBar')" ></div>
+<div #cartContainer (click)="navi.navigateTo('cart')" ></div>
+<div #userContainer (click)="navi.navigateTo('users:panel')" ></div>

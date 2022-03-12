@@ -3,23 +3,26 @@ import {
   Component,
   ElementRef,
   OnInit,
+  Renderer2,
   ViewChild,
 } from '@angular/core';
+import { renderIconToView } from '../../services/icons/icon-functions';
 import { searchIcon } from '../../services/icons/icons';
-import { resizeIcon } from '../../services/icons/icon-functions';
 
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.css'],
 })
-export class NavComponent implements OnInit, AfterViewInit {
+export class NavComponent implements AfterViewInit {
   @ViewChild('iconContainer') searchIconContainerRef!: ElementRef;
-  searchIcon = searchIcon;
-  constructor() {}
+  constructor(private render: Renderer2) {}
 
-  ngOnInit(): void {}
   ngAfterViewInit(): void {
-    resizeIcon(this.searchIconContainerRef, '1.125rem');
+    renderIconToView(
+      searchIcon,
+      this.searchIconContainerRef.nativeElement,
+      this.render
+    );
   }
 }

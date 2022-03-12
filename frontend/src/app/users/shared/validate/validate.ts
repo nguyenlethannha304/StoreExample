@@ -7,7 +7,7 @@ export const isTwoPasswordSame = (
     let firstPassControl = control.get(firstPassName);
     let secondPassControl = control.get(secondPassName);
     if (firstPassControl.value !== secondPassControl.value) {
-      return { password: 'Mật khẩu mới và xác nhận mật khẩu không trùng nhau' };
+      return { password: 'Mật khẩu mới và mật khẩu xác nhận không giống nhau' };
     }
     return null;
   };

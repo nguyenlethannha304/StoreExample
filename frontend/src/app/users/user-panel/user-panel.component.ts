@@ -3,9 +3,10 @@ import {
   Component,
   ElementRef,
   OnInit,
+  Renderer2,
   ViewChild,
 } from '@angular/core';
-import { resizeIcon } from 'src/app/shared/services/icons/icon-functions';
+import { renderIconToView } from 'src/app/shared/services/icons/icon-functions';
 import { userIcon } from 'src/app/shared/services/icons/icons';
 import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
 @Component({
@@ -15,11 +16,15 @@ import { NavigateService } from 'src/app/shared/services/navigate/navigate.servi
 })
 export class UserPanelComponent implements OnInit, AfterViewInit {
   userIcon = userIcon;
-  @ViewChild('avatarIcon') avatarIconRef!: ElementRef;
-  constructor(public navSer: NavigateService) {}
+  @ViewChild('avatarIcon') avatarIconContainer: ElementRef;
+  constructor(public navSer: NavigateService, private render: Renderer2) {}
 
   ngOnInit(): void {}
   ngAfterViewInit(): void {
-    resizeIcon(this.avatarIconRef, '1.5rem');
+    renderIconToView(
+      userIcon,
+      this.avatarIconContainer.nativeElement,
+      this.render
+    );
   }
 }

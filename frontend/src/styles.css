@@ -4,6 +4,13 @@
   --cl-blue: 210, 100%, 50%;
   --cl-background: var(--cl-blue-light);
 }
+body {
+  background-color: hsl(var(--cl-blue)) !important;
+  min-height: 100vh;
+}
+main {
+  background-color: #fff !important;
+}
 .icon-container {
   display: flex;
   align-items: center;
@@ -14,6 +21,7 @@ svg {
   width: 100%;
   height: 100%;
   fill: var(--bs-light);
+  stroke-width: 0.25px;
 }
 .color-cl-blue-light {
   color: hsl(var(--cl-blue-light));
