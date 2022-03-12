@@ -6,17 +6,13 @@ import { successIcon, errorIcon } from '../icons/icons';
   providedIn: 'root',
 })
 export class MessageService {
-  levels = {
-    Sucess: 1,
-    Debug: 10,
-    Info: 20,
-    Warning: 30,
-    Error: 40,
-    Critical: 50,
+  messageClass = {
+    1: 'alert-sucess',
+    40: 'alert-danger',
   };
   icons = {
-    success: successIcon,
-    error: errorIcon,
+    1: successIcon,
+    40: errorIcon,
   };
   messageSubject = new Subject<Message>();
   constructor() {}

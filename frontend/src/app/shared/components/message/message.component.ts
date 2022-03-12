@@ -1,3 +1,4 @@
+import { TypeofExpr } from '@angular/compiler';
 import {
   Component,
   ElementRef,
@@ -8,6 +9,7 @@ import {
 } from '@angular/core';
 import { Observer } from 'rxjs';
 import { Message } from '../../interface/message';
+import { renderIconToView } from '../../services/icons/icon-functions';
 import { MessageService } from '../../services/message/message.service';
 
 @Component({
@@ -16,11 +18,12 @@ import { MessageService } from '../../services/message/message.service';
   styleUrls: ['./message.component.css'],
   host: {
     class: 'position-absolute top-0 start-0 w-100 h-100 show',
-    '(click)': 'this.revertMesageType()', //Active hide message
+    '(click)': 'this.revertMesageType()', //Actively hide message
   },
 })
 export class MessageComponent implements OnInit, OnDestroy {
-  flag: boolean = false; //Recognize message destroyed or not
+  messageContent: string;
+  messageLevel: number = -1;
   constructor(
     private el: ElementRef,
     private render: Renderer2,
@@ -42,40 +45,48 @@ export class MessageComponent implements OnInit, OnDestroy {
     error: (error) => {},
     complete: () => {
       // Destroy after 3 seconds
-      setTimeout(this.revertMessageType, 3000);
+      setTimeout(this.removeMessage, 3000);
     },
   };
   createMessage(message: Message) {
-    this.changeMessageType(message.level);
-    this.assignIcon(message.level);
-    this.assignContent(message.content);
-    this.flag = true;
+    this.messageLevel = message.level;
+    this.messageContent = message.content;
+    this.changeMessageClass();
+    this.assignIcon();
+    // Make message visible
+    this.render.addClass(this.messageContainer.nativeElement, 'visible');
   }
-  changeMessageType(level: number) {
-    if (level == this.messageSer.levels.Sucess) {
-      this.render.addClass(
-        this.messageContainer.nativeElement,
-        'alert-success'
-      );
-    } else if (level == this.messageSer.levels.Error) {
-      this.render.addClass(this.messageContainer.nativeElement, 'alert-danger');
-    }
-  }
-  assignIcon(level: number) {
-    this.iconContainer.nativeElement.innerHTML =
-      this.messageSer.icons[
-        level.toString() as keyof typeof this.messageSer.icons
+  changeMessageClass() {
+    let className =
+      this.messageSer.messageClass[
+        this.messageLevel as keyof typeof this.messageSer.messageClass
       ];
+    this.render.addClass(this.messageContainer.nativeElement, className);
   }
-  assignContent(content: string) {}
-  revertMessageType() {
-    if (this.flag == true) {
-      let messageContainerE: HTMLElement = this.messageContainer.nativeElement;
-      let classListLength = messageContainerE.classList.length;
-      // Remove the last class (the one added from changeMessageType())
-      messageContainerE.classList.remove(
-        `${messageContainerE.classList[classListLength - 1]}`
-      );
-    }
+  removeMessageClass() {
+    let className =
+      this.messageSer.messageClass[
+        this.messageLevel as keyof typeof this.messageSer.messageClass
+      ];
+    this.render.removeClass(this.messageContainer.nativeElement, className);
+  }
+  assignIcon() {
+    let iconString =
+      this.messageSer.icons[
+        this.messageLevel as keyof typeof this.messageSer.icons
+      ];
+    renderIconToView(iconString, this.iconContainer.nativeElement, this.render);
+  }
+  unassignIcon() {
+    Array.from(this.iconContainer.nativeElement.children).forEach((child) => {
+      this.render.removeChild(this.iconContainer.nativeElement, child);
+    });
+  }
+
+  removeMessage() {
+    // Make message inivisible
+    this.render.removeClass(this.messageContainer.nativeElement, '');
+    this.unassignIcon();
+    this.removeMessageClass();
   }
 }
