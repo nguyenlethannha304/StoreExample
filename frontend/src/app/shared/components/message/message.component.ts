@@ -3,6 +3,7 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
+  Renderer2,
   ViewChild,
 } from '@angular/core';
 import { Observer } from 'rxjs';
@@ -20,7 +21,11 @@ import { MessageService } from '../../services/message/message.service';
 })
 export class MessageComponent implements OnInit, OnDestroy {
   flag: boolean = false; //Recognize message destroyed or not
-  constructor(public messageSer: MessageService) {}
+  constructor(
+    private el: ElementRef,
+    private render: Renderer2,
+    public messageSer: MessageService
+  ) {}
   @ViewChild('messageContainer') messageContainer: ElementRef;
   @ViewChild('iconContainer') iconContainer: ElementRef;
   @ViewChild('contentContainer') contentContainer: ElementRef;
@@ -48,9 +53,12 @@ export class MessageComponent implements OnInit, OnDestroy {
   }
   changeMessageType(level: number) {
     if (level == this.messageSer.levels.Sucess) {
-      this.messageContainer.nativeElement.classList.add('alert-success');
+      this.render.addClass(
+        this.messageContainer.nativeElement,
+        'alert-success'
+      );
     } else if (level == this.messageSer.levels.Error) {
-      this.messageContainer.nativeElement.classList.add('alert-danger');
+      this.render.addClass(this.messageContainer.nativeElement, 'alert-danger');
     }
   }
   assignIcon(level: number) {
@@ -69,8 +77,5 @@ export class MessageComponent implements OnInit, OnDestroy {
         `${messageContainerE.classList[classListLength - 1]}`
       );
     }
-  }
-  toggleMessageVisibility() {
-    this.messageContainer.nativeElement.classList.toggle('');
   }
 }
