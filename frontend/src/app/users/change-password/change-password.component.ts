@@ -1,22 +1,39 @@
 import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import {
   isPasswordValid,
   isTwoPasswordSame,
 } from '../shared/validate/validate';
 import { environment as e } from 'src/environments/environment';
+import { Observer } from 'rxjs';
+import { type } from 'os';
+import { MessageService } from 'src/app/shared/services/message/message.service';
+import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
 @Component({
   selector: 'app-change-password',
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.css'],
 })
 export class ChangePasswordComponent implements OnInit {
-  constructor(public location: Location, private http: HttpClient) {}
+  constructor(
+    public location: Location,
+    private http: HttpClient,
+    private messageSer: MessageService,
+    private render: Renderer2,
+    private navSer: NavigateService
+  ) {}
 
   ngOnInit(): void {}
   // FORM SECTION
+  @ViewChild('formErrorContainer') formErrorContainer: ElementRef;
   changePassForm: FormGroup = new FormGroup(
     {
       oldPass: new FormControl('', isPasswordValid()),
@@ -44,17 +61,27 @@ export class ChangePasswordComponent implements OnInit {
       this.http
         .post(`${e.api}/users/change_password`, body, {
           headers: { Authorization: '' },
-          observe: 'events',
+          observe: 'body',
         })
         .subscribe({
-          next: (events) => {
-            console.log('Ok', events);
+          next: () => {
+            this.messageSer.showSuccessAutoDestroyMessage(
+              'Mật khẩu thay đổi thành công'
+            );
           },
           error: (error) => {
-            console.log('Error', error);
+            Array.from(this.formErrorContainer.nativeElement.children).forEach(
+              (child) => {
+                this.render.removeChild(this.formErrorContainer, child);
+              }
+            );
+            let element = this.render.createElement('p');
+            let text = this.render.createText(error);
+            this.render.appendChild(element, text);
+            this.render.appendChild(this.formErrorContainer, element);
           },
           complete: () => {
-            console.log('Done');
+            this.navSer.navigateTo('home');
           },
         });
     }

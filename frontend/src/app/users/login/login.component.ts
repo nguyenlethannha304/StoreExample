@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -9,6 +15,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { AuthTokenService } from 'src/app/shared/auth/auth-token.service';
 import { AuthError } from 'src/app/shared/interface/token';
+import { MessageService } from 'src/app/shared/services/message/message.service';
 import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
 import {
   isPhoneNumberValid,
@@ -24,7 +31,8 @@ export class LoginComponent implements OnInit {
   constructor(
     public navSer: NavigateService,
     private authTokenSer: AuthTokenService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private render: Renderer2
   ) {}
   ngOnInit(): void {
     this.redirectAfterLogin = this.route.snapshot.queryParams['next'];
@@ -43,8 +51,20 @@ export class LoginComponent implements OnInit {
     return this.loginForm.get('password');
   }
   showErrorForm = (body: AuthError) => {
-    this.formErrorContainer.nativeElement.innerHTML =
-      '<p>Tên đăng nhập hoặc Mật khẩu không đúng</p>';
+    // Remove all old error before rendering the new one
+    Array.from(this.formErrorContainer.nativeElement.children).forEach(
+      (child) => {
+        this.render.removeChild(this.formErrorContainer.nativeElement, child);
+      }
+    );
+    // Render new error
+    let errorElement = this.render.createElement('p');
+    let errorText = this.render.createText(body.detail);
+    this.render.appendChild(errorElement, errorText);
+    this.render.appendChild(
+      this.formErrorContainer.nativeElement,
+      errorElement
+    );
   };
   onSubmit() {
     if (this.loginForm.valid) {

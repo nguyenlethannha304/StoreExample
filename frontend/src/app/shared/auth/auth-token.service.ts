@@ -4,7 +4,7 @@ import { NavigateService } from '../services/navigate/navigate.service';
 import { environment as e } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { AuthError, TokenPair } from '../interface/token';
-import { Router } from '@angular/router';
+import { Router, UrlTree } from '@angular/router';
 import { AccessToken } from '../interface/token';
 @Injectable({
   providedIn: 'root',
@@ -39,7 +39,10 @@ export class AuthTokenService {
           this.accessToken = body.access;
           this.refreshToken = body.refresh;
         },
-        error: (error) => errorShownFunc(error.error),
+        error: (error) => {
+          let body: AuthError = { detail: error['detail'] };
+          errorShownFunc(body);
+        },
         complete: () => {
           this.router.navigateByUrl(redirect);
         },
@@ -60,7 +63,7 @@ export class AuthTokenService {
       this._accessTokenSetTime = new Date().getTime();
     }
   }
-  get accessToken$(): Observable<string> {
+  get accessToken$(): Observable<string> | UrlTree {
     if (this.accessToken != '' && !this.isTokenExpire('access')) {
       // Get token from cache if not expired
       return of(this.accessToken);
@@ -76,7 +79,7 @@ export class AuthTokenService {
             // Save token after getting from server
             this.accessToken = accessToken;
           }),
-          catchError((err, caught) => '')
+          catchError((err, caught) => of(''))
         );
     } else {
       return of('');

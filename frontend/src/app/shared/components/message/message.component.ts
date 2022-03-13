@@ -1,4 +1,3 @@
-import { TypeofExpr } from '@angular/compiler';
 import {
   Component,
   ElementRef,
@@ -18,12 +17,12 @@ import { MessageService } from '../../services/message/message.service';
   styleUrls: ['./message.component.css'],
   host: {
     class: 'position-absolute top-0 start-0 w-100 h-100 show',
-    '(click)': 'this.revertMesageType()', //Actively hide message
   },
 })
 export class MessageComponent implements OnInit, OnDestroy {
   messageContent: string;
   messageLevel: number = -1;
+  autoDestroy: boolean = false;
   constructor(
     private el: ElementRef,
     private render: Renderer2,
@@ -41,11 +40,14 @@ export class MessageComponent implements OnInit, OnDestroy {
   observer: Observer<Message> = {
     next: (message: Message) => {
       this.createMessage(message);
+      this.autoDestroy = message.autoDestroy;
     },
     error: (error) => {},
     complete: () => {
-      // Destroy after 3 seconds
-      setTimeout(this.removeMessage, 3000);
+      if (this.autoDestroy) {
+        // Destroy after 3 seconds
+        setTimeout(this.removeMessage, 3000);
+      }
     },
   };
   createMessage(message: Message) {

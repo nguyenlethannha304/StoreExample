@@ -16,8 +16,14 @@ export class MessageService {
   };
   messageSubject = new Subject<Message>();
   constructor() {}
-  emitMessage = (content: string, level: number) => {
-    // level:{1:SUCCESS, 10:DEBUG, 20:INFO, 30:WARNING, 40:ERROR, 50:CRITICAL}
-    this.messageSubject.next({ content, level });
+  showMessage = (content: string, level: 1 | 40, autoDestroy: boolean) => {
+    this.messageSubject.next({ content, level, autoDestroy });
+  };
+  showSuccessAutoDestroyMessage = (
+    content: string,
+    level: 1 = 1,
+    autoDestroy = true
+  ) => {
+    this.showMessage(content, level, autoDestroy);
   };
 }

@@ -1,4 +1,5 @@
 export interface Message {
   content: string;
-  level: number;
+  level: 1 | 40;
+  autoDestroy: boolean;
 }
