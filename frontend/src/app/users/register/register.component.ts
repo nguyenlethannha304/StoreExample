@@ -17,6 +17,11 @@ import { environment as e } from 'src/environments/environment';
 import { EmptyResponse } from 'src/app/shared/interface/empty-response';
 import { MessageService } from 'src/app/shared/services/message/message.service';
 import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
+import {
+  removeChildrenElement,
+  renderErrorsFromBackend,
+} from 'src/app/shared/common-function';
+import { FormErrors } from 'src/app/shared/interface/errors';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -61,33 +66,15 @@ export class RegisterComponent implements OnInit {
       .subscribe({
         next: (response: HttpEvent<EmptyResponse>) => {
           this.messageSer.showSuccessAutoDestroyMessage(
-            `Your registration is successful. Your registered email is ${email}`
+            `Bạn đã đăng ký thành công. Email đăng ký của bạn là <span>${email}</span>`
           );
         },
-        error: (error: HttpErrorResponse) => {
-          this.showErrorForm(error.error);
+        error: (errors: FormErrors) => {
+          renderErrorsFromBackend(errors, this.formErrorContainer, this.render);
         },
         complete: () => {
           this.navSer.navigateTo('home');
         },
       });
   }
-  showErrorForm = (error: Object) => {
-    // Remove all old errors
-    Array.from(this.formErrorContainer.nativeElement.children).forEach(
-      (child) => {
-        this.render.removeChild(this.formErrorContainer.nativeElement, child);
-      }
-    );
-    // Render new errors
-    for (let value of Object.values(error)) {
-      let elementError = this.render.createElement('p');
-      let elementText = this.render.createText(value);
-      this.render.appendChild(elementError, elementText);
-      this.render.appendChild(
-        this.formErrorContainer.nativeElement,
-        elementError
-      );
-    }
-  };
 }

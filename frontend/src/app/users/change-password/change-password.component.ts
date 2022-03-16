@@ -15,6 +15,8 @@ import {
 import { environment as e } from 'src/environments/environment';
 import { MessageService } from 'src/app/shared/services/message/message.service';
 import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
+import { renderErrorsFromBackend } from 'src/app/shared/common-function';
+import { EmptyResponse } from 'src/app/shared/interface/empty-response';
 @Component({
   selector: 'app-change-password',
   templateUrl: './change-password.component.html',
@@ -57,7 +59,7 @@ export class ChangePasswordComponent implements OnInit {
         new_password2: this.confirmPass.value,
       };
       this.http
-        .post(`${e.api}/users/change_password`, body, {
+        .post<EmptyResponse>(`${e.api}/users/change_password`, body, {
           headers: { Authorization: '' },
           observe: 'body',
         })
@@ -67,16 +69,12 @@ export class ChangePasswordComponent implements OnInit {
               'Mật khẩu thay đổi thành công'
             );
           },
-          error: (error) => {
-            Array.from(this.formErrorContainer.nativeElement.children).forEach(
-              (child) => {
-                this.render.removeChild(this.formErrorContainer, child);
-              }
+          error: (errors) => {
+            renderErrorsFromBackend(
+              errors,
+              this.formErrorContainer,
+              this.render
             );
-            let element = this.render.createElement('p');
-            let text = this.render.createText(error);
-            this.render.appendChild(element, text);
-            this.render.appendChild(this.formErrorContainer, element);
           },
           complete: () => {
             this.navSer.navigateTo('home');

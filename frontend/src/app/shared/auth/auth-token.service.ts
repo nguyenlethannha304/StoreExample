@@ -3,9 +3,10 @@ import { catchError, Observable, of, map, tap } from 'rxjs';
 import { NavigateService } from '../services/navigate/navigate.service';
 import { environment as e } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { AuthError, TokenPair } from '../interface/token';
-import { Router, UrlTree } from '@angular/router';
+import { TokenPair } from '../interface/token';
+import { Router } from '@angular/router';
 import { AccessToken } from '../interface/token';
+import { FormErrors } from '../interface/errors';
 @Injectable({
   providedIn: 'root',
 })
@@ -27,7 +28,7 @@ export class AuthTokenService {
   login = (
     username: string,
     password: string,
-    errorShownFunc: (body: AuthError) => void,
+    errorShownFunc: (body: FormErrors) => void,
     redirect: string
   ) => {
     // submit username and password to server to get 2 tokens
@@ -41,9 +42,8 @@ export class AuthTokenService {
           this.accessToken = body.access;
           this.refreshToken = body.refresh;
         },
-        error: (error) => {
-          let body: AuthError = { detail: error['detail'] };
-          errorShownFunc(body);
+        error: (errors) => {
+          errorShownFunc(errors);
         },
         complete: () => {
           this.router.navigateByUrl(redirect);

@@ -14,7 +14,8 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthTokenService } from 'src/app/shared/auth/auth-token.service';
-import { AuthError } from 'src/app/shared/interface/token';
+import { renderErrorsFromBackend } from 'src/app/shared/common-function';
+import { FormErrors } from 'src/app/shared/interface/errors';
 import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
 import {
   isPhoneNumberValid,
@@ -49,21 +50,8 @@ export class LoginComponent implements OnInit {
   get password() {
     return this.loginForm.get('password');
   }
-  showErrorForm = (body: AuthError) => {
-    // Remove all old error before rendering the new one
-    Array.from(this.formErrorContainer.nativeElement.children).forEach(
-      (child) => {
-        this.render.removeChild(this.formErrorContainer.nativeElement, child);
-      }
-    );
-    // Render new error
-    let errorElement = this.render.createElement('p');
-    let errorText = this.render.createText(body.detail);
-    this.render.appendChild(errorElement, errorText);
-    this.render.appendChild(
-      this.formErrorContainer.nativeElement,
-      errorElement
-    );
+  renderLoginFormErrors = (errors: FormErrors) => {
+    renderErrorsFromBackend(errors, this.formErrorContainer, this.render);
   };
   onSubmit() {
     if (this.loginForm.valid) {
@@ -72,7 +60,7 @@ export class LoginComponent implements OnInit {
       this.authTokenSer.login(
         username,
         password,
-        this.showErrorForm,
+        this.renderLoginFormErrors,
         this.redirectAfterLogin
       );
     }
