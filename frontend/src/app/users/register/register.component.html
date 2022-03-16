@@ -1,5 +1,6 @@
 <form class="form-custom" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
     <h1 class="color-cl-blue-light mb-4">Đăng ký</h1>
+    <div #formErrorContainer id="form-errors" class="error"></div>
     <!-- Email Input -->
     <div InputContainer id="email">
         <label for="email-input">Email</label>
@@ -30,11 +31,11 @@
             </p>
         </div>
         <div HideShowInput [TargetElement]="confirmPassword"></div>
-        <input #confirmPassword InputElement  id="confirm-password-input" type="password" formControlName=""confirmPass>
+        <input #confirmPassword InputElement  id="confirm-password-input" type="password" formControlName="confirmPass">
     </div>
     <!-- Buttons -->
     <div class="button-container">
-        <button [ButtonElement]="'primary'">Đăng Ký</button>
+        <button [ButtonElement]="'primary'" [Type]="'submit'">Đăng Ký</button>
         <button [ButtonElement]="'secondary'" (click)="location.back()">Huỷ</button>
     </div>
 </form>

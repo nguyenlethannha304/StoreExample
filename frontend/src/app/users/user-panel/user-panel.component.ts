@@ -6,7 +6,6 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { renderIconToView } from 'src/app/shared/services/icons/icon-functions';
 import { userIcon } from 'src/app/shared/services/icons/icons';
 import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
 @Component({
@@ -21,10 +20,10 @@ export class UserPanelComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {}
   ngAfterViewInit(): void {
-    renderIconToView(
-      userIcon,
+    this.render.setProperty(
       this.avatarIconContainer.nativeElement,
-      this.render
+      'innerHTML',
+      userIcon
     );
   }
 }

@@ -14,6 +14,8 @@ export class AuthTokenService {
   private _accessTokenSetTime: number = 0;
   private _refreshToken: string = '';
   private _refreshTokenSetTime: number = 0;
+  private _refreshTokenName = 'refresh-token';
+  private _refreshTokenSetTimeName = 'refresh-token-set-time';
   constructor(
     private navSer: NavigateService,
     private http: HttpClient,
@@ -52,7 +54,7 @@ export class AuthTokenService {
     // Clear token and navigate to homepage
     this.accessToken = '';
     this.refreshToken = '';
-    this.navSer.navigateTo('home');
+    window.localStorage.setItem(this._refreshTokenName, '');
   };
   get accessToken(): string {
     return this._accessToken;
@@ -63,7 +65,7 @@ export class AuthTokenService {
       this._accessTokenSetTime = new Date().getTime();
     }
   }
-  get accessToken$(): Observable<string> | UrlTree {
+  get accessToken$(): Observable<string> {
     if (this.accessToken != '' && !this.isTokenExpire('access')) {
       // Get token from cache if not expired
       return of(this.accessToken);
@@ -93,9 +95,9 @@ export class AuthTokenService {
     if (value != '') {
       // Save to local storage
       this._refreshTokenSetTime = new Date().getTime();
-      window.localStorage.setItem('refresh-token', this._refreshToken);
+      window.localStorage.setItem(this._refreshTokenName, this._refreshToken);
       window.localStorage.setItem(
-        'refresh-token-set-time',
+        this._refreshTokenSetTimeName,
         this._refreshTokenSetTime.toString()
       );
     }
@@ -113,11 +115,11 @@ export class AuthTokenService {
     return tokenSetTime + duration + 10000 <= new Date().getTime(); // Add 10000 or 10 seconds
   };
   getRefreshTokenFromLocalStorage = (): [string, number] => {
-    let refreshToken = window.localStorage.getItem('refresh-token');
+    let refreshToken = window.localStorage.getItem(this._refreshTokenName);
     // Check if refreshToken saved in localStorage
     if (refreshToken != null) {
       this._refreshTokenSetTime = parseInt(
-        window.localStorage.getItem('refresh-token-set-time')
+        window.localStorage.getItem(this._refreshTokenSetTimeName)
       );
       // Check if refreshToken expired
       if (!this.isTokenExpire('refresh')) {

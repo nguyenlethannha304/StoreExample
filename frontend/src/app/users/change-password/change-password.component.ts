@@ -13,8 +13,6 @@ import {
   isTwoPasswordSame,
 } from '../shared/validate/validate';
 import { environment as e } from 'src/environments/environment';
-import { Observer } from 'rxjs';
-import { type } from 'os';
 import { MessageService } from 'src/app/shared/services/message/message.service';
 import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
 @Component({

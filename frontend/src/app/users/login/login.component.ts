@@ -15,7 +15,6 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { AuthTokenService } from 'src/app/shared/auth/auth-token.service';
 import { AuthError } from 'src/app/shared/interface/token';
-import { MessageService } from 'src/app/shared/services/message/message.service';
 import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
 import {
   isPhoneNumberValid,
@@ -38,7 +37,7 @@ export class LoginComponent implements OnInit {
     this.redirectAfterLogin = this.route.snapshot.queryParams['next'];
   }
   // FORM SECTION
-  @ViewChild('formError') formErrorContainer: ElementRef;
+  @ViewChild('formErrorContainer') formErrorContainer: ElementRef;
   redirectAfterLogin: string = '/'; //default redirect to homepage
   loginForm: FormGroup = new FormGroup({
     username: new FormControl('', isUsernameValid()),

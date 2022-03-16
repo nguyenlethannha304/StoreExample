@@ -14,5 +14,9 @@ import { MessageService } from 'src/app/shared/services/message/message.service'
 export class HomeComponent implements OnInit {
   constructor(private messageSer: MessageService, private render: Renderer2) {}
   @ViewChild('debugContainer') debugContainer: ElementRef;
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.messageSer.showSuccessAutoDestroyMessage(
+      'OKas asdfdsf sdf dsf sdf dsfsdf dsfsdfsdfdsfsdfsdfsdfsd fds fsd fdsf sdf sdf sdf sdf sdf sdf sdf'
+    );
+  }
 }

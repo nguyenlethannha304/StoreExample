@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthTokenService } from 'src/app/shared/auth/auth-token.service';
+import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
 
 @Component({
   selector: 'app-logout',
@@ -7,9 +8,14 @@ import { AuthTokenService } from 'src/app/shared/auth/auth-token.service';
   styleUrls: ['./logout.component.css'],
 })
 export class LogoutComponent implements OnInit {
-  constructor(private authTokenSer: AuthTokenService) {}
+  constructor(
+    private authTokenSer: AuthTokenService,
+    private navSer: NavigateService
+  ) {}
 
   ngOnInit(): void {
+    // Clear tokens and navigate back to home page
     this.authTokenSer.clear();
+    this.navSer.navigateTo('home');
   }
 }

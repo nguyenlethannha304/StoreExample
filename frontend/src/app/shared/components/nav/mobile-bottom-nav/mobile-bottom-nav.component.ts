@@ -12,7 +12,6 @@ import {
   userIcon,
   successIcon,
 } from 'src/app/shared/services/icons/icons';
-import { renderIconToView } from 'src/app/shared/services/icons/icon-functions';
 import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
 @Component({
   selector: 'app-mobile-bottom-nav',
@@ -31,13 +30,25 @@ export class MobileBottomNavComponent implements AfterViewInit {
   @ViewChild('cartContainer') cartContainer: ElementRef;
   @ViewChild('userContainer') userContainer: ElementRef;
   ngAfterViewInit(): void {
-    renderIconToView(homeIcon, this.homeContainer.nativeElement, this.render);
-    renderIconToView(
-      menubarIcon,
-      this.menuBarContainer.nativeElement,
-      this.render
+    this.render.setProperty(
+      this.homeContainer.nativeElement,
+      'innerHTML',
+      homeIcon
     );
-    renderIconToView(cartIcon, this.cartContainer.nativeElement, this.render);
-    renderIconToView(userIcon, this.userContainer.nativeElement, this.render);
+    this.render.setProperty(
+      this.menuBarContainer.nativeElement,
+      'innerHTML',
+      menubarIcon
+    );
+    this.render.setProperty(
+      this.cartContainer.nativeElement,
+      'innerHTML',
+      cartIcon
+    );
+    this.render.setProperty(
+      this.userContainer.nativeElement,
+      'innerHTML',
+      userIcon
+    );
   }
 }

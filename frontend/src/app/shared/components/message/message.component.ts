@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { Observer } from 'rxjs';
 import { Message } from '../../interface/message';
-import { renderIconToView } from '../../services/icons/icon-functions';
 import { MessageService } from '../../services/message/message.service';
 
 @Component({
@@ -31,6 +30,7 @@ export class MessageComponent implements OnInit, OnDestroy {
   @ViewChild('messageContainer') messageContainer: ElementRef;
   @ViewChild('iconContainer') iconContainer: ElementRef;
   @ViewChild('contentContainer') contentContainer: ElementRef;
+  @ViewChild('closeButton') closeButton: ElementRef;
   ngOnInit(): void {
     this.messageSer.messageSubject.subscribe(this.observer);
   }
@@ -41,54 +41,63 @@ export class MessageComponent implements OnInit, OnDestroy {
     next: (message: Message) => {
       this.createMessage(message);
       this.autoDestroy = message.autoDestroy;
+      this.closeButton.nativeElement;
+      // setTimeout(this.removeMessage.bind(this), 3000);
     },
     error: (error) => {},
-    complete: () => {
-      if (this.autoDestroy) {
-        // Destroy after 3 seconds
-        setTimeout(this.removeMessage, 3000);
-      }
-    },
+    complete: () => {},
   };
   createMessage(message: Message) {
     this.messageLevel = message.level;
     this.messageContent = message.content;
+    this.autoDestroy = message.autoDestroy;
     this.changeMessageClass();
     this.assignIcon();
     // Make message visible
     this.render.addClass(this.messageContainer.nativeElement, 'visible');
   }
+  messageClassNamePattern = /alert-\w+?/;
   changeMessageClass() {
+    // Remove old message class
+    Array.from(this.messageContainer.nativeElement.classList).forEach(
+      (className) => {
+        let match = (className as string).match(this.messageClassNamePattern);
+        if (match) {
+          this.render.removeClass(
+            this.messageContainer.nativeElement,
+            match[0]
+          );
+        }
+      }
+    );
+    // Add new message class
     let className =
       this.messageSer.messageClass[
         this.messageLevel as keyof typeof this.messageSer.messageClass
       ];
     this.render.addClass(this.messageContainer.nativeElement, className);
   }
-  removeMessageClass() {
-    let className =
-      this.messageSer.messageClass[
-        this.messageLevel as keyof typeof this.messageSer.messageClass
-      ];
-    this.render.removeClass(this.messageContainer.nativeElement, className);
-  }
   assignIcon() {
+    // Remove old icon before assign
+    Array.from(this.iconContainer.nativeElement.children).forEach((child) => {
+      this.render.removeChild(this.iconContainer.nativeElement, child);
+    });
+    // Assign new icon
     let iconString =
       this.messageSer.icons[
         this.messageLevel as keyof typeof this.messageSer.icons
       ];
-    renderIconToView(iconString, this.iconContainer.nativeElement, this.render);
+    this.render.setProperty(
+      this.iconContainer.nativeElement,
+      'innerHTML',
+      iconString
+    );
   }
-  unassignIcon() {
-    Array.from(this.iconContainer.nativeElement.children).forEach((child) => {
-      this.render.removeChild(this.iconContainer.nativeElement, child);
-    });
-  }
-
   removeMessage() {
-    // Make message inivisible
-    this.render.removeClass(this.messageContainer.nativeElement, '');
-    this.unassignIcon();
-    this.removeMessageClass();
+    if (this.autoDestroy)
+      this.render.removeClass(this.messageContainer.nativeElement, 'visible');
+  }
+  closeButtonClick() {
+    this.removeMessage();
   }
 }

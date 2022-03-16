@@ -15,7 +15,7 @@ export class UserFormObserver {
   create = () => {
     return {
       next: () => {
-        this.mesageSer.showAutoDestroyMessage(this.messageContent, 1);
+        this.mesageSer.showSuccessAutoDestroyMessage(this.messageContent);
       },
       error: (error: string) => {},
       complete: () => {

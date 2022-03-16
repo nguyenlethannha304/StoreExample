@@ -12,6 +12,7 @@ import { ObjectToKeysPipe } from './pipe/object-to-keys.pipe';
 import { HttpClientModule } from '@angular/common/http';
 import { httpInterceptorProviders } from './interceptors';
 import { MessageComponent } from './components/message/message.component';
+import { CloseButtonDirective } from './directive/close-button.directive';
 @NgModule({
   declarations: [
     MessageComponent,
@@ -24,6 +25,7 @@ import { MessageComponent } from './components/message/message.component';
     HideShowInputDirective,
     MobileBottomNavComponent,
     ObjectToKeysPipe,
+    CloseButtonDirective,
   ],
   exports: [
     MessageComponent,
@@ -36,6 +38,7 @@ import { MessageComponent } from './components/message/message.component';
     HideShowInputDirective,
     MobileBottomNavComponent,
     ObjectToKeysPipe,
+    CloseButtonDirective,
   ],
   providers: [httpInterceptorProviders],
   imports: [CommonModule, HttpClientModule],

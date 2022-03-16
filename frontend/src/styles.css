@@ -124,3 +124,22 @@ button + button {
 .hide-show-input.show-input > svg:first-child {
   display: none;
 }
+/* Close Button */
+.close-button {
+  background-color: #fff;
+  border: 0.25px rgba(0, 0, 0, 0.5) solid;
+  border-radius: 50%;
+  height: 1.5rem;
+  width: 1.5rem;
+}
+.close-button > svg {
+  fill: rgba(0, 0, 0, 0.5);
+  height: 70%;
+  width: 70%;
+}
+.close-button:hover {
+  background-color: var(--bs-gray-200);
+}
+.close-button:hover > svg {
+  fill: var(--bs-gray-800);
+}
