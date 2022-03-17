@@ -4,6 +4,8 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 from django import forms
+
+from .models import City, Province
 UserModel = get_user_model()
 
 # Register your models here.
@@ -67,3 +69,13 @@ class UserAdmin(BaseUserAdmin):
     )
     search_fields = ('email', 'phone')
     ordering = ('email',)
+
+
+@admin.register(City)
+class CityAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Province)
+class ProvinceAdmin(admin.ModelAdmin):
+    pass

@@ -3,7 +3,11 @@ from rest_framework.response import Response
 from .serializers import *
 import json
 from rest_framework.permissions import IsAuthenticated
-from ..models import Address
+from ..models import Address, Province, City
+from rest_framework.decorators import api_view
+
+from .serializers import ProvinceSerializer
+from .serializers import CitySerializer
 
 
 class UserCreationView(APIView):
@@ -63,3 +67,17 @@ class ProfileView(APIView):
 
 
 api_user_profile_view = ProfileView.as_view()
+
+
+@api_view(['GET'])
+def getProvinceInfo(request):
+    province_query = Province.objects.all()
+    serializer = ProvinceSerializer(data=province_query)
+    return Response(data=serializer)
+
+
+@api_view(['GET'])
+def getCityInfo(request, province):
+    city_query = City.objects.filter(province=province)
+    serializer = CitySerializer(data=city_query)
+    return Response(data=serializer)

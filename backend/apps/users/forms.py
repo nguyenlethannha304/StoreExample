@@ -2,17 +2,16 @@ from django import forms
 from django.contrib.auth import (
     authenticate, get_user_model, password_validation,
 )
-from django.core.exceptions import ImproperlyConfigured, ValidationError, NON_FIELD_ERRORS
+from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from django.forms.fields import CharField
 
 from django.forms.models import construct_instance, model_to_dict
 
 from ..utils.tools import validate_phonenumber, validate_email
-from .address_name import CITY_NAME_CHOICES, PROVINCE_NAME_CHOICES
-from .models import Address
+from .models import Address, Province, City
 
 __all__ = ['UserCreationForm', 'AuthenticationForm',
-           'PasswordChangeForm', 'ProfileChangeForm']
+           'PasswordChangeForm']
 UserModel = get_user_model()
 
 
@@ -243,61 +242,10 @@ class PasswordChangeForm(forms.Form):
         js = ('js/users/user_validate.js', 'js/users/change_password.js')
 
 
-class ProfileChangeForm(forms.Form):
-    phone = forms.CharField(max_length=12, required=None,
-                            widget=forms.TextInput(attrs={'placeholder': 'Your phone number'}))
-    street = forms.CharField(max_length=255, required=None,
-                             widget=forms.TextInput(attrs={'placeholder': 'Your address'}))
-    city = forms.ChoiceField(choices=CITY_NAME_CHOICES, required=None)
-    province = forms.ChoiceField(choices=PROVINCE_NAME_CHOICES, required=None)
-    user_fields = ('phone',)
-    address_fields = ('street', 'city', 'province')
-
-    def __init__(self, request, *args, **kwargs):
-        self.user = request.user
-        if self.user.is_authenticated:
-            self.address = Address.objects.filter(
-                user=self.user.pk).get(default_address=True)
-            # Get initial data for both instance
-            initial_user = model_to_dict(self.user, self.user_fields)
-            initial_adress = model_to_dict(
-                self.address, self.address_fields)
-            kwargs['initial'] = {**initial_user, **initial_adress}
-        super().__init__(*args, **kwargs)
-
-    def clean_phone(self):
-        phone = self.cleaned_data.get('phone')
-        if phone and validate_phonenumber(phone):
-            return uniform_phone_field(phone)
-
-    def _post_clean(self):
-        if self.has_changed():
-            # Check every fields of user or address, if it changed, construct new instance
-            for user_field in self.user_fields:
-                if user_field in self.changed_data:
-                    self.user = construct_instance(
-                        self, self.user, self.user_fields)
-                    setattr(self.user, 'did_change', True)
-                    break
-            for address_field in self.address_fields:
-                if address_field in self.changed_data:
-                    self.address = construct_instance(
-                        self, self.address, self.address_fields)
-                    setattr(self.address, 'did_change', True)
-                    break
-
-    def save(self):
-        assert not self.errors, ("Cannot call `.save()` with invalid data")
-        if getattr(self.user, 'did_change', False):
-            self.user.save()
-        if getattr(self.address, 'did_change', False):
-            self.address.save()
-
-    class Media:
-        css = {
-            'all': ('css/users/user_form.css', )
-        }
-        js = ('js/users/user_validate.js', 'js/users/profile.js')
+class PhoneChangeForm(forms.ModelForm):
+    class Meta:
+        model = UserModel
+        fields = ('phone',)
 
 
 class AddressChangeForm(forms.ModelForm):

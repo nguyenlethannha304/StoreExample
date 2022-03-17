@@ -143,7 +143,6 @@ password_change_view = PasswordChangeView.as_view()
 
 @method_decorator(login_required, name='dispatch')
 class ProfileChangeView(AbstractUserView):
-    form = ProfileChangeForm
     template_name = 'users/profile.html'
     redirect_url = None
 

@@ -4,11 +4,10 @@ from rest_framework.serializers import Serializer, ValidationError
 from django.contrib.auth import get_user_model
 from django.core.exceptions import FieldDoesNotExist
 from apps.utils.tools import validate_phonenumber
-from ..models import Address
-from ..address_name import CITY_NAME_CHOICES, PROVINCE_NAME_CHOICES
+from ..models import Address, City, Province
 UserModel = get_user_model()
 __all__ = ['UserCreationSerializer',
-           'PasswordChangeSerializer', 'ProfileSerializer']
+           'PasswordChangeSerializer']
 
 
 class UserCreationSerializer(serializers.Serializer):
@@ -84,47 +83,11 @@ class PasswordChangeSerializer(serializers.Serializer):
         return self.user
 
 
-class ProfileSerializer(serializers.Serializer):
-    phone = serializers.CharField(
-        validators=[validate_phonenumber], max_length=255, required=False)
-    street = serializers.CharField(max_length=255, required=False)
-    city = serializers.ChoiceField(choices=CITY_NAME_CHOICES, required=False)
-    province = serializers.ChoiceField(
-        choices=PROVINCE_NAME_CHOICES, required=False)
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
 
-    def __init__(self, request, *args, **kwargs):
-        assert request.user.is_authenticated, ("User must be login")
-        self.user = request.user
-        self.address = Address.objects.filter(
-            user=self.user.pk).get(default_address=True)
-        super().__init__(*args, **kwargs)
 
-    def validate_phone(self, phone):
-        if phone and validate_phonenumber(phone):
-            return uniform_phone_field(phone)
-
-    def save(self):
-        assert not self.errors, ("Cannot call `.save()` with invalid data.")
-        self.user = self.instance_data_change(self.user)
-        self.address = self.instance_data_change(self.address)
-        if getattr(self.user, 'did_change', False):
-            self.user.save()
-        if getattr(self.address, 'did_change', False):
-            self.address.save()
-
-    def instance_data_change(self, instance):
-        '''Compare values between serializer and instance if change then assign new value to instance'''
-        for serializer_field in self.get_fields():
-            # Check value on serializer field not empty
-            if (new_value := self.validated_data.get(serializer_field, None)) is None:
-                continue
-            # Check serializer field exist on instance
-            try:
-                instance._meta.get_field(serializer_field)
-            except FieldDoesNotExist:
-                continue
-            # Compare old_value and new_value if change then set new_value
-            if new_value != getattr(instance, serializer_field):
-                setattr(instance, serializer_field, new_value)
-                instance.did_change = True
-        return instance
+class ProvinceSerializer(serializers.ModelField):
+    class Meta:
+        model = Province

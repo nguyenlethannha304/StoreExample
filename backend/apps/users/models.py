@@ -7,7 +7,6 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import PermissionsMixin, UserManager
 from ..utils.tools import validate_phonenumber
-from .address_name import CITY_NAME_CHOICES, PROVINCE_NAME_CHOICES
 # Create your models here.
 
 
@@ -65,12 +64,20 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
 
+class Province(models.Model):
+    name = models.CharField(max_length=255)
+
+
+class City(models.Model):
+    name = models.CharField(max_length=255)
+    province = models.ForeignKey(Province, on_delete=models.CASCADE, null=True)
+
+
 class Address(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, )
     street = models.CharField(max_length=255, blank=True)
-    city = models.CharField(
-        max_length=100, choices=CITY_NAME_CHOICES, blank=True)
-    province = models.CharField(
-        max_length=100, choices=PROVINCE_NAME_CHOICES, blank=True)
+    province = models.ForeignKey(
+        Province, on_delete=models.SET_NULL, null=True)
+    city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
     default_address = models.BooleanField()
