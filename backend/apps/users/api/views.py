@@ -86,17 +86,19 @@ api_address_change_view = AddressChangeView.as_view()
 
 class ProfileChangeView(APIView):
     def get(self, request, *args, **kwargs):
-        city = province = ''
+        city_data = province_data = ''
         address = Address.objects.get(user=request.user)
         if address.city != None:
             city = City.objects.get(id=address.city.id)
             city = CitySerializer(city)
+            city_data = city.data
         if address.province != None:
             province = Province.objects.get(id=address.province.id)
             province = ProvinceSerializer(province)
+            province_data = province.data
         rv_dict = {'phone': request.user.phone, 'street': address.street,
-                   'province': province, 'city': city}
-        return Response(json.dumps(rv_dict))
+                   'province': province_data, 'city': city_data}
+        return Response(data=json.dumps(rv_dict))
 
     def post(self, request, *args, **kwargs):
         phone_serializer = PhoneSerializer(request, data=request.data)
@@ -117,12 +119,12 @@ api_profile_change_view = ProfileChangeView.as_view()
 @api_view(['GET'])
 def api_get_province_view(request):
     province_query = Province.objects.all()
-    serializer = ProvinceSerializer(data=province_query)
-    return Response(data=serializer)
+    serializer = ProvinceSerializer(province_query, many=True)
+    return Response(data=serializer.data)
 
 
 @api_view(['GET'])
 def api_get_city_view(request, province_id):
     city_query = City.objects.filter(province=province_id)
-    serializer = CitySerializer(data=city_query)
-    return Response(data=serializer)
+    serializer = CitySerializer(city_query, many=True)
+    return Response(data=serializer.data)

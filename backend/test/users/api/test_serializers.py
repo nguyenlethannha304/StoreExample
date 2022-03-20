@@ -1,21 +1,25 @@
+from django.conf import settings
 from apps.users.api.serializers import *
 from rest_framework import serializers
 from rest_framework.test import APIRequestFactory, APITestCase
 from django.test import tag
 from django.contrib.auth import get_user_model
+from apps.users.models import Province, City, Address
 from test.utils import new_data_with_change
 from django.contrib.auth.models import AnonymousUser
 from apps.users.forms import uniform_phone_field
+from model_bakery import baker
 UserModel = get_user_model()
 
 
 def setUpModule():
-    testing_user = UserModel.objects.create_user(
-        username='testing_user@gmail.com', password='12345678')
+    testing_user = baker.make_recipe('users.testing_user')
+    city1 = baker.make_recipe('users.city_of_province1', _quantity=2)
 
 
 def tearDownModule():
     UserModel.objects.all().delete()
+    Province.objects.all().delete()
 
 
 @tag('user', 'user_api_serializer')
@@ -108,37 +112,56 @@ class TestPasswordChangeSerializer(APITestCase):
 
 
 @tag('user', 'user_api_serializer')
-class TestProfileSerializer(APITestCase):
-    def setUp(self):
-        self.user = UserModel.objects.get(email='testing_user@gmail.com')
+class TestPhoneSerializer(APITestCase):
+    def setUp(self) -> None:
+        self.valid_data = {'phone': '0979311352'}
         self.request = APIRequestFactory()
-        self.request.user = self.user
+        user = UserModel.objects.get(email='testing_user@gmail.com')
+        self.request.user = user
 
-    def test_must_login_or_raise_assertion_error(self):
-        self.request = APIRequestFactory()
-        self.request.user = AnonymousUser()
-        with self.assertRaises(AssertionError):
-            serializer = ProfileSerializer(self.request)
-
-    def test_change_phone_number(self):
-        new_valid_data = {'phone': '0979311356'}
-        serializer = ProfileSerializer(self.request, data=new_valid_data)
-        # Check form valid
+    def test_phone_change(self):
+        serializer = PhoneSerializer(self.request, data=self.valid_data)
         self.assertTrue(serializer.is_valid())
         serializer.save()
-        # Check user phone
+        user_with_new_phone = UserModel.objects.get(
+            email='testing_user@gmail.com')
+        self.assertEqual(user_with_new_phone.phone, '0979311352')
+
+
+@tag('user', 'user_api_serializer')
+class TestAddressSerializer(APITestCase):
+    def setUp(self) -> None:
+        province_data = Province.objects.get(name='P1')
+        city_data = City.objects.get(name='C01')
+        self.valid_data = {'street': '1234 NTMK',
+                           'city': str(city_data.id), 'province': str(province_data.id)}
+        self.request = APIRequestFactory()
         user = UserModel.objects.get(email='testing_user@gmail.com')
-        new_phone = uniform_phone_field(new_valid_data['phone'])
-        self.assertEqual(user.phone, new_phone)
+        self.request.user = user
 
     def test_change_address(self):
-        new_valid_data = {'street': '123 NTM', 'city': 'CA', 'province': 'PA'}
-        serializer = ProfileSerializer(self.request, data=new_valid_data)
-        # Check form valid
+        serializer = AddressSerializer(self.request, data=self.valid_data)
         self.assertTrue(serializer.is_valid())
         serializer.save()
-        # Check new_address
-        new_address = self.request.user.address_set.first()
-        self.assertEqual(new_address.street, new_valid_data['street'])
-        self.assertEqual(new_address.city, new_valid_data['city'])
-        self.assertEqual(new_address.province, new_valid_data['province'])
+        new_address = Address.objects.get(user=self.request.user)
+        self.assertEqual(new_address.street, self.valid_data['street'])
+        self.assertEqual(str(new_address.city.id), self.valid_data['city'])
+        self.assertEqual(str(new_address.province.id),
+                         self.valid_data['province'])
+
+
+@tag('user', 'user_api_serializer')
+class TestProvinceSerializer(APITestCase):
+    def test_serialize_province(self):
+        province = Province.objects.get(name='P1')
+        serializer = ProvinceSerializer(province)
+        self.assertEqual(serializer.data, {'id': 1, 'name': 'P1'})
+
+
+@tag('user', 'user_api_serializer')
+class TestCitySerializer(APITestCase):
+    def test_serializer_city(self):
+        city = City.objects.get(name='C01')
+        serializer = CitySerializer(city)
+        self.assertEqual(serializer.data, {
+                         'id': 1, 'name': 'C01', 'province': 1})

@@ -101,42 +101,6 @@ class TestPasswordChangeView(TestCase):
 
 
 @tag('user', 'user_view')
-class TestProfileChangeView(TestCase):
-    user_email = 'normal_user@gmail.com'
-    password = '12345678'
-    profile_url = reverse('users:profile')
-
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls.login_client = Client()
-        cls.login_client.login(email=cls.user_email, password=cls.password)
-
-    def test_view_must_login(self):
-        test_redirect_to_login(method='get', request_url=self.profile_url)
-        test_redirect_to_login(method='post', request_url=self.profile_url)
-
-    def test_get_method(self):
-        response = self.login_client.get(self.profile_url)
-        self.assertTemplateUsed('users/profile.html')
-        context = response.context
-        self.assertTrue(isinstance(context['form'], ProfileChangeForm))
-
-    def test_post_method(self):
-        new_phone = '+84934923705'
-        data = {'phone': new_phone, 'street': '234 NTMK',
-                'city': 'CA', 'province': 'PA'}
-        response = self.login_client.post(
-            self.profile_url, data=data, follow=True)
-        user = UserModel.objects.get(email=self.user_email)
-        self.assertEqual(user.phone, new_phone)
-        address = user.address_set.first()
-        self.assertEqual(address.street, '234 NTMK')
-        self.assertEqual(address.city, 'CA')
-        self.assertEqual(address.province, 'PA')
-
-
-@tag('user', 'user_view')
 class TestUserPanelView(TestCase):
     panel_url = reverse('users:panel')
 

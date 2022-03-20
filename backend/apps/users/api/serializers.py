@@ -120,8 +120,10 @@ class AddressSerializer(serializers.ModelSerializer):
 class CitySerializer(serializers.ModelSerializer):
     class Meta:
         model = City
+        fields = '__all__'
 
 
-class ProvinceSerializer(serializers.ModelField):
+class ProvinceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Province
+        fields = '__all__'

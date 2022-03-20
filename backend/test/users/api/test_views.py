@@ -1,42 +1,63 @@
-from urllib import response
 from django.contrib.auth import get_user_model
-from rest_framework.test import APIClient, APIRequestFactory, APITestCase
+from django.contrib.auth.hashers import make_password
+from rest_framework.test import APIClient, APITestCase
 from apps.users.api.serializers import *
 from django.test import tag
+from apps.users.models import Province, City, Address
 from test.utils import new_data_with_change
 from http import HTTPStatus
 import json
-import copy
+from model_bakery import baker
+from rest_framework.renderers import JSONRenderer
 UserModel = get_user_model()
-app_url = '/api/users/'
+# --------------URL-----------------
+USERS_APP_URL = '/api/users/'
+CHECK_EMAIL_EXIST = USERS_APP_URL + 'check_email_exists'
+REGISTER_URL = USERS_APP_URL + 'register'
+CHANGE_PASSWORD_URL = USERS_APP_URL + 'change_password'
+
+
+def get_city_url(number):
+    return USERS_APP_URL + 'get_city/' + str(number)
+
+
+GET_PROVINCE_URL = USERS_APP_URL + 'get_province'
+PROFILE_URL = USERS_APP_URL + 'profile'
+# ------------------------
 
 
 def setUpModule():
-    testing_user = UserModel.objects.create_user(
-        username='testing_user@gmail.com', password='12345678')
+    testing_user = baker.make_recipe('users.testing_user')
+    testing_cities = baker.make_recipe('users.city_of_province1', _quantity=2)
+    testing_cities2 = baker.make_recipe('users.city_of_province2', _quantity=2)
+    # Hash password for user
+    user = UserModel.objects.get(email='testing_user@gmail.com')
+    user.password = make_password(user.password)
+    user.save()
 
 
 def tearDownModule():
     UserModel.objects.all().delete()
+    Province.objects.all().delete()
 
 
 @tag('user', 'user_api_view')
 class TestUserCreationView(APITestCase):
     valid_data = {'email': 'new_user@gmail.com',
                   'password1': '12345678', 'password2': '12345678'}
-    url = app_url + 'register'
 
     def setUp(self):
         self.client = APIClient()
 
     def test_create_user(self):
         response = self.client.post(
-            self.url, data=self.valid_data, format='json')
+            REGISTER_URL, data=self.valid_data, format='json')
         self.assertEqual(response.status_code, HTTPStatus.CREATED)
 
     def test_error_invalid_email(self):
         invalid_data = new_data_with_change(self.valid_data, 'email', 'a')
-        response = self.client.post(self.url, data=invalid_data, format='json')
+        response = self.client.post(
+            REGISTER_URL, data=invalid_data, format='json')
         # Check status_code
         self.assertEqual(response.status_code, HTTPStatus.UNPROCESSABLE_ENTITY)
         # Check error
@@ -46,7 +67,8 @@ class TestUserCreationView(APITestCase):
     def test_error_user_already_registed(self):
         invalid_data = new_data_with_change(
             self.valid_data, 'email', 'testing_user@gmail.com')
-        response = self.client.post(self.url, data=invalid_data, format='json')
+        response = self.client.post(
+            REGISTER_URL, data=invalid_data, format='json')
         self.assertEqual(response.status_code, HTTPStatus.UNPROCESSABLE_ENTITY)
         # Check error
         errors = json.loads(response.data)
@@ -56,7 +78,7 @@ class TestUserCreationView(APITestCase):
     def test_error_mismatch_password(self):
         invalid_data = new_data_with_change(
             self.valid_data, 'password1', 'mismatch_pass')
-        response = self.client.post(self.url, invalid_data, format='json')
+        response = self.client.post(REGISTER_URL, invalid_data, format='json')
         self.assertEqual(response.status_code, HTTPStatus.UNPROCESSABLE_ENTITY)
         # Check error
         errors = json.loads(response.data)
@@ -68,7 +90,6 @@ class TestUserCreationView(APITestCase):
 class TestPasswordChangeView(APITestCase):
     valid_data = {'old_password': '12345678',
                   'new_password1': '87654321', 'new_password2': '87654321'}
-    url = app_url + 'change_password'
 
     def setUp(self):
         # Log in client
@@ -79,12 +100,12 @@ class TestPasswordChangeView(APITestCase):
 
     def test_must_login(self):
         not_login_user = APIClient()
-        response = not_login_user.post(self.url)
+        response = not_login_user.post(CHANGE_PASSWORD_URL)
         self.assertEqual(response.status_code, HTTPStatus.UNAUTHORIZED)
 
     def test_change_password(self):
         response = self.client.post(
-            self.url, data=self.valid_data, form='json')
+            CHANGE_PASSWORD_URL, data=self.valid_data, form='json')
         self.assertEqual(response.status_code, 200)
         # Test new password of user
         testing_user = UserModel.objects.get(email='testing_user@gmail.com')
@@ -94,17 +115,19 @@ class TestPasswordChangeView(APITestCase):
     def test_error_password_mismatch(self):
         invalid_data = new_data_with_change(
             self.valid_data, 'new_password2', 'different_pass')
-        response = self.client.post(self.url, data=invalid_data, form='json')
+        response = self.client.post(
+            CHANGE_PASSWORD_URL, data=invalid_data, form='json')
         self.assertEqual(response.status_code, 422)
         # check error
         errors = json.loads(response.data)
         expected_error = PasswordChangeSerializer.error_message['password_mismatch']
-        self.assertEqual(errors['no_fields_error'][0], expected_error)
+        self.assertEqual(errors['non_field_errors'][0], expected_error)
 
     def test_error_password_incorrect(self):
         invalid_data = new_data_with_change(
             self.valid_data, 'old_password', 'incorrect_pass')
-        response = self.client.post(self.url, data=invalid_data, form='json')
+        response = self.client.post(
+            CHANGE_PASSWORD_URL, data=invalid_data, form='json')
         self.assertEqual(response.status_code, 422)
         # Check error
         errors = json.loads(response.data)
@@ -113,42 +136,46 @@ class TestPasswordChangeView(APITestCase):
 
 
 @tag('user', 'user_api_view')
-class TestProfileView(APITestCase):
-    url = app_url + 'profile'
-    valid_data = {'phone': '+84979311359',
-                  'street': '125 NTMK', 'city': 'CA', 'province': 'PA'}
+class TestGetCityAndProvince(APITestCase):
+    # Need to find a way to test data
+    def setUp(self):
+        self.client = APIClient()
+
+    def test_get_province(self):
+        response = self.client.get(GET_PROVINCE_URL)
+        data = JSONRenderer().render(response.data)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    def test_get_city(self):
+        response = self.client.get(get_city_url('1'))
+        data = JSONRenderer().render(response.data)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+
+@tag('user', 'user_api_view', 'cr')
+class TestProfile(APITestCase):
+    @classmethod
+    def setUpClass(cls):
+        # Create address for user
+        cls.user = UserModel.objects.get(email='testing_user@gmail.com')
+        city = City.objects.get(name='C01')
+        province = Province.objects.get(name='P1')
+        user_address = Address.objects.filter(user=cls.user).update(
+            street='1234 NTMK', city=city, province=province)
+        super().setUpClass()
 
     def setUp(self):
-        # Login user
-        self.client = APIClient()
-        self.testing_user = UserModel.objects.get(
-            email='testing_user@gmail.com')
-        self.client.force_authenticate(self.testing_user)
+        self.request = APIClient()
+        self.request.force_authenticate(user=self.user)
 
-    def test_must_login(self):
-        not_login_user = APIClient()
-        response = not_login_user.post(self.url)
-        self.assertEqual(response.status_code, 401)
+    def test_in_order(self):
+        self.get_request()
+        self.post_request()
 
-    def test_get_user_profile(self):
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        # All values are blank
-        data = response.data
-        self.assertEqual(data['phone'], '')
-        self.assertEqual(data['city'], '')
-        self.assertEqual(data['province'], '')
-        self.assertEqual(data['street'], '')
+    def get_request(self):
+        response = self.request.get(PROFILE_URL)
+        data = JSONRenderer().render(response.data)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
-    def test_post_user_profile(self):
-        response = self.client.post(
-            self.url, data=self.valid_data, format='json')
-        self.assertEqual(response.status_code, 200)
-        # Check new phone value
-        testing_user = UserModel.objects.get(email='testing_user@gmail.com')
-        self.assertEqual(testing_user.phone, self.valid_data['phone'])
-        # Check new address value
-        testing_address = testing_user.address_set.get(default_address=True)
-        self.assertEqual(testing_address.street, self.valid_data['street'])
-        self.assertEqual(testing_address.city, self.valid_data['city'])
-        self.assertEqual(testing_address.province, self.valid_data['province'])
+    def post_request(self):
+        pass

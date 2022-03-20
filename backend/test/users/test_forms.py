@@ -4,9 +4,8 @@ from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from django.contrib.auth import get_user_model
 from django.test.client import RequestFactory
 from django.utils.datastructures import MultiValueDict
-from apps.users.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm, ProfileChangeForm
+from apps.users.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
 from apps.users.models import Address
-from apps.users.address_name import CITY_NAME_CHOICES, PROVINCE_NAME_CHOICES
 from test.utils import new_data_with_change
 UserModel = get_user_model()
 
@@ -110,41 +109,3 @@ class TestPasswordChangeForm(TestCase):
         error_message = invalid_form.errors[NON_FIELD_ERRORS][0]
         self.assertEqual(
             error_message, PasswordChangeForm.error_messages['password_mismatch'])
-
-
-@tag('user', 'user_form')
-class TestProfileChangeForm(TestCase):
-    new_phone = '+84987654321'
-    user_email = 'testing_user@gmail.com'
-
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls.user = UserModel.objects.get(email=cls.user_email)
-        cls.custom_request = RequestFactory()
-        cls.custom_request.user = cls.user
-        cls.address = Address.objects.get(
-            **{"user": cls.user})
-
-    def test_change_phone_number(self):
-        form = ProfileChangeForm(self.custom_request,
-                                 data={'phone': self.new_phone})
-        self.assertTrue(form.is_valid())
-        form.save()
-        user_with_new_phone_number = UserModel.objects.get(
-            email=self.user_email)
-        self.assertEqual(user_with_new_phone_number.phone, self.new_phone)
-
-    def test_change_address(self):
-        city_data = CITY_NAME_CHOICES[1][0]
-        province_data = PROVINCE_NAME_CHOICES[1][0]
-        address_data = '123 A Street'
-        data = {'city': city_data, 'province': province_data,
-                'street': address_data}
-        form = ProfileChangeForm(self.custom_request, data=data)
-        self.assertTrue(form.is_valid())
-        form.save()
-        new_address = Address.objects.get(user=self.user)
-        self.assertEqual(new_address.street, address_data)
-        self.assertEqual(new_address.city, city_data)
-        self.assertEqual(new_address.province, province_data)

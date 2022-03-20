@@ -24,5 +24,5 @@ province2 = Recipe(
 )
 city_name_list2 = ['C11', 'C12']
 city_of_province2 = Recipe(
-    City, name=cycle(city_name_list2), province2=foreign_key(province2)
+    City, name=cycle(city_name_list2), province=foreign_key(province2)
 )
