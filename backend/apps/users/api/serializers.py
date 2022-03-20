@@ -7,7 +7,7 @@ from apps.utils.tools import validate_phonenumber
 from ..models import Address, City, Province
 UserModel = get_user_model()
 __all__ = ['UserCreationSerializer',
-           'PasswordChangeSerializer']
+           'PasswordChangeSerializer', 'PhoneSerializer', 'AddressSerializer', 'CitySerializer', 'ProvinceSerializer']
 
 
 class UserCreationSerializer(serializers.Serializer):
@@ -81,6 +81,40 @@ class PasswordChangeSerializer(serializers.Serializer):
         if commit:
             self.user.save()
         return self.user
+
+
+class PhoneSerializer(serializers.Serializer):
+    phone = serializers.CharField(allow_null=True)
+
+    def __init__(self, request, *args, **kwargs):
+        assert request.user.is_authenticated, ("User must be login")
+        self.user = request.user
+        super().__init__(*args, **kwargs)
+
+    def validate_phone(self, value):
+        if not (validate_phonenumber(value)):
+            raise ValidationError("Số điện thoại không hợp lệ")
+        return value
+
+    def save(self):
+        self.user.phone = self.validated_data['phone']
+        self.user.save()
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    def __init__(self, request, *args, **kwargs):
+        assert request.user.is_authenticated, ("User must be login")
+        self.user = request.user
+        super().__init__(*args, **kwargs)
+
+    def save(self,):
+        Address.objects.filter(user=self.user).update(**self.validated_data)
+
+    class Meta:
+        model = Address
+        fields = ('street', 'province', 'city',)
+        extra_kwargs = {'province': {'allow_null': True},
+                        'city': {'allow_null': True}}
 
 
 class CitySerializer(serializers.ModelSerializer):
