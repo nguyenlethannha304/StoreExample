@@ -43,48 +43,7 @@ class PasswordChangeView(APIView):
 api_user_password_change_view = PasswordChangeView.as_view()
 
 
-class PhoneChangeView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        serializer = PhoneSerializer(request.user.phone)
-        return Response(data=serializer)
-
-    def post(self, request, *args, **kwargs):
-        serializer = PhoneSerializer(request, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=200)
-        else:
-            json_errors = json.dumps(serializer.errors)
-            return Response(data=json_errors, status=422)
-
-
-api_phone_change_view = PhoneChangeView.as_view()
-
-
-class AddressChangeView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        address = Address.objects.get(user=request.user)
-        serializer = AddressSerializer(request, address)
-        return Response(data=serializer)
-
-    def post(self, request, *args, **kwargs):
-        serializer = AddressSerializer(request, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=200)
-        else:
-            json_errors = json.dumps(serializer.errors)
-            return Response(data=json_errors, status=422)
-
-
-api_address_change_view = AddressChangeView.as_view()
-
-
-class ProfileChangeView(APIView):
+class ProfileView(APIView):
     def get(self, request, *args, **kwargs):
         city_data = province_data = ''
         address = Address.objects.get(user=request.user)
@@ -113,7 +72,7 @@ class ProfileChangeView(APIView):
             return Response(data=json_errors, status=422)
 
 
-api_profile_change_view = ProfileChangeView.as_view()
+api_profile_view = ProfileView.as_view()
 
 
 @api_view(['GET'])

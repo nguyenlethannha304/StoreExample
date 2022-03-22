@@ -1,7 +1,7 @@
 from django.conf import settings
 from apps.users.api.serializers import *
 from rest_framework import serializers
-from rest_framework.test import APIRequestFactory, APITestCase
+from rest_framework.test import APITestCase, APIClient
 from django.test import tag
 from django.contrib.auth import get_user_model
 from apps.users.models import Province, City, Address
@@ -24,11 +24,8 @@ def tearDownModule():
 
 @tag('user', 'user_api_serializer')
 class TestUserCreationSerializer(APITestCase):
-    @classmethod
-    def setUpClass(cls) -> None:
-        cls.valid_data = {'email': 'new_user@gmail.com',
-                          'password1': '12345678', 'password2': '12345678'}
-        return super().setUpClass()
+    valid_data = {'email': 'new_user@gmail.com',
+                  'password1': '12345678', 'password2': '12345678'}
 
     def test_create_user(self):
         serializer = UserCreationSerializer(data=self.valid_data)
@@ -68,12 +65,11 @@ class TestPasswordChangeSerializer(APITestCase):
                            'new_password1': 'new_password', 'new_password2': 'new_password'}
         self.user = UserModel.objects.get(email='testing_user@gmail.com')
         # Assign user to request, used for argument in serializer init
-        self.request = APIRequestFactory()
-        self.request.user = self.user
+        self.request = APIClient()
+        self.request.force_authenticate(user=self.user)
 
     def test_must_login_or_raise_assertion_error(self):
-        self.request = APIRequestFactory()
-        self.request.user = AnonymousUser()
+        self.request = APIClient
         with self.assertRaises(AssertionError):
             serializer = PasswordChangeSerializer(
                 self.request, data=self.valid_data)
@@ -115,9 +111,9 @@ class TestPasswordChangeSerializer(APITestCase):
 class TestPhoneSerializer(APITestCase):
     def setUp(self) -> None:
         self.valid_data = {'phone': '0979311352'}
-        self.request = APIRequestFactory()
+        self.request = APIClient()
         user = UserModel.objects.get(email='testing_user@gmail.com')
-        self.request.user = user
+        self.request.force_authenticate(user=user)
 
     def test_phone_change(self):
         serializer = PhoneSerializer(self.request, data=self.valid_data)
@@ -135,9 +131,9 @@ class TestAddressSerializer(APITestCase):
         city_data = City.objects.get(name='C01')
         self.valid_data = {'street': '1234 NTMK',
                            'city': str(city_data.id), 'province': str(province_data.id)}
-        self.request = APIRequestFactory()
+        self.request = APIClient()
         user = UserModel.objects.get(email='testing_user@gmail.com')
-        self.request.user = user
+        self.request.force_authenticate(user=user)
 
     def test_change_address(self):
         serializer = AddressSerializer(self.request, data=self.valid_data)

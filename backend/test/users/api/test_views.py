@@ -152,7 +152,7 @@ class TestGetCityAndProvince(APITestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
 
-@tag('user', 'user_api_view', 'cr')
+@tag('user', 'user_api_view')
 class TestProfile(APITestCase):
     @classmethod
     def setUpClass(cls):
@@ -178,4 +178,14 @@ class TestProfile(APITestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def post_request(self):
-        pass
+        new_province = Province.objects.get(name='P2')
+        new_city = City.objects.get(name='C11')
+        new_phone = '0979311359'
+        self.request.post(PROFILE_URL, data={
+                          'phone': new_phone, 'street': '1234 NTMK', 'city': new_city.id, 'province': new_province.id})
+        user_with_new_profile = UserModel.objects.get(
+            email='testing_user@gmail.com')
+        new_address = Address.objects.get(user=user_with_new_profile)
+        self.assertEqual(user_with_new_profile.phone, '0979311359')
+        self.assertEqual(new_address.city.name, 'C11')
+        self.assertEqual(new_address.province.name, 'P2')
