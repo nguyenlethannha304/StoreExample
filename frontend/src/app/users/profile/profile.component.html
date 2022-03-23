@@ -11,23 +11,23 @@
         </div>
         <input InputElement id="phone-input" type="text">
     </div>
-    <!-- Address Input -->
-    <div InputContainer id="address">
-        <label for="address-input">Địa Chỉ</label>
-        <input #address InputElement id="address-input" type="text" formControlName="address">
+    <!-- Street Input -->
+    <div InputContainer id="street">
+        <label for="street-input">Địa Chỉ</label>
+        <input InputElement id="street-input" type="text" formControlName="street">
     </div>
     <!-- Province and City Input -->
     <div style="width:65%" class="d-flex">
         <div InputContainer class="half-input-container">
             <label for="province-input">Tỉnh</label>
-            <select #address InputElement id="province-input" type="text" formControlName="province">
-                <option value="Binh Dinh">Binh Dinh</option>
+            <select #provinceContainer InputElement id="province-input" formControlName="province">
+                <option value="">-Tỉnh-</option>
             </select>
         </div>
         <div InputContainer class="half-input-container">
             <label for="city-input">Thành Phố</label>
-            <select #address InputElement id="city-input" type="text">
-                <option value="Quy Nhon">Quy Nhon</option>
+            <select #cityContainer InputElement id="city-input" formControlName="city">
+                <option value="">-Thành Phố-</option>
             </select>
         </div>
     </div>

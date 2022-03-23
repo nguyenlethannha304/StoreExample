@@ -1,8 +1,8 @@
 import { ElementRef } from '@angular/core';
 import { Renderer2 } from '@angular/core';
-import { FormError } from './interface/errors';
+import { FormErrors } from './interface/errors';
 export const renderErrorsFromBackend = (
-  errors: FormError,
+  errors: FormErrors,
   errorContainer: ElementRef,
   render: Renderer2
 ) => {
