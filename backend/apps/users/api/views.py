@@ -6,9 +6,6 @@ from rest_framework.permissions import IsAuthenticated
 from ..models import Address, Province, City
 from rest_framework.decorators import api_view
 
-from .serializers import ProvinceSerializer
-from .serializers import CitySerializer
-
 
 class UserCreationView(APIView):
 
@@ -86,4 +83,11 @@ def api_get_province_view(request):
 def api_get_city_view(request, province_id):
     city_query = City.objects.filter(province=province_id)
     serializer = CitySerializer(city_query, many=True)
+    return Response(data=serializer.data)
+
+
+@api_view(['GET'])
+def api_get_provinces_cities(request):
+    query = Province.objects.prefetch_related('city_set').all()
+    serializer = ProvinceCitiesSerializer(query, many=True)
     return Response(data=serializer.data)

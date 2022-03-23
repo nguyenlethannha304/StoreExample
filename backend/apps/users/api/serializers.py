@@ -7,7 +7,7 @@ from apps.utils.tools import validate_phonenumber
 from ..models import Address, City, Province
 UserModel = get_user_model()
 __all__ = ['UserCreationSerializer',
-           'PasswordChangeSerializer', 'PhoneSerializer', 'AddressSerializer', 'CitySerializer', 'ProvinceSerializer']
+           'PasswordChangeSerializer', 'PhoneSerializer', 'AddressSerializer', 'CitySerializer', 'ProvinceSerializer', 'ProvinceCitiesSerializer']
 
 
 class UserCreationSerializer(serializers.Serializer):
@@ -127,3 +127,11 @@ class ProvinceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Province
         fields = '__all__'
+
+
+class ProvinceCitiesSerializer(serializers.ModelSerializer):
+    city_set = CitySerializer(many=True)
+
+    class Meta:
+        model = Province
+        fields = ['id', 'name', 'city_set']

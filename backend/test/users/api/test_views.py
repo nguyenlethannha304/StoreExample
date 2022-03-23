@@ -23,6 +23,7 @@ def get_city_url(number):
 
 GET_PROVINCE_URL = USERS_APP_URL + 'get_province'
 PROFILE_URL = USERS_APP_URL + 'profile'
+GET_PROVINCES_CITIES_URL = USERS_APP_URL + 'get_provinces_cities'
 # ------------------------
 
 
@@ -152,7 +153,7 @@ class TestGetCityAndProvince(APITestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
 
-@tag('user', 'user_api_view')
+@tag('user', 'user_api_view', )
 class TestProfile(APITestCase):
     @classmethod
     def setUpClass(cls):
@@ -189,3 +190,14 @@ class TestProfile(APITestCase):
         self.assertEqual(user_with_new_profile.phone, '0979311359')
         self.assertEqual(new_address.city.name, 'C11')
         self.assertEqual(new_address.province.name, 'P2')
+
+
+@tag('user', 'user_api_view', 'cr')
+class TestGetProvincesCities(APITestCase):
+    def setUp(self) -> None:
+        self.request = APIClient()
+
+    def test_get_request(self):
+        response = self.request.get(GET_PROVINCES_CITIES_URL)
+        data = JSONRenderer().render(response.data)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
