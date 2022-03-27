@@ -192,7 +192,7 @@ class TestProfile(APITestCase):
         self.assertEqual(new_address.province.name, 'P2')
 
 
-@tag('user', 'user_api_view', 'cr')
+@tag('user', 'user_api_view')
 class TestGetProvincesCities(APITestCase):
     def setUp(self) -> None:
         self.request = APIClient()
