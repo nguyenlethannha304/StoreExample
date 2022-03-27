@@ -124,7 +124,7 @@ class TestPhoneSerializer(APITestCase):
         self.assertEqual(user_with_new_phone.phone, '0979311352')
 
 
-@tag('user', 'user_api_serializer')
+@tag('user', 'user_api_serializer', 'cr')
 class TestAddressSerializer(APITestCase):
     def setUp(self) -> None:
         province_data = Province.objects.get(name='P1')
@@ -144,6 +144,9 @@ class TestAddressSerializer(APITestCase):
         self.assertEqual(str(new_address.city.id), self.valid_data['city'])
         self.assertEqual(str(new_address.province.id),
                          self.valid_data['province'])
+
+    def test_value_None_if_blank(self):
+        pass
 
 
 @tag('user', 'user_api_serializer')

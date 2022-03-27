@@ -92,6 +92,8 @@ class PhoneSerializer(serializers.Serializer):
         super().__init__(*args, **kwargs)
 
     def validate_phone(self, value):
+        if value == '':
+            return None
         if not (validate_phonenumber(value)):
             raise ValidationError("Số điện thoại không hợp lệ")
         return value
@@ -106,6 +108,16 @@ class AddressSerializer(serializers.ModelSerializer):
         assert request.user.is_authenticated, ("User must be login")
         self.user = request.user
         super().__init__(*args, **kwargs)
+
+    def validate_city(self, value):
+        if value == '':
+            return None
+        return value
+
+    def validate_province(self, value):
+        if value == '':
+            return None
+        return value
 
     def save(self,):
         Address.objects.filter(user=self.user).update(**self.validated_data)
