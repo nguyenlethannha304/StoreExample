@@ -9,7 +9,6 @@ import { HomeComponent } from './common-pages/home/home.component';
 import { AboutComponent } from './common-pages/about/about.component';
 import { ShareModule } from './shared/share.module';
 // Import Extension for String
-import 'src/app/shared/extensions/string.extensions';
 import { httpInterceptorProviders } from './shared/interceptors';
 @NgModule({
   declarations: [

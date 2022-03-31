@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { httpInterceptorProviders } from './interceptors';
 import { MessageComponent } from './components/message/message.component';
 import { CloseButtonDirective } from './directive/close-button.directive';
+import './extensions';
 @NgModule({
   declarations: [
     MessageComponent,
