@@ -42,7 +42,6 @@ export class MessageComponent implements OnInit, OnDestroy {
       this.createMessage(message);
       this.autoDestroy = message.autoDestroy;
       this.closeButton.nativeElement;
-      // setTimeout(this.removeMessage.bind(this), 3000);
     },
     error: (error) => {},
     complete: () => {},
