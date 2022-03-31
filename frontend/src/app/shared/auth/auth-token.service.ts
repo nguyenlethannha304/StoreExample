@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { catchError, Observable, of, map, tap } from 'rxjs';
+import { catchError, Observable, of, map, tap, Observer } from 'rxjs';
 import { NavigateService } from '../services/navigate/navigate.service';
 import { environment as e } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -17,6 +17,7 @@ export class AuthTokenService {
   private _refreshTokenSetTime: number = 0;
   private _refreshTokenName = 'refresh-token';
   private _refreshTokenSetTimeName = 'refresh-token-set-time';
+  private redirect: string;
   constructor(
     private navSer: NavigateService,
     private http: HttpClient,
@@ -41,12 +42,13 @@ export class AuthTokenService {
         next: (body) => {
           this.accessToken = body.access;
           this.refreshToken = body.refresh;
+          this.redirect = redirect;
         },
         error: (errors) => {
           errorShownFunc(errors);
         },
         complete: () => {
-          this.router.navigateByUrl(redirect);
+          this.router.navigateByUrl(this.redirect);
         },
       });
   };
