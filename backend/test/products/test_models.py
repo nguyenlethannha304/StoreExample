@@ -2,25 +2,18 @@ from django.apps import apps
 from django.test import tag, TestCase
 from django.utils.text import slugify
 from model_bakery import baker
+from . import setUpForProductsTest, tearDownForProductsTest
 Category = apps.get_model('products', 'Category')
 Type = apps.get_model('products', 'Type')
 Product = apps.get_model('products', 'Product')
 
 
 def setUpModule():
-    baker.make_recipe('products.chair_products', _quantity=3)
-    baker.make_recipe('products.table_products', _quantity=3)
-    # For some reason model_bakery not use save method for product --> not slugify before save (Category and Type are fine)
-    products = Product.objects.all()
-    for product in products:
-        product.slug = slugify(product.name)
-        product.save()
+    setUpForProductsTest()
 
 
 def tearDownModule():
-    Category.objects.all().delete()
-    Type.objects.all().delete()
-    Product.objects.all().delete()
+    tearDownForProductsTest()
 
 
 @tag('product', 'product_model')
