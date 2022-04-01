@@ -31,6 +31,7 @@ class Product(models.Model):
     slug = models.SlugField(max_length=255)
     price = models.PositiveIntegerField()
     old_price = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField()
     image = models.ImageField()
     thumbnail = models.ImageField()
     description = models.TextField()
