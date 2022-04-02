@@ -3,6 +3,10 @@ export const viewNameObject = {
   about: 'about',
   cart: 'cart',
   menuBar: 'menuBar',
+  // Product module
+  products: {
+    name: 'products',
+  },
   //Users module
   users: {
     name: 'users', //Prefix for components in user module

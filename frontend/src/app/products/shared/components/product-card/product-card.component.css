@@ -1,0 +1,11 @@
+:host {
+    width: 10rem;
+    height:15rem;
+}
+.image-container {
+    width: 10rem;
+    height: 10rem;
+}
+.price-container {
+    color: var(--bs-red);
+}

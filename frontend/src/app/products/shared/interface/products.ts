@@ -4,3 +4,7 @@ export interface ProductCard {
   price: number;
   thumbnail: string;
 }
+export interface ProductList {
+  results: ProductCard[];
+  count: number;
+}
