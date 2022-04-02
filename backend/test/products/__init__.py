@@ -9,11 +9,6 @@ Product = apps.get_model('products', 'Product')
 def setUpForProductsTest():
     baker.make_recipe('products.chair_products', _quantity=3)
     baker.make_recipe('products.table_products', _quantity=3)
-    # For some reason model_bakery not use save method for product --> not slugify before save (Category and Type are fine)
-    products = Product.objects.all()
-    for product in products:
-        product.slug = slugify(product.name)
-        product.save()
     # Assign many-to-many categories for Type
     furniture_category = baker.make_recipe('products.furniture_category')
     types = Type.objects.all()

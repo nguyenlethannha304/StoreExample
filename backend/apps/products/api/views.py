@@ -29,12 +29,12 @@ class ProductListView(APIView):
     permission_classes = []
 
     def get(self, request, *args, **kwargs):
-        queryset, object_count = self.get_queryset()
+        queryset, object_count = self.get_queryset_and_count()
         queryset_serializer = ProductListSerializer(queryset, many=True)
         data = {"results": queryset_serializer.data, "count": object_count}
         return Response(data=data)
 
-    def get_queryset(self, request, *args, **kwargs):
+    def get_queryset_and_count(self, request, *args, **kwargs):
         type_slug = kwargs['type']
         queryset = Product.objects.filter(type__slug=type_slug)
         count = queryset.count()
