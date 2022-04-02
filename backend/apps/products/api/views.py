@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from ..models import Category, Product, Type
 
 
-class CategoryNestingTypesListView(APIView):
+class MenuBarView(APIView):
     # Get all Categories
     authentication_classes = []
     permission_classes = []
@@ -17,19 +17,21 @@ class CategoryNestingTypesListView(APIView):
         return Response(data=serializer.data)
 
     def get_queryset(self, request, *args, **kwargs):
-        return Category.objects.all().prefetch_related('types').values('name', 'types')
+        return Category.objects.all().prefetch_related('types')
 
 
-api_category_list_view = CategoryNestingTypesListView.as_view()
+menu_bar_view = MenuBarView.as_view()
 
 
 class ProductListView(APIView):
     # Get a list of products according to Type
     authentication_classes = []
     permission_classes = []
+    page_size = 16
 
     def get(self, request, *args, **kwargs):
-        queryset, object_count = self.get_queryset_and_count()
+        queryset, object_count = self.get_queryset_and_count(
+            request, *args, **kwargs)
         queryset_serializer = ProductListSerializer(queryset, many=True)
         data = {"results": queryset_serializer.data, "count": object_count}
         return Response(data=data)
@@ -42,9 +44,9 @@ class ProductListView(APIView):
         return queryset[bottom:top], count
 
     def get_range_queryset(self, count, *args, **kwargs):
-        page = self.return_integer_or_one(kwargs['page'])
-        offset_kwargs = self.return_integer_or_one(kwargs.get("offset", 0))
-        offset = offset_kwargs if offset_kwargs else self.page_size
+        page = self.get_page(*args, **kwargs)
+        offset = self.get_offset(
+            *args, **kwargs) if self.get_offset(*args, **kwargs) else self.page_size
         page_num = math.ceil(count / offset)
         if page > page_num:
             page = page_num
@@ -56,8 +58,16 @@ class ProductListView(APIView):
             bottom = top - self.page_size
         return bottom, top
 
-    def return_integer_or_one(number):
-        # return integer number or 1 if not integer
+    def get_page(self, *args, **kwargs):
+        page_kwargs = kwargs.get("page", 1)
+        return self.integer_or_zero(page_kwargs)
+
+    def get_offset(self, *args, **kwargs):
+        offset_kwargs = kwargs.get("offset", 0)
+        return self.integer_or_zero(offset_kwargs)
+
+    def integer_or_zero(self, number):
+        # return integer number or 0 if not integer
         try:
             number = int(number)
             return number
@@ -82,9 +92,9 @@ class ProductDetailView(APIView):
             return Response(status_code=404)
 
     def get_queryset(self, request, *args, **kwargs):
-        product_slug = kwargs['product']
+        product_id = kwargs['product_id']
         try:
-            return Product.objects.get(slug=product_slug)
+            return Product.objects.get(id=product_id)
         except Product.DoesNotExist:
             return None
 

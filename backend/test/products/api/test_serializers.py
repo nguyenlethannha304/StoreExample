@@ -40,7 +40,7 @@ class TestCategoryNestingTypesSerializer(APITestCase):
         self.assertIn('types', a_category_serializer_data)
 
 
-@tag('product', 'product_serializer', 'cr')
+@tag('product', 'product_serializer')
 class TestProductListSerializer(APITestCase):
     def test_data_contains_id_price_thumbnail(self):
         products = Product.objects.all().values('id', 'price', 'thumbnail')
