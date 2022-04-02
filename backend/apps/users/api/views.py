@@ -88,6 +88,7 @@ def api_get_city_view(request, province_id):
 
 @api_view(['GET'])
 def api_get_provinces_cities(request):
+    # Get provinces nesting its cities
     query = Province.objects.prefetch_related('city_set').all()
     serializer = ProvinceCitiesSerializer(query, many=True)
     return Response(data=serializer.data)

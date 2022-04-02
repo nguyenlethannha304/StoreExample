@@ -12,14 +12,15 @@ __all__ = ['UserCreationSerializer',
 
 class UserCreationSerializer(serializers.Serializer):
     error_message = {
-        'registed': 'Email is already registed',
-        'password_mismatch': "Two password didn't match",
+        'registed': 'Email đã được đăng ký',
+        'password_mismatch': "Mật khẩu mới và xác nhận không giống nhau",
     }
     email = serializers.EmailField(max_length=255)
     password1 = serializers.CharField(max_length=255, min_length=8)
     password2 = serializers.CharField(max_length=255, min_length=8)
 
     def validate_email(self, email):
+        # Validate email is not exist
         user_exist = UserModel.objects.filter(email=email).exists()
 
         if user_exist is True:
@@ -29,6 +30,7 @@ class UserCreationSerializer(serializers.Serializer):
             return email
 
     def validate(self, data):
+        # Validate password1 and password1 match
         password1 = data.get('password1')
         password2 = data.get('password2')
         if password1 != password2:
@@ -44,8 +46,8 @@ class UserCreationSerializer(serializers.Serializer):
 
 class PasswordChangeSerializer(serializers.Serializer):
     error_message = {
-        'password_mismatch': "Two new passwords didn't match",
-        'password_incorrect': "The old password is incorrect"
+        'password_mismatch': "Mật khẩu mới và xác nhận không giống nhau",
+        'password_incorrect': "Sai mật khẩu cũ"
     }
     old_password = serializers.CharField(max_length=255, min_length=8)
     new_password1 = serializers.CharField(max_length=255, min_length=8)
@@ -57,14 +59,15 @@ class PasswordChangeSerializer(serializers.Serializer):
         super().__init__(*args, **kwargs)
 
     def validate_old_password(self, old_password):
+        # Check the old_password is correct
         correct_old_password = self.user.check_password(old_password)
-        # breakpoint()
         if not correct_old_password:
             raise ValidationError(
                 self.error_message['password_incorrect'], code='password_incorrect')
         return old_password
 
     def validate(self, data):
+        # Check new_password and confirm_password are the same
         new_password1 = data.get('new_password1')
         new_password2 = data.get('new_password2')
         if new_password1 != new_password2:
@@ -73,9 +76,6 @@ class PasswordChangeSerializer(serializers.Serializer):
         return data
 
     def save(self, commit=True):
-        assert not self.errors, (
-            'Can not call `.save()` with invalid data'
-        )
         password = self.validated_data.get('new_password1')
         self.user.set_password(password)
         if commit:
@@ -87,11 +87,13 @@ class PhoneSerializer(serializers.Serializer):
     phone = serializers.CharField(allow_null=True)
 
     def __init__(self, request, *args, **kwargs):
+        # Attach user to self for later usage
         assert request.user.is_authenticated, ("User must be login")
         self.user = request.user
         super().__init__(*args, **kwargs)
 
     def validate_phone(self, value):
+        # Check if phone is correct format
         if value == '':
             return None
         if not (validate_phonenumber(value)):
@@ -105,16 +107,19 @@ class PhoneSerializer(serializers.Serializer):
 
 class AddressSerializer(serializers.ModelSerializer):
     def __init__(self, request, *args, **kwargs):
+        # Attach user to self for later usage
         assert request.user.is_authenticated, ("User must be login")
         self.user = request.user
         super().__init__(*args, **kwargs)
 
     def validate_city(self, value):
+        # City is foreign key if it is blank => it is None
         if value == '':
             return None
         return value
 
     def validate_province(self, value):
+        # Province is foreign key if it is blank => it is None
         if value == '':
             return None
         return value
