@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SafeIconHTMLPipe } from './pipe/safe-html.pipe';
 import { InputElementDirective } from './directive/form/input-element.directive';
 import { ButtonElementDirective } from './directive/form/button-element.directive';
 import { InputContainerDirective } from './directive/form/input-container.directive';
@@ -14,12 +13,12 @@ import { httpInterceptorProviders } from './interceptors';
 import { MessageComponent } from './components/message/message.component';
 import { CloseButtonDirective } from './directive/close-button.directive';
 import './extensions';
+import { CurrencyPipe } from './pipe/currency.pipe';
 @NgModule({
   declarations: [
     MessageComponent,
     NavComponent,
     FooterComponent,
-    SafeIconHTMLPipe,
     InputElementDirective,
     ButtonElementDirective,
     InputContainerDirective,
@@ -27,12 +26,12 @@ import './extensions';
     MobileBottomNavComponent,
     ObjectToKeysPipe,
     CloseButtonDirective,
+    CurrencyPipe,
   ],
   exports: [
     MessageComponent,
     NavComponent,
     FooterComponent,
-    SafeIconHTMLPipe,
     InputElementDirective,
     ButtonElementDirective,
     InputContainerDirective,
@@ -40,6 +39,7 @@ import './extensions';
     MobileBottomNavComponent,
     ObjectToKeysPipe,
     CloseButtonDirective,
+    CurrencyPipe,
   ],
   providers: [httpInterceptorProviders],
   imports: [CommonModule, HttpClientModule],
