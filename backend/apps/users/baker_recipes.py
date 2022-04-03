@@ -12,17 +12,17 @@ testing_user1 = Recipe(
     UserModel, email='testing_user1@gmail.com', phone=None, password='12345678', is_staff=False, is_active=True, is_superuser=False)
 # Adress 1
 province1 = Recipe(
-    Province, name='P1'
+    Province, name='Province 1'
 )
-city_name_list1 = ['C01', 'C02']
+city_name_list1 = ['City 11', 'City 12']
 city_of_province1 = Recipe(
     City, name=cycle(city_name_list1), province=foreign_key(province1)
 )
 # Adress 2
 province2 = Recipe(
-    Province, name='P2'
+    Province, name='Province 2'
 )
-city_name_list2 = ['C11', 'C12']
+city_name_list2 = ['City 21', 'City 22']
 city_of_province2 = Recipe(
     City, name=cycle(city_name_list2), province=foreign_key(province2)
 )

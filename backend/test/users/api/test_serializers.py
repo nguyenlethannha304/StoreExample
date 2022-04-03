@@ -134,8 +134,8 @@ class TestPhoneSerializer(APITestCase):
 @tag('user', 'user_api_serializer')
 class TestAddressSerializer(APITestCase):
     def setUp(self) -> None:
-        province_data = Province.objects.get(name='P1')
-        city_data = City.objects.get(name='C01')
+        province_data = Province.objects.get(name='Province 1')
+        city_data = City.objects.get(name='City 11')
         self.valid_data = {'street': '1234 NTMK',
                            'city': str(city_data.id), 'province': str(province_data.id)}
         self.request = APIRequestFactory()
@@ -165,15 +165,15 @@ class TestAddressSerializer(APITestCase):
 @tag('user', 'user_api_serializer')
 class TestProvinceSerializer(APITestCase):
     def test_serialize_province(self):
-        province = Province.objects.get(name='P1')
+        province = Province.objects.get(name='Province 1')
         serializer = ProvinceSerializer(province)
-        self.assertEqual(serializer.data, {'id': 1, 'name': 'P1'})
+        self.assertEqual(serializer.data, {'id': 1, 'name': 'Province 1'})
 
 
 @tag('user', 'user_api_serializer')
 class TestCitySerializer(APITestCase):
     def test_serializer_city(self):
-        city = City.objects.get(name='C01')
+        city = City.objects.get(name='City 11')
         serializer = CitySerializer(city)
         self.assertEqual(serializer.data, {
-                         'id': 1, 'name': 'C01', 'province': 1})
+                         'id': 1, 'name': 'City 11', 'province': 1})
