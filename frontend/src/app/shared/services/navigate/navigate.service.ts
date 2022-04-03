@@ -8,8 +8,11 @@ import { viewNameObject } from './viewName';
 export class NavigateService {
   //Service allow navigate website via constant name in viewNameObject
   constructor(private route: Router) {}
-  navigateTo(viewName: string) {
+  navigateTo(viewName: string, args: string[] = []) {
     let url = this.getUrlFromName(viewName);
+    for (let part of args) {
+      url = this.mergeURLPart(url, part);
+    }
     this.route.navigate([url]);
   }
   getUrlFromName = (viewName: string): string | null => {
