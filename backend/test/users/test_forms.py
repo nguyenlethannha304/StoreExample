@@ -7,13 +7,14 @@ from django.utils.datastructures import MultiValueDict
 from apps.users.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
 from apps.users.models import Address
 from test.utils import new_data_with_change
+from . import setUpTestUser, tearDownTestUser
 UserModel = get_user_model()
 
 
 def setUpModule():
+    setUpTestUser()
     # Create user for test
-    testing_user = UserModel.objects.create_user(
-        'testing_user@gmail.com', '12345678')
+    testing_user = UserModel.objects.get(email='testing_user@gmail.com')
     testing_user.phone = "+84979311359"
     testing_user.save()
     global fake_request
@@ -21,7 +22,7 @@ def setUpModule():
 
 
 def tearDownModule():
-    UserModel.objects.all().delete()
+    tearDownTestUser()
 
 
 @tag('user', 'user_form')

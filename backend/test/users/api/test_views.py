@@ -9,6 +9,7 @@ from http import HTTPStatus
 import json
 from model_bakery import baker
 from rest_framework.renderers import JSONRenderer
+from .. import setUpTestUser, tearDownTestUser
 UserModel = get_user_model()
 # --------------URL-----------------
 USERS_APP_URL = '/api/users/'
@@ -28,18 +29,11 @@ GET_PROVINCES_CITIES_URL = USERS_APP_URL + 'get_provinces_cities'
 
 
 def setUpModule():
-    testing_user = baker.make_recipe('users.testing_user')
-    testing_cities = baker.make_recipe('users.city_of_province1', _quantity=2)
-    testing_cities2 = baker.make_recipe('users.city_of_province2', _quantity=2)
-    # Hash password for user
-    user = UserModel.objects.get(email='testing_user@gmail.com')
-    user.password = make_password(user.password)
-    user.save()
+    setUpTestUser()
 
 
 def tearDownModule():
-    UserModel.objects.all().delete()
-    Province.objects.all().delete()
+    tearDownTestUser()
 
 
 @tag('user', 'user_api_view')

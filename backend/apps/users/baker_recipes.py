@@ -7,9 +7,9 @@ UserModel = get_user_model()
 
 # User (hash password before test something related to password)
 testing_user = Recipe(
-    UserModel, email='testing_user@gmail.com', phone='', password='12345678', is_staff=False, is_active=True, is_superuser=False)
+    UserModel, email='testing_user@gmail.com', phone=None, password='12345678', is_staff=False, is_active=True, is_superuser=False)
 testing_user1 = Recipe(
-    UserModel, email='testing_user1@gmail.com', phone='', password='12345678', is_staff=False, is_active=True, is_superuser=False)
+    UserModel, email='testing_user1@gmail.com', phone=None, password='12345678', is_staff=False, is_active=True, is_superuser=False)
 # Adress 1
 province1 = Recipe(
     Province, name='P1'

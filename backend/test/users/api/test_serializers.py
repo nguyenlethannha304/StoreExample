@@ -10,21 +10,22 @@ from test.utils import new_data_with_change
 from django.contrib.auth.models import AnonymousUser
 from apps.users.forms import uniform_phone_field
 from model_bakery import baker
+from .. import setUpTestUser, tearDownTestUser
 UserModel = get_user_model()
 
 
 def setUpModule():
-    testing_user = baker.make_recipe('users.testing_user')
-    city1 = baker.make_recipe('users.city_of_province1', _quantity=2)
-    # Hash password for user
-    user = UserModel.objects.get(email="testing_user@gmail.com")
-    user.password = make_password(user.password)
-    user.save()
+    # testing_user = baker.make_recipe('users.testing_user')
+    # city1 = baker.make_recipe('users.city_of_province1', _quantity=2)
+    # # Hash password for user
+    # user = UserModel.objects.get(email="testing_user@gmail.com")
+    # user.password = make_password(user.password)
+    # user.save()
+    setUpTestUser()
 
 
 def tearDownModule():
-    UserModel.objects.all().delete()
-    Province.objects.all().delete()
+    tearDownTestUser()
 
 
 @tag('user', 'user_api_serializer')

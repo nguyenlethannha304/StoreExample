@@ -7,21 +7,21 @@ from django.urls import reverse
 from django.conf import settings
 from apps.users.forms import *
 from test.utils import test_redirect_to_login
+from . import setUpTestUser, tearDownTestUser
 UserModel = get_user_model()
 
 
 def setUpModule():
-    normal_user = UserModel.objects.create_user(
-        'normal_user@gmail.com', '12345678')
+    setUpTestUser()
 
 
 def tearDownModule():
-    UserModel.objects.all().delete()
+    tearDownTestUser()
 
 
 @tag('user', 'user_view')
 class TestLoginView(TestCase):
-    login_username = 'normal_user@gmail.com'
+    login_username = 'testing_user@gmail.com'
     login_password = '12345678'
     login_url = reverse('users:login')
 
@@ -67,7 +67,7 @@ class TestUserCreationView(TestCase):
 
 @tag('user', 'user_view')
 class TestPasswordChangeView(TestCase):
-    user_email = 'normal_user@gmail.com'
+    user_email = 'testing_user@gmail.com'
     old_password = '12345678'
     new_password = 'new_password'
     change_password_url = reverse('users:change_password')
@@ -106,7 +106,7 @@ class TestUserPanelView(TestCase):
 
     def setUp(self):
         self.client = Client()
-        user = UserModel.objects.get(email='normal_user@gmail.com')
+        user = UserModel.objects.get(email='testing_user@gmail.com')
         self.client.force_login(user)
 
     def test_get_method_must_login(self):
