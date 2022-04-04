@@ -144,11 +144,9 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
     // Remove all options of City Select before Render new Cities
     let childrenElements =
       this.citySelect.nativeElement.querySelectorAll('option');
-    if (childrenElements) {
-      for (let child of childrenElements) {
-        this.render.removeChild(this.citySelect.nativeElement, child);
-      }
-    }
+    Array.from(childrenElements).forEach((child) =>
+      this.render.removeChild(this.citySelect.nativeElement, child)
+    );
     // Render new Cities corresponding to new Province
     Array.from(this.provincesCitiesData).forEach(
       (province: ProvinceWithCities) => {

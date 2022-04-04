@@ -78,7 +78,9 @@ export class MessageComponent implements OnInit, OnDestroy {
   }
   assignIcon() {
     // Remove old icon before assign
-    Array.from(this.iconContainer.nativeElement.children).forEach((child) => {
+    let iconContainerChildren =
+      this.iconContainer.nativeElement.querySelectorAll('*');
+    Array.from(iconContainerChildren).forEach((child) => {
       this.render.removeChild(this.iconContainer.nativeElement, child);
     });
     // Assign new icon
