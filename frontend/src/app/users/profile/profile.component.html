@@ -9,7 +9,7 @@
                 {{phone.errors[errorKey]}}
             </p>
         </div>
-        <input InputElement id="phone-input" type="text">
+        <input InputElement id="phone-input" type="text" formControlName="phone">
     </div>
     <!-- Street Input -->
     <div InputContainer id="street">
@@ -20,14 +20,12 @@
     <div style="width:65%" class="d-flex">
         <div InputContainer class="half-input-container">
             <label for="province-input">Tỉnh</label>
-            <select #provinceContainer InputElement id="province-input" formControlName="province">
-                <option value="">-Tỉnh-</option>
+            <select (change)="updateCityInformation()" #provinceSelect InputElement id="province-input" formControlName="province">
             </select>
         </div>
         <div InputContainer class="half-input-container">
             <label for="city-input">Thành Phố</label>
-            <select #cityContainer InputElement id="city-input" formControlName="city">
-                <option value="">-Thành Phố-</option>
+            <select #citySelect InputElement id="city-input" formControlName="city">
             </select>
         </div>
     </div>
