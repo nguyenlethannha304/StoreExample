@@ -7,7 +7,7 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { provinces, profile } from 'src/app/data-for-test';
+import { provinces, profile, productList } from 'src/app/data-for-test';
 import { environment as e } from 'src/environments/environment';
 import { of } from 'rxjs';
 @Injectable()
@@ -24,6 +24,12 @@ export class FakeResponseInterceptor implements HttpInterceptor {
       }
       if (request.url.includes(`${e.api}/users/profile/`)) {
         return of(new HttpResponse({ status: 200, body: profile }));
+      }
+      if (
+        request.url.includes(`${e.api}/products/t`) ||
+        request.url.includes(`${e.api}/products/c`)
+      ) {
+        return of(new HttpResponse({ status: 200, body: productList }));
       }
     }
     return next.handle(request);
