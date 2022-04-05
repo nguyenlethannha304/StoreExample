@@ -1,0 +1,17 @@
+:host {
+    display: grid;
+    position:relative;
+    grid-template-areas:
+    "header"
+    "main"
+    "footer";
+}
+app-nav {
+    grid-area: header;
+}
+main {
+    grid-area: main;
+}
+app-footer {
+    grid-area: footer;
+}
