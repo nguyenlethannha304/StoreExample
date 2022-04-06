@@ -1,0 +1,18 @@
+<!-- To First page -->
+<div *ngIf="hasPrevious()" (click)="changeToPage(1)">&#8249;&#8249;</div>
+<!-- To Previous page -->
+<div *ngIf="hasPrevious()" (click)="changeToPage(current_page - 1)">&#8249;</div>
+<!-- To 2 previous page -->
+<div *ngIf="hasNumberPagePrevious(2)" (click)="changeToPage(current_page - 2)">{{current_page - 2}}</div>
+<!-- To 1 previous page -->
+<div *ngIf="hasNumberPagePrevious(1)" (click)="changeToPage(current_page - 1)">{{current_page - 1}}</div>
+<!-- current-page -->
+<div id="current-page">{{current_page}}</div>
+<!-- To 1 next page -->
+<div *ngIf="hasNumberPageNext(1)" (click)="changeToPage(current_page + 1)">{{current_page + 1}}</div>
+<!-- To 2 next page -->
+<div *ngIf="hasNumberPageNext(2)" (click)="changeToPage(current_page + 2)">{{current_page + 2}}</div>
+<!-- To Next page -->
+<div *ngIf="hasNext()" (click)="changeToPage(current_page + 1)">&#8250;</div>
+<!-- To Last page -->
+<div *ngIf="hasNext()" (click)="changeToPage(numPage)">&#8250;&#8250;</div>

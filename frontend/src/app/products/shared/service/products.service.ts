@@ -8,11 +8,16 @@ import { environment as e } from 'src/environments/environment';
 })
 export class ProductsService {
   constructor(private httpClient: HttpClient) {}
-  getProducts(slug: string, kind: 't' | 'c'): Observable<ProductList> {
+  getProducts(
+    slug: string,
+    kind: 't' | 'c',
+    page: number,
+    offset: number
+  ): Observable<ProductList> {
     // slug of type or category
     // kind = t => get products based on type; kind = c => get products based on category
     return this.httpClient.get<ProductList>(
-      `${e.api}/products/${kind}/${slug}/`
+      `${e.api}/products/${kind}/${slug}?page=${page}&offset=${offset}`
     );
   }
 }

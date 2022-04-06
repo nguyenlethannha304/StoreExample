@@ -1,3 +1,6 @@
 #product-list-container {
-    display: flex;
+    display: grid;
+    margin: 1rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
 }

@@ -7,13 +7,13 @@ import { viewNameObject } from './viewName';
 })
 export class NavigateService {
   //Service allow navigate website via constant name in viewNameObject
-  constructor(private route: Router) {}
+  constructor(private router: Router) {}
   navigateTo(viewName: string, args: string[] = []) {
     let url = this.getUrlFromName(viewName);
     for (let part of args) {
       url = this.mergeURLPart(url, part);
     }
-    this.route.navigate([url]);
+    this.router.navigate([url]);
   }
   getUrlFromName = (viewName: string): string | null => {
     let viewNameArray = viewName.split(':');
