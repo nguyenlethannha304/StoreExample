@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ProductCard, ProductList } from '../interface/products';
+import { ProductCard, ProductDetail, ProductList } from '../interface/products';
 import { environment as e } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
@@ -19,5 +19,9 @@ export class ProductsService {
     return this.httpClient.get<ProductList>(
       `${e.api}/products/${kind}/${slug}?page=${page}&offset=${offset}`
     );
+  }
+  getProduct(uuid: string) {
+    // Get a specific products
+    return this.httpClient.get<ProductDetail>(`${e.api}/products/${uuid}`);
   }
 }

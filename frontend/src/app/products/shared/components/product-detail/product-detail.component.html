@@ -1,1 +1,30 @@
-<p>product-detail works!</p>
+<div class="product-container">
+    <div id="image-container" class="d-flex">
+        <img src="assets/example.jpg" alt="">
+        <img src="assets/example.jpg" alt="">
+        <!-- <img src="assets/example.jpg" alt=""> -->
+    </div>
+    <div id="product-information" class="ps-2 pe-2">
+        <div id="product-name">
+            <h2 class="text-capitalize">{{product.name}}</h2>
+        </div>
+        <div id="rating" class="d-flex">
+            <div #stars id="stars" class="d-flex"></div>
+            <div id="rating-count">( {{rating_count}} lượt đánh giá )</div>
+        </div>
+        <div id="price">
+            <h4 class="mb-0 mt-2" id="current-price">{{product.price | currency}}</h4>
+            <div><span id="old-price" class="text-decoration-line-through">{{product.old_price | currency}}</span><span class="ms-2" id="discount-percentage">{{discount()}}</span></div>
+        </div>
+        <div class="action-buttons">
+            <button [ButtonElement]="'primary'">Thêm Vào Giỏ</button>
+            <button [ButtonElement]="'secondary'">Yêu Thích</button>
+        </div>
+    </div>
+</div>
+<ng-content>
+    <!-- For similar products container -->
+</ng-content>
+<div id="product-description">
+    <p>{{product.description}}</p>
+</div>

@@ -8,3 +8,13 @@ export interface ProductList {
   results: ProductCard[];
   count: number;
 }
+export interface ProductDetail {
+  id: string;
+  name: string;
+  price: number;
+  old_price: number;
+  quantity: number;
+  image: string;
+  description: string;
+  type: number;
+}

@@ -1,4 +1,7 @@
-import { ProductList } from './products/shared/interface/products';
+import {
+  ProductDetail,
+  ProductList,
+} from './products/shared/interface/products';
 import { Profile } from './users/shared/interface/profile';
 // Data for users module
 export const provinces = [
@@ -115,4 +118,15 @@ export const productList2: ProductList = {
     },
   ],
   count: 52,
+};
+export const productDetail: ProductDetail = {
+  id: '85dcddf6-7de2-41fc-8564-f11be363b9dc',
+  name: 'plastic table',
+  price: 620765289,
+  old_price: 1323584914,
+  quantity: 963476691,
+  image: null,
+  description:
+    'ipERmngwytfcgMAtwGGncTPVlkwMuzBfIkNWsqYmMyUXmaBXvsfYzYUuAUrKravzyaUFwXIrXLohfTpYAqWbwdGnmPRVFHvqxJgwhpXrZzBQztgBnenWGLkCJPFiHBVWCmwyCYVExzYYyUTmXLxFqDGeKFhcYsOhkTCyvmGZOQsEypZAYHFuWwAeFaZgktTpeuCLfiyBEoKxqueAUUysNcbQTOQDwSYtmVtZFnWrcjVOiyljGWSjRsaqwjqJelwElXWcStvwaKqRMKjFOQLgbHNOnIjGtyQlsGuRYwoBFSMs',
+  type: 2,
 };
