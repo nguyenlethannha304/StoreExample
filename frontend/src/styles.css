@@ -6,10 +6,12 @@
 }
 body {
   background-color: hsl(var(--cl-blue)) !important;
-  min-height: 100vh;
+  max-width: 100vw;
+  /* min-height: 100vh; */
 }
 main {
   background-color: #fff !important;
+  max-width: 100vw;
 }
 .icon-container {
   display: flex;
@@ -22,6 +24,12 @@ svg {
   height: 100%;
   fill: var(--bs-light);
   stroke-width: 0.25px;
+}
+.w-0 {
+  width: 0;
+}
+.h-0 {
+  height: 0;
 }
 .color-cl-blue-light {
   color: hsl(var(--cl-blue-light));
