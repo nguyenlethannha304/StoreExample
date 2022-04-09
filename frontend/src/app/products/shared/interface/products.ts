@@ -11,6 +11,8 @@ export interface ProductList {
 export interface ProductDetail {
   id: string;
   name: string;
+  rating: number;
+  rating_count: number;
   price: number;
   old_price: number;
   quantity: number;

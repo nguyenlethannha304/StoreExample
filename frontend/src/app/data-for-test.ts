@@ -122,6 +122,8 @@ export const productList2: ProductList = {
 export const productDetail: ProductDetail = {
   id: '85dcddf6-7de2-41fc-8564-f11be363b9dc',
   name: 'plastic table',
+  rating: 3.8,
+  rating_count: 20,
   price: 620765289,
   old_price: 1323584914,
   quantity: 963476691,
