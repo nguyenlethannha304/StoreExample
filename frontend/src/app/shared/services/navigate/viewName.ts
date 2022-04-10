@@ -4,9 +4,7 @@ export const viewNameObject = {
   cart: 'cart',
   menuBar: 'menuBar',
   // Product module
-  products: {
-    name: 'products',
-  },
+  products: 'products',
   //Users module
   users: {
     name: 'users', //Prefix for components in user module

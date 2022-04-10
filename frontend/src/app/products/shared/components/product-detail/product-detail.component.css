@@ -1,0 +1,29 @@
+#image-container {
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+}
+#image-container > img {
+    scroll-snap-align: start;
+    width: 100vw;
+    min-height: 15rem;
+}
+#product-information > div {
+    margin-bottom: 1rem;
+}
+#stars {
+    width: 8rem;
+}
+#description {
+    overflow-wrap: break-word;
+    overflow-y: hidden;
+    transition: all 0.5s;
+}
+#product-description > .description {
+    height: 2rem;
+}
+.description-collapse-toggle {
+    cursor: pointer;
+}
+.action-button {
+    height: 1rem;
+}

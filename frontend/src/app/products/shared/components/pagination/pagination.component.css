@@ -1,0 +1,27 @@
+:host {
+    height: 3rem;
+}
+div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin: 0.25rem 0.25rem;
+    background-color: var(--bs-gray-300);
+}
+div:hover {
+    width: 2rem;
+    height: 2rem;
+    background-color: var(--bs-gray-500);
+    cursor: pointer;
+}
+#current-page{
+    background-color: var(--bs-gray-100);
+}
+#current-page:hover {
+    width: 2rem;
+    height: 2rem;
+    background-color: var(--bs-gray-100);
+    cursor: default;
+}

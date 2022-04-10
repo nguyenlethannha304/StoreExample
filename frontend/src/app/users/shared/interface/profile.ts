@@ -1,8 +1,8 @@
 export interface Profile {
   phone: string;
   street: string;
-  province: Province;
-  city: City;
+  province: Province['id'];
+  city: City['id'];
 }
 export interface ProvinceWithCities {
   id: number;
