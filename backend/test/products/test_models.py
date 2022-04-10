@@ -1,8 +1,9 @@
+from this import d
 from django.apps import apps
 from django.test import tag, TestCase
 from django.utils.text import slugify
 from model_bakery import baker
-from . import setUpForProductsTest, tearDownForProductsTest
+from . import setUpForProductsTest, tearDownForProductsTest, pick_random_object_from_queryset
 Category = apps.get_model('products', 'Category')
 Type = apps.get_model('products', 'Type')
 Product = apps.get_model('products', 'Product')
@@ -43,10 +44,18 @@ class TestType(TestCase):
 @tag('product', 'product_model')
 class TestProduct(TestCase):
     def test_slug(self):
-        all_products_objects = Product.objects.all()
-        if all_products_objects:
-            a_product_obj = all_products_objects[0]
+        product_queryset = Product.objects.all()
+        if product_queryset:
+            a_product_obj = product_queryset[0]
             # Check slug is result from slugify of name
             self.assertEqual(a_product_obj.slug, slugify(a_product_obj.name))
         else:
             self.assertEqual('Error', 'Product is empty')
+
+    def test_rating_min_max(self):
+        product_queryset = Product.objects.all()
+        if product_queryset:
+            random_object = pick_random_object_from_queryset(product_queryset)
+            # Test min and max of product.rating
+            self.assertLessEqual(random_object.rating, 5)
+            self.assertGreaterEqual(random_object.rating, 0)

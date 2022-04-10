@@ -100,3 +100,20 @@ class ProductDetailView(APIView):
 
 
 api_product_detail_view = ProductDetailView.as_view()
+
+
+class SimilarProductView(APIView):
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset(request, *args, **kwargs)
+        if queryset:
+            serializer = ProductListSerializer(queryset)
+            return Response(data=serializer.data)
+        else:
+            return Response(status_code=404)
+
+    def get_queryset(self, request, *args, **kwargs):
+        offset = kwargs.get('offset', 8)
+        type_id = kwargs.get('id')
+        if type_id:
+            return Product.objects.filter(type=type_id)[:offset]
+        return None

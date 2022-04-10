@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinLengthValidator, MaxLengthValidator
 import uuid
 from django.utils.text import slugify
 # Create your models here.
@@ -28,6 +29,10 @@ class Type(models.Model):
 class Product(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     name = models.CharField(max_length=255)
+    slug = models.CharField(max_length=255)
+    rating = models.IntegerField(
+        validators=[MinLengthValidator(0), MaxLengthValidator(5)])
+    rating_count = models.IntegerField()
     price = models.PositiveIntegerField()
     old_price = models.PositiveIntegerField()
     quantity = models.PositiveIntegerField()
@@ -36,3 +41,8 @@ class Product(models.Model):
     description = models.TextField()
     type = models.ForeignKey(
         Type, related_name='products', on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.slug = slugify(self.name)
+        return super().save(*args, **kwargs)
