@@ -94,7 +94,7 @@ class ProductDetailView(APIView):
     def get_queryset(self, request, *args, **kwargs):
         product_id = kwargs['product_id']
         try:
-            return Product.objects.get(id=product_id)
+            return Product.objects.get(id=product_id).select_related('sub_images')
         except Product.DoesNotExist:
             return None
 

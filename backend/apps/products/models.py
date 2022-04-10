@@ -46,3 +46,9 @@ class Product(models.Model):
         if not self.id:
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
+
+
+class SubImage(models.Model):
+    product = models.ForeignKey(
+        Product, related_name='sub_images', on_delete=models.CASCADE)
+    image = models.ImageField()
