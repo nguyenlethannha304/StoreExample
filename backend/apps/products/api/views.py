@@ -89,12 +89,12 @@ class ProductDetailView(APIView):
             serializer = ProductDetailSerializer(queryset)
             return Response(data=serializer.data)
         else:
-            return Response(status_code=404)
+            return Response(status=404)
 
     def get_queryset(self, request, *args, **kwargs):
         product_id = kwargs['product_id']
         try:
-            return Product.objects.get(id=product_id).select_related('sub_images')
+            return Product.objects.prefetch_related('sub_images').get(id=product_id)
         except Product.DoesNotExist:
             return None
 
@@ -106,14 +106,17 @@ class SimilarProductView(APIView):
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset(request, *args, **kwargs)
         if queryset:
-            serializer = ProductListSerializer(queryset)
+            serializer = ProductListSerializer(queryset, many=True)
             return Response(data=serializer.data)
         else:
-            return Response(status_code=404)
+            return Response(status=404)
 
     def get_queryset(self, request, *args, **kwargs):
-        offset = kwargs.get('offset', 8)
-        type_id = kwargs.get('id')
+        offset = kwargs.get('offset', 6)
+        type_id = kwargs.get('type_id')
         if type_id:
             return Product.objects.filter(type=type_id)[:offset]
         return None
+
+
+api_similar_product_view = SimilarProductView.as_view()
