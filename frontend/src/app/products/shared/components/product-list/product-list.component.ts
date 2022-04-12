@@ -8,7 +8,7 @@ import { ProductsService } from '../../service/products.service';
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css'],
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponentRender implements OnInit {
   // Queryparams
   page: number = 1;
   // get offset();

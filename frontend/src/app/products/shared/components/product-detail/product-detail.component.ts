@@ -17,7 +17,7 @@ import {
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.css'],
 })
-export class ProductDetailComponent implements OnInit, AfterViewInit {
+export class ProductDetailComponentRender implements OnInit, AfterViewInit {
   product: ProductDetail = {
     id: '85dcddf6-7de2-41fc-8564-f11be363b9dc',
     name: 'plastic table',
