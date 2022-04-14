@@ -13,24 +13,12 @@ import {
   starLinearGradient,
 } from 'src/app/shared/services/icons/icons';
 @Component({
-  selector: 'app-product-detail',
-  templateUrl: './product-detail.component.html',
-  styleUrls: ['./product-detail.component.css'],
+  selector: 'app-product-detail-render',
+  templateUrl: './product-detail-render.component.html',
+  styleUrls: ['./product-detail-render.component.css'],
 })
 export class ProductDetailComponentRender implements OnInit, AfterViewInit {
-  product: ProductDetail = {
-    id: '85dcddf6-7de2-41fc-8564-f11be363b9dc',
-    name: 'plastic table',
-    rating: 3.8,
-    rating_count: 20,
-    price: 620765289,
-    old_price: 1323584914,
-    quantity: 963476691,
-    image: null,
-    description:
-      'ipERmngwytfcgMAtwGGncTPVlkwMuzBfIkNWsqYmMyUXmaBXvsfYzYUuAUrKravzyaUFwXIrXLohfTpYAqWbwdGnmPRVFHvqxJgwhpXrZzBQztgBnenWGLkCJPFiHBVWCmwyCYVExzYYyUTmXLxFqDGeKFhcYsOhkTCyvmGZOQsEypZAYHFuWwAeFaZgktTpeuCLfiyBEoKxqueAUUysNcbQTOQDwSYtmVtZFnWrcjVOiyljGWSjRsaqwjqJelwElXWcStvwaKqRMKjFOQLgbHNOnIjGtyQlsGuRYwoBFSMs',
-    type: 2,
-  };
+  @Input() product: ProductDetail;
 
   constructor(private render: Renderer2, private hostElementRef: ElementRef) {}
   @ViewChild('stars') stars: ElementRef;

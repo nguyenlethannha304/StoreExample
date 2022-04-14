@@ -1,3 +1,6 @@
-<ng-template *ngFor="let product of products">
-    <app-product-card [product]="product" ></app-product-card>
-</ng-template>
+<br>
+<h3>Similar Products</h3>
+<div class="d-flex overflow-scroll ">
+    <app-product-card *ngFor="let product of similarProducts" [product]="product" class="m-2 p-2"></app-product-card>
+</div>
+<br>

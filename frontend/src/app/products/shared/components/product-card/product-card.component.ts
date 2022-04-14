@@ -14,7 +14,9 @@ import { ProductCard } from '../../interface/products';
 export class ProductCardComponent implements OnInit {
   @Input() product: ProductCard;
   constructor(private navSer: NavigateService, private router: Router) {}
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.product);
+  }
   onClick() {
     this.navSer.navigateTo('products', [this.product.id]);
   }
