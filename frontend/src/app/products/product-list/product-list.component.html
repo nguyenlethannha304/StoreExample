@@ -1,1 +1,2 @@
-<p>product-list works!</p>
+<app-product-list-render [products]="products"></app-product-list-render>
+<app-pagination [count]="count" [offset]="offset" (changePage)="changeToPage($event)"></app-pagination>

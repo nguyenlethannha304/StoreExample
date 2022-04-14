@@ -6,7 +6,7 @@ import { environment as e } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class ProductsService {
+export class ProductService {
   constructor(private httpClient: HttpClient) {}
   getProducts(
     slug: string,
