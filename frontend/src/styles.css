@@ -5,14 +5,10 @@
   --cl-background: var(--cl-blue-light);
 }
 body {
-  background-color: var(--bs-gray-200) !important;
+  background-color: var(--bs-gray-200);
   max-width: 100vw;
 }
-body > * {
-  background-color: #fff;
-}
 main {
-  /* background-color: #fff !important; */
   max-width: 100vw;
 }
 .icon-container {

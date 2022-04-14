@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { ProductsRoutingModule } from './products-routing.module';
 import { ShareModule } from '../shared/share.module';
-import { ProductListComponentRender } from './shared/components/product-list/product-list.component';
-import { ProductDetailComponentRender } from './shared/components/product-detail/product-detail.component';
+import { ProductListComponentRender } from './shared/components/product-list-render/product-list-render.component';
+import { ProductDetailComponentRender } from './shared/components/product-detail-render/product-detail-render.component';
 import { ProductCardComponent } from './shared/components/product-card/product-card.component';
 import { PaginationComponent } from './shared/components/pagination/pagination.component';
 import { SimilarProductsComponent } from './shared/components/similar-products/similar-products.component';

@@ -1,6 +1,6 @@
-<br>
-<h3>Similar Products</h3>
-<div class="d-flex overflow-scroll ">
-    <app-product-card *ngFor="let product of similarProducts" [product]="product" class="m-2 p-2"></app-product-card>
+<div id="similar-product-container" class="border border-secondary pt-2 pb-2">
+    <h3>Similar Products</h3>
+    <div class="d-flex overflow-scroll ">
+        <app-product-card *ngFor="let product of similarProducts" [product]="product" class="m-2 p-2"></app-product-card>
+    </div>
 </div>
-<br>

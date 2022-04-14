@@ -85,7 +85,6 @@ export class ProductDetailComponentRender implements OnInit, AfterViewInit {
     this.normalDescriptionHeight = window
       .getComputedStyle(descriptionElement)
       .getPropertyValue('height');
-    console.log(this.normalDescriptionHeight);
   }
   toggleCollapse() {
     this.descriptionCollapse = !this.descriptionCollapse;

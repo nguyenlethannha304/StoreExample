@@ -1,4 +1,5 @@
 import {
+  ProductCard,
   ProductDetail,
   ProductList,
 } from './products/shared/interface/products';
@@ -132,7 +133,7 @@ export const productDetail: ProductDetail = {
     'ipERmngwytfcgMAtwGGncTPVlkwMuzBfIkNWsqYmMyUXmaBXvsfYzYUuAUrKravzyaUFwXIrXLohfTpYAqWbwdGnmPRVFHvqxJgwhpXrZzBQztgBnenWGLkCJPFiHBVWCmwyCYVExzYYyUTmXLxFqDGeKFhcYsOhkTCyvmGZOQsEypZAYHFuWwAeFaZgktTpeuCLfiyBEoKxqueAUUysNcbQTOQDwSYtmVtZFnWrcjVOiyljGWSjRsaqwjqJelwElXWcStvwaKqRMKjFOQLgbHNOnIjGtyQlsGuRYwoBFSMs',
   type: 2,
 };
-export const similarProduct: ProductList['results'] = [
+export const similarProduct: ProductCard[] = [
   {
     id: 'bfaab8db-d97b-4582-8f18-c8afd5417513',
     price: 92648695,
