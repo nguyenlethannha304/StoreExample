@@ -5,7 +5,7 @@ from django.test import tag
 from django.utils.text import slugify
 from model_bakery import baker
 from apps.products.api.serializers import *
-from .. import setUpForProductsTest, tearDownForProductsTest
+from .. import setUpTestProduct, tearDownTestProduct
 Category = apps.get_model('products', 'Category')
 Type = apps.get_model('products', 'Type')
 Product = apps.get_model('products', 'Product')
@@ -13,11 +13,11 @@ tag('products')
 
 
 def setUpModule():
-    setUpForProductsTest()
+    setUpTestProduct()
 
 
 def tearDownModule():
-    tearDownForProductsTest()
+    tearDownTestProduct()
 
 
 @tag('product', 'product_serializer')

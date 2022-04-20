@@ -6,7 +6,7 @@ from rest_framework.renderers import JSONRenderer
 from http import HTTPStatus
 
 from apps.products.api.serializers import Product
-from .. import pick_random_object_from_queryset, setUpForProductsTest, tearDownForProductsTest
+from .. import pick_random_object_from_queryset, setUpTestProduct, tearDownTestProduct
 from django.apps import apps
 from random import randint
 # Get Model of products app
@@ -21,11 +21,11 @@ SIMILAR_PRODUCT = PRODUCT_APP_URL + 'similar_product/'  # Add id type to complet
 
 
 def setUpModule():
-    setUpForProductsTest()
+    setUpTestProduct()
 
 
 def tearDownModule():
-    tearDownForProductsTest()
+    tearDownTestProduct()
 
 
 @tag('product', 'product_view')

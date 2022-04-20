@@ -7,7 +7,7 @@ Type = apps.get_model('products', 'Type')
 Product = apps.get_model('products', 'Product')
 
 
-def setUpForProductsTest():
+def setUpTestProduct():
     baker.make_recipe('products.chair_products', _quantity=3)
     baker.make_recipe('products.table_products', _quantity=3)
     # Assign many-to-many categories for Type
@@ -23,7 +23,7 @@ def setUpForProductsTest():
         product.save()
 
 
-def tearDownForProductsTest():
+def tearDownTestProduct():
     Category.objects.all().delete()
     Type.objects.all().delete()
     Product.objects.all().delete()
