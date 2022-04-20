@@ -1,7 +1,6 @@
 from django.apps import apps
 from model_bakery import baker
 from django.utils.text import slugify
-import random
 Category = apps.get_model('products', 'Category')
 Type = apps.get_model('products', 'Type')
 Product = apps.get_model('products', 'Product')
@@ -27,9 +26,3 @@ def tearDownTestProduct():
     Category.objects.all().delete()
     Type.objects.all().delete()
     Product.objects.all().delete()
-
-
-def pick_random_object_from_queryset(object_queryset):
-    queryset_len = len(object_queryset)
-    random_number = random.randint(0, queryset_len - 1)
-    return object_queryset[random_number]

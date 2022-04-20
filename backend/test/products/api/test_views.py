@@ -6,7 +6,8 @@ from rest_framework.renderers import JSONRenderer
 from http import HTTPStatus
 
 from apps.products.api.serializers import Product
-from .. import pick_random_object_from_queryset, setUpTestProduct, tearDownTestProduct
+from .. import setUpTestProduct, tearDownTestProduct
+from test import pick_random_object_from_queryset
 from django.apps import apps
 from random import randint
 # Get Model of products app
