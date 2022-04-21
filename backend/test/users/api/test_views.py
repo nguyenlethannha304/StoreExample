@@ -9,7 +9,7 @@ from http import HTTPStatus
 import json
 from model_bakery import baker
 from rest_framework.renderers import JSONRenderer
-from .. import setUpTestUser, tearDownTestUser
+from .. import setUpTestUserApp, tearDownTestUserApp
 UserModel = get_user_model()
 # --------------URL-----------------
 USERS_APP_URL = '/api/users/'
@@ -29,11 +29,11 @@ GET_PROVINCES_CITIES_URL = USERS_APP_URL + 'get_provinces_cities'
 
 
 def setUpModule():
-    setUpTestUser()
+    setUpTestUserApp()
 
 
 def tearDownModule():
-    tearDownTestUser()
+    tearDownTestUserApp()
 
 
 @tag('user', 'user_api_view')

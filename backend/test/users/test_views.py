@@ -7,16 +7,16 @@ from django.urls import reverse
 from django.conf import settings
 from apps.users.forms import *
 from test.utils import test_redirect_to_login
-from . import setUpTestUser, tearDownTestUser
+from . import setUpTestUserApp, tearDownTestUserApp
 UserModel = get_user_model()
 
 
 def setUpModule():
-    setUpTestUser()
+    setUpTestUserApp()
 
 
 def tearDownModule():
-    tearDownTestUser()
+    tearDownTestUserApp()
 
 
 @tag('user', 'user_view')

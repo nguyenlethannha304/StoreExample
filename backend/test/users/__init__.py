@@ -8,7 +8,7 @@ City = apps.get_model('users', 'City')
 Address = apps.get_model('users', 'Address')
 
 
-def setUpTestUser():
+def setUpTestUserApp():
     # Create user instances and hash its password
     testing_user = baker.make_recipe('users.testing_user')
     testing_user.password = make_password(testing_user.password)
@@ -21,7 +21,7 @@ def setUpTestUser():
     baker.make_recipe('users.city_of_province2', _quantity=2)
 
 
-def tearDownTestUser():
+def tearDownTestUserApp():
     UserModel.objects.all().delete()
     Province.objects.all().delete()
     City.objects.all().delete()

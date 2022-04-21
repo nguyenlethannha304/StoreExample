@@ -3,7 +3,7 @@ from django.apps import apps
 from django.test import tag, TestCase
 from django.utils.text import slugify
 from model_bakery import baker
-from . import setUpTestProduct, tearDownTestProduct
+from . import setUpTestProductApp, tearDownTestProductApp
 from test import pick_random_object_from_queryset
 Category = apps.get_model('products', 'Category')
 Type = apps.get_model('products', 'Type')
@@ -11,11 +11,11 @@ Product = apps.get_model('products', 'Product')
 
 
 def setUpModule():
-    setUpTestProduct()
+    setUpTestProductApp()
 
 
 def tearDownModule():
-    tearDownTestProduct()
+    tearDownTestProductApp()
 
 
 @tag('product', 'product_model')

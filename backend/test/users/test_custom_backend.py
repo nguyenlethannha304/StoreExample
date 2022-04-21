@@ -2,12 +2,12 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, tag
 from django.test.client import RequestFactory
 from django.contrib.auth import authenticate
-from . import setUpTestUser, tearDownTestUser
+from . import setUpTestUserApp, tearDownTestUserApp
 UserModel = get_user_model()
 
 
 def setUpModule():
-    setUpTestUser()
+    setUpTestUserApp()
     # Create user for authentication tests
     testing_user = UserModel.objects.get(email='testing_user@gmail.com')
     testing_user.phone = '+84979311359'
@@ -18,7 +18,7 @@ def setUpModule():
 
 
 def tearDownModule():
-    tearDownTestUser()
+    tearDownTestUserApp()
 
 
 @tag('user', 'user_backend')
