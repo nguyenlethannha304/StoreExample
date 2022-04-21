@@ -158,15 +158,21 @@ class TestAddressSerializer(APITestCase):
 @tag('user', 'user_api_serializer')
 class TestProvinceSerializer(APITestCase):
     def test_serialize_province(self):
+        # Check serializer return id and name of province
         province = Province.objects.get(name='Province 1')
         serializer = ProvinceSerializer(province)
-        self.assertEqual(serializer.data, {'id': 1, 'name': 'Province 1'})
+        dict_key = serializer.data.keys()
+        self.assertIn('id', dict_key)
+        self.assertIn('name', dict_key)
 
 
 @tag('user', 'user_api_serializer')
 class TestCitySerializer(APITestCase):
     def test_serializer_city(self):
+        # Check serializer return city's id, name and its province
         city = City.objects.get(name='City 11')
         serializer = CitySerializer(city)
-        self.assertEqual(serializer.data, {
-                         'id': 1, 'name': 'City 11', 'province': 1})
+        dict_keys = serializer.data.keys()
+        self.assertIn('id', dict_keys)
+        self.assertIn('name', dict_keys)
+        self.assertIn('province', dict_keys)
