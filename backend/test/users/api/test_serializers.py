@@ -88,9 +88,8 @@ class TestPasswordChangeSerializer(APITestCase):
         self.assertTrue(serializer.is_valid())
         serializer.save()
         # Check user new password
-        user_with_new_pass = UserModel.objects.get(
-            email='testing_user@gmail.com')
-        self.assertTrue(user_with_new_pass.check_password(
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password(
             self.valid_data['new_password1']))
 
     def test_error_incorect_old_password(self):
@@ -119,16 +118,16 @@ class TestPhoneSerializer(APITestCase):
     def setUp(self) -> None:
         self.valid_data = {'phone': '0979311352'}
         self.request = APIRequestFactory()
-        user = UserModel.objects.get(email='testing_user@gmail.com')
-        self.request.user = user
+        self.user = UserModel.objects.get(email='testing_user@gmail.com')
+        self.request.user = self.user
 
     def test_phone_change(self):
         serializer = PhoneSerializer(self.request, data=self.valid_data)
         self.assertTrue(serializer.is_valid())
         serializer.save()
-        user_with_new_phone = UserModel.objects.get(
-            email='testing_user@gmail.com')
-        self.assertEqual(user_with_new_phone.phone, '0979311352')
+        # Check user new phone
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.phone, '0979311352')
 
 
 @tag('user', 'user_api_serializer')

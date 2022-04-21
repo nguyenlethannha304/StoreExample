@@ -103,9 +103,9 @@ class TestPasswordChangeView(APITestCase):
             CHANGE_PASSWORD_URL, data=self.valid_data, form='json')
         self.assertEqual(response.status_code, 200)
         # Test new password of user
-        testing_user = UserModel.objects.get(email='testing_user@gmail.com')
+        self.testing_user.refresh_from_db()
         new_password = self.valid_data['new_password1']
-        self.assertTrue(testing_user.check_password(new_password))
+        self.assertTrue(self.testing_user.check_password(new_password))
 
     def test_error_password_mismatch(self):
         invalid_data = new_data_with_change(
