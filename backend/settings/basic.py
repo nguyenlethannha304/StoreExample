@@ -43,7 +43,7 @@ THIRD_PARTY_APPS = [
 PROJECT_APPS = [
     'apps.users.apps.UsersConfig',
     'apps.products.apps.ProductsConfig',
-    'apps.orders.apps.OrdersConfig',
+    'apps.carts.apps.CartsConfig',
 ]
 INSTALLED_APPS = DJANGO_APP + THIRD_PARTY_APPS + PROJECT_APPS
 
@@ -149,5 +149,3 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
 ]
-
-DB_CONSTRAINT = False  # APPLIED DATABASE CONSTRAINT
