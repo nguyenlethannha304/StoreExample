@@ -4,7 +4,7 @@ from .models import Address
 from django.contrib.auth import get_user_model
 from django.apps import apps
 UserModel = get_user_model()
-Cart = apps.get_model('orders', 'Cart')
+Cart = apps.get_model('carts', 'Cart')
 
 
 @receiver(post_save, sender=UserModel)
