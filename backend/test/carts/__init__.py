@@ -21,7 +21,7 @@ def setUpTestCartApp():
     # Create product
     setUpTestProductApp()
     # Create CartItem
-    # setUpCartItem()
+    setUpCartItem()
 
 
 def setUpCartItem():

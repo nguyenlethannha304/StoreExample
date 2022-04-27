@@ -2,7 +2,7 @@ from . import setUpTestCartApp, tearDownTestCartApp
 from django.test import TransactionTestCase, tag
 from django.apps import apps
 from django.contrib.auth import get_user_model
-from . import setUpTestOrderApp, tearDownTestOrderApp
+from . import setUpTestCartApp, tearDownTestCartApp
 # Get models
 UserModel = get_user_model()
 # Models of orders app
