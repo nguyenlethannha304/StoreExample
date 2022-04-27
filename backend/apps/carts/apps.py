@@ -7,4 +7,4 @@ class CartsConfig(AppConfig):
     app_label = 'carts'
 
     def ready(self):
-        from .signals import update_cart_count_when_add_new_itemcart
+        from .signals import update_cart_count_when_add_new_itemcart, update_cart_count_when_delete_itemcart
