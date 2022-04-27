@@ -5,7 +5,7 @@ from django.apps import apps
 from pkg_resources import require
 from rest_framework import serializers
 from django.db.models import F, Q
-from ..models import Order, ItemOrder, Cart, CartItem
+from ..models import Cart, CartItem
 #
 Product = apps.get_model('products', 'Product')
 
@@ -53,15 +53,3 @@ class CartItemForCartViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
         fields = ['id', 'quantity', 'product']
-
-
-class OrderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Order
-        fields = '__all__'
-
-
-class ItemOrderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ItemOrder
-        fields = '__all__'

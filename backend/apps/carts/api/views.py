@@ -1,5 +1,6 @@
 from rest_framework import views
-from ..models import Cart, CartItem, Order, ItemOrder
+from rest_framework.permissions import IsAuthenticated
+from ..models import Cart, CartItem
 from .serializers import *
 from rest_framework.response import Response
 from django.db.models import F, Prefetch
@@ -22,6 +23,8 @@ def count_product_in_cart(user):
 
 
 class CartCountView(views.APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         # Get count attribute of cart
         count = count_product_in_cart(request.user)
@@ -32,6 +35,9 @@ api_cart_count_view = CartCountView.as_view()
 
 
 class CartView(views.APIView):
+    '''CartView for log-in user'''
+    permission_classes = [IsAuthenticated]
+
     def redirect_to_get_request(self):
         return Response(status=HTTPStatus.SEE_OTHER, headers={'Location': '/cart/'})
 
@@ -86,3 +92,29 @@ class CartView(views.APIView):
 
 
 api_cart_view = CartView.as_view()
+
+
+class UnauthorizedCartView(views.APIView):
+    '''CartView for anonymous user'''
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request, *args, **kwargs):
+        product_id_queryparams = self.get_queryparams_of_product_ids(request)
+        if product_id_queryparams != None:
+            product_id_list = product_id_queryparams.split(',')
+            queryset = self.get_queryset(product_id_list)
+            serializer = ProductCartSerializer(queryset, many=True)
+            return Response(data=serializer.data)
+        return Response(status=HTTPStatus.BAD_REQUEST)
+
+    def get_queryparams_of_product_ids(self, request):
+        return request.query_params.get('product-ids', None)
+
+    def get_queryset(self, product_id_list):
+        queryset = Product.objects.filter(pk__in=product_id_list)
+        return queryset.only(
+            'id', 'name', 'price', 'quantity', 'thumbnail')
+
+
+api_cart_unauthorized_view = UnauthorizedCartView.as_view()
