@@ -11,19 +11,17 @@ UserModel = get_user_model()
 # Model from orders app
 Cart = apps.get_model('carts', 'Cart')
 CartItem = apps.get_model('carts', 'CartItem')
-Order = apps.get_model('carts', 'Order')
-ItemOrder = apps.get_model('carts', 'ItemOrder')
 # Model from products app
 Product = apps.get_model('products', 'Product')
 
 
-def setUpTestOrderApp():
+def setUpTestCartApp():
     # Create user with cart
     setUpTestUserApp()
     # Create product
     setUpTestProductApp()
     # Create CartItem
-    setUpCartItem()
+    # setUpCartItem()
 
 
 def setUpCartItem():
@@ -35,7 +33,7 @@ def setUpCartItem():
     item_cart = baker.make(CartItem, product=random_product, cart=cart)
 
 
-def tearDownTestOrderApp():
+def tearDownTestCartApp():
     # Delete user
     tearDownTestUserApp()
     # Delete products
@@ -46,5 +44,4 @@ def tearDownTestOrderApp():
 
 def tearDownOrderModels():
     # Cart and CartItem will be deleted automatically when deleting users
-    Order.objects.all().delete()
-    ItemOrder.objects.all().delete()
+    pass

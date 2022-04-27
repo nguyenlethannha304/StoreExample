@@ -3,24 +3,22 @@ from django.contrib.auth import get_user_model
 from django.apps import apps
 from model_bakery import baker
 from test import pick_random_object_from_queryset
-from . import setUpTestOrderApp, tearDownTestOrderApp
+from . import setUpTestCartApp, tearDownTestCartApp
 # Get models
 UserModel = get_user_model()
 # Models of orders app
 Cart = apps.get_model('carts', 'Cart')
 CartItem = apps.get_model('carts', 'CartItem')
-Order = apps.get_model('carts', 'Order')
-ItemOrder = apps.get_model('carts', 'ItemOrder')
 # Models of products app
 Product = apps.get_model('products', 'Product')
 
 
 def setUpModule():
-    setUpTestOrderApp()
+    setUpTestCartApp()
 
 
 def tearDownModule():
-    tearDownTestOrderApp()
+    tearDownTestCartApp()
 
 
 @tag('carts', 'carts_signals')
