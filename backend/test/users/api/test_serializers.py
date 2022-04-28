@@ -136,10 +136,10 @@ class TestAddressSerializer(APITestCase):
         self.request.user = user
 
     def test_change_address(self):
-        serializer = AddressSerializer(self.request, data=self.valid_data)
+        serializer = UserAddressSerializer(self.request, data=self.valid_data)
         self.assertTrue(serializer.is_valid())
         serializer.save()
-        new_address = Address.objects.get(user=self.request.user)
+        new_address = self.request.user.address
         self.assertEqual(new_address.street, self.valid_data['street'])
         self.assertEqual(str(new_address.city.id), self.valid_data['city'])
         self.assertEqual(str(new_address.province.id),
@@ -147,10 +147,10 @@ class TestAddressSerializer(APITestCase):
 
     def test_value_None_if_blank(self):
         data = {'street': '', 'city': '', 'province': ''}
-        serializer = AddressSerializer(self.request, data=data)
+        serializer = UserAddressSerializer(self.request, data=data)
         self.assertTrue(serializer.is_valid())
         serializer.save()
-        new_address = self.request.user.address_set.all()[0]
+        new_address = self.request.user.address
         self.assertEqual(new_address.city, None)
         self.assertEqual(new_address.province, None)
 
