@@ -10,6 +10,23 @@ from ..utils.tools import validate_phonenumber
 # Create your models here.
 
 
+class Province(models.Model):
+    name = models.CharField(max_length=255)
+
+
+class City(models.Model):
+    name = models.CharField(max_length=255)
+    province = models.ForeignKey(Province, on_delete=models.CASCADE, null=True)
+
+
+class Address(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True)
+    street = models.CharField(max_length=255, blank=True)
+    province = models.ForeignKey(
+        Province, on_delete=models.SET_NULL, null=True)
+    city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
+
+
 class CustomUserManager(UserManager):
     def _create_user(self, username, password, **extra_fields):
         if not username:
@@ -51,7 +68,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
                              blank=True, validators=[validate_phonenumber], db_index=True, null=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-
+    address = models.ForeignKey(
+        Address, related_name='+', on_delete=models.SET_NULL, null=True)
     objects = CustomUserManager()
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
@@ -62,22 +80,3 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
-
-
-class Province(models.Model):
-    name = models.CharField(max_length=255)
-
-
-class City(models.Model):
-    name = models.CharField(max_length=255)
-    province = models.ForeignKey(Province, on_delete=models.CASCADE, null=True)
-
-
-class Address(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True)
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, )
-    street = models.CharField(max_length=255, blank=True)
-    province = models.ForeignKey(
-        Province, on_delete=models.SET_NULL, null=True)
-    city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
-    default_address = models.BooleanField()

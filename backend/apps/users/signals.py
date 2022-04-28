@@ -11,8 +11,10 @@ Cart = apps.get_model('carts', 'Cart')
 def create_adress_for_new_user(sender, instance, created, **kwargs):
     '''Create empty address object for new users'''
     if created is True:
-        address = Address(user=instance, default_address=True)
+        address = Address()
         address.save()
+        instance.address = address
+        instance.save()
 
 
 @receiver(post_save, sender=UserModel)

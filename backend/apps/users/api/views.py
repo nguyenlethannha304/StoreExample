@@ -5,6 +5,7 @@ import json
 from rest_framework.permissions import IsAuthenticated
 from ..models import Address, Province, City
 from rest_framework.decorators import api_view
+from http import HTTPStatus
 
 
 class UserCreationView(APIView):
@@ -15,10 +16,9 @@ class UserCreationView(APIView):
         serializer = UserCreationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(status=201)
-        else:
-            json_errors = json.dumps(serializer.errors)
-            return Response(data=json_errors, status=422)
+            return Response(status=HTTPStatus.CREATED)
+        json_errors = json.dumps(serializer.errors)
+        return Response(data=json_errors, status=HTTPStatus.UNPROCESSABLE_ENTITY)
 
 
 api_user_creation_view = UserCreationView.as_view()
@@ -31,10 +31,9 @@ class PasswordChangeView(APIView):
         serializer = PasswordChangeSerializer(request, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(status=200)
-        else:
-            json_errors = json.dumps(serializer.errors)
-            return Response(data=json_errors, status=422)
+            return Response(status=HTTPStatus.OK)
+        json_errors = json.dumps(serializer.errors)
+        return Response(data=json_errors, status=HTTPStatus.UNPROCESSABLE_ENTITY)
 
 
 api_user_password_change_view = PasswordChangeView.as_view()
@@ -43,14 +42,13 @@ api_user_password_change_view = PasswordChangeView.as_view()
 class ProfileView(APIView):
     def get(self, request, *args, **kwargs):
         city_data = province_data = ''
-        address = Address.objects.get(user=request.user)
+        address = Address.objects.select_related(
+            'city', 'province').get(pk=request.user.address_id)
         if address.city != None:
-            city = City.objects.get(id=address.city.id)
-            city = CitySerializer(city)
+            city = CitySerializer(address.city)
             city_data = city.data
         if address.province != None:
-            province = Province.objects.get(id=address.province.id)
-            province = ProvinceSerializer(province)
+            province = ProvinceSerializer(address.province)
             province_data = province.data
         rv_dict = {'phone': request.user.phone, 'street': address.street,
                    'province': province_data, 'city': city_data}
@@ -58,15 +56,14 @@ class ProfileView(APIView):
 
     def post(self, request, *args, **kwargs):
         phone_serializer = PhoneSerializer(request, data=request.data)
-        address_serializer = AddressSerializer(request, data=request.data)
+        address_serializer = UserAddressSerializer(request, data=request.data)
         if phone_serializer.is_valid() and address_serializer.is_valid():
             phone_serializer.save()
             address_serializer.save()
-            return Response(status=200)
-        else:
-            errors = phone_serializer.errors.update(address_serializer.errors)
-            json_errors = json.dumps(errors)
-            return Response(data=json_errors, status=422)
+            return Response(status=HTTPStatus.OK)
+        errors = phone_serializer.errors.update(address_serializer.errors)
+        json_errors = json.dumps(errors)
+        return Response(data=json_errors, status=HTTPStatus.UNPROCESSABLE_ENTITY)
 
 
 api_profile_view = ProfileView.as_view()

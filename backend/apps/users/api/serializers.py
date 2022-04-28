@@ -7,7 +7,7 @@ from apps.utils.tools import validate_phonenumber
 from ..models import Address, City, Province
 UserModel = get_user_model()
 __all__ = ['UserCreationSerializer',
-           'PasswordChangeSerializer', 'PhoneSerializer', 'AddressSerializer', 'CitySerializer', 'ProvinceSerializer', 'ProvinceCitiesSerializer']
+           'PasswordChangeSerializer', 'PhoneSerializer', 'UserAddressSerializer', 'CitySerializer', 'ProvinceSerializer', 'ProvinceCitiesSerializer']
 
 
 class UserCreationSerializer(serializers.Serializer):
@@ -105,7 +105,13 @@ class PhoneSerializer(serializers.Serializer):
         self.user.save()
 
 
-class AddressSerializer(serializers.ModelSerializer):
+class AddressSerializerAbstract(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = '__all__'
+
+
+class UserAddressSerializer(AddressSerializerAbstract):
     def __init__(self, request, *args, **kwargs):
         # Attach user to self for later usage
         assert request.user.is_authenticated, ("User must be login")
@@ -124,11 +130,12 @@ class AddressSerializer(serializers.ModelSerializer):
             return None
         return value
 
-    def save(self,):
-        Address.objects.filter(user=self.user).update(**self.validated_data)
+    def save(self):
+        address_id = self.user.address_id
+        Address.objects.filter(pk=address_id).update(
+            **self.validated_data)
 
-    class Meta:
-        model = Address
+    class Meta(AddressSerializerAbstract.Meta):
         fields = ('street', 'province', 'city',)
         extra_kwargs = {'province': {'allow_null': True},
                         'city': {'allow_null': True}}
