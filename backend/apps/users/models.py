@@ -16,7 +16,8 @@ class Province(models.Model):
 
 class City(models.Model):
     name = models.CharField(max_length=255)
-    province = models.ForeignKey(Province, on_delete=models.CASCADE, null=True)
+    province = models.ForeignKey(
+        Province, on_delete=models.CASCADE, null=True, related_name='cities')
 
 
 class Address(models.Model):

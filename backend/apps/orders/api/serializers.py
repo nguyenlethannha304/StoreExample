@@ -10,6 +10,8 @@ from django.db.models import F
 # Product app models
 Product = apps.get_model('products', 'Product')
 Address = apps.get_model('users', 'Address')
+# users app models
+City = apps.get_model('users', 'City')
 
 
 class StatusSerializer(serializers.ModelSerializer):
@@ -38,6 +40,14 @@ class AddressForCreateOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ['street', 'city', 'province']
+
+    def validate(self, data):
+        # check city belongs to province
+        city_exists_boolean = City.objects.filter(
+            pk=data['city'], province=data['province']).exists()
+        if not city_exists_boolean:
+            raise ValidationError('Địa chỉ không hợp lệ')
+        return data
 
 
 class CreateOrderSerializer(serializers.Serializer):

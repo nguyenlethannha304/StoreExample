@@ -151,7 +151,7 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
     Array.from(this.provincesCitiesData).forEach(
       (province: ProvinceWithCities) => {
         if (province.id == current_province_id) {
-          Array.from(province.city_set).forEach((city: City) => {
+          Array.from(province.cities).forEach((city: City) => {
             this.renderCity(city);
           });
         }

@@ -154,8 +154,8 @@ class ProvinceSerializer(serializers.ModelSerializer):
 
 
 class ProvinceCitiesSerializer(serializers.ModelSerializer):
-    city_set = CitySerializer(many=True)
+    cities = CitySerializer(many=True)
 
     class Meta:
         model = Province
-        fields = ['id', 'name', 'city_set']
+        fields = ['id', 'name', 'cities']

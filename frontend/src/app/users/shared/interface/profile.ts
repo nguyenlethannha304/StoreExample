@@ -7,7 +7,7 @@ export interface Profile {
 export interface ProvinceWithCities {
   id: number;
   name: string;
-  city_set: City[];
+  cities: City[];
 }
 export interface Province {
   id: number;

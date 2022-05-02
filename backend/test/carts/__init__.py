@@ -38,10 +38,3 @@ def tearDownTestCartApp():
     tearDownTestUserApp()
     # Delete products
     tearDownTestProductApp()
-    # Delete order
-    tearDownOrderModels()
-
-
-def tearDownOrderModels():
-    # Cart and CartItem will be deleted automatically when deleting users
-    pass
