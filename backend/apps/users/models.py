@@ -26,6 +26,11 @@ class Address(models.Model):
         Province, on_delete=models.SET_NULL, null=True)
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
 
+    def __bool__(self):
+        if self.street and self.province and self.city:
+            return True
+        return False
+
 
 class CustomUserManager(UserManager):
     def _create_user(self, username, password, **extra_fields):
