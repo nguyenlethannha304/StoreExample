@@ -26,7 +26,7 @@ class OrderInformationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = [
-            'total_price', 'address', 'created_date', 'status']
+            'total_price', 'address', 'created_time', 'status']
 
 
 class ProductForCreateOrderSerializer(serializers.ModelSerializer):
@@ -44,7 +44,7 @@ class AddressForCreateOrderSerializer(serializers.ModelSerializer):
     def validate(self, data):
         # check city belongs to province
         city_exists_boolean = City.objects.filter(
-            pk=data['city'], province=data['province']).exists()
+            pk=data['city'].pk, province=data['province'].pk).exists()
         if not city_exists_boolean:
             raise ValidationError('Địa chỉ không hợp lệ')
         return data
@@ -73,8 +73,7 @@ class CreateOrderSerializer(serializers.Serializer):
             if self.is_address_or_phone_invalid(self.user_address, self.context['user'].phone):
                 raise ValidationError(
                     'Thông tin liên lạc người dùng không hợp lệ')
-            return True
-        return False
+        return value
 
     def is_address_or_phone_invalid(self, address, phone):
         if bool(address) and phone:
