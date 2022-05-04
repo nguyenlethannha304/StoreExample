@@ -12,14 +12,14 @@ Province = apps.get_model('users', 'Province')
 Order = apps.get_model('orders', 'Order')
 ItemOrder = apps.get_model('orders', 'ItemOrder')
 FAKE_DATA_CREATE_ORDER = {'products': [], 'address': {
-}, 'use_user_contact': False, 'phone_number': '0979311359', 'item_price': 0, 'total_price': 0}
+}, 'use_profile_contact': False, 'phone_number': '0979311359', 'item_price': 0, 'total_price': 0}
 
 
 def chose_random_number_lte_5():
     return random.randint(1, 5)
 
 
-def setFakeData(use_user_contact=False):
+def setFakeData(use_profile_contact=False):
     fake_data = copy.deepcopy(FAKE_DATA_CREATE_ORDER)
     item_price = 0
     # products, item_price, total_price
@@ -37,6 +37,6 @@ def setFakeData(use_user_contact=False):
     city = pick_random_object_from_queryset(province.cities.all())
     fake_data['address'] = {
         'street': '1234 random St', 'city': city.pk, 'province': province.pk}
-    # use_user_contact
-    fake_data['use_user_contanct'] = use_user_contact
+    # use_profile_contact
+    fake_data['use_profile_contact'] = use_profile_contact
     return fake_data
