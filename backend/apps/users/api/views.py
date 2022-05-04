@@ -44,15 +44,23 @@ class ProfileView(APIView):
         city_data = province_data = ''
         address = Address.objects.select_related(
             'city', 'province').get(pk=request.user.address_id)
-        if address.city != None:
-            city = CitySerializer(address.city)
-            city_data = city.data
-        if address.province != None:
-            province = ProvinceSerializer(address.province)
-            province_data = province.data
+        city_data = self.get_city_data(address)
+        province_data = self.get_province_data(address)
         rv_dict = {'phone': request.user.phone, 'street': address.street,
                    'province': province_data, 'city': city_data}
         return Response(data=json.dumps(rv_dict))
+
+    def get_city_data(self, address):
+        if address.city != None:
+            city = CitySerializer(address.city)
+            return city.data
+        return ''
+
+    def get_province_data(self, address):
+        if address.province is not None:
+            province = ProvinceSerializer(address.province)
+            return province.data
+        return ''
 
     def post(self, request, *args, **kwargs):
         phone_serializer = PhoneSerializer(request, data=request.data)

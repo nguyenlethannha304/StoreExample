@@ -20,14 +20,12 @@ class UserCreationSerializer(serializers.Serializer):
     password2 = serializers.CharField(max_length=255, min_length=8)
 
     def validate_email(self, email):
-        # Validate email is not exist
+        # Validate email is not registed
         user_exist = UserModel.objects.filter(email=email).exists()
-
         if user_exist is True:
             raise ValidationError(
                 self.error_message['registed'], code='registed')
-        else:
-            return email
+        return email
 
     def validate(self, data):
         # Validate password1 and password1 match
@@ -60,8 +58,8 @@ class PasswordChangeSerializer(serializers.Serializer):
 
     def validate_old_password(self, old_password):
         # Check the old_password is correct
-        correct_old_password = self.user.check_password(old_password)
-        if not correct_old_password:
+        old_password_correct = self.user.check_password(old_password)
+        if not old_password_correct:
             raise ValidationError(
                 self.error_message['password_incorrect'], code='password_incorrect')
         return old_password
@@ -75,11 +73,10 @@ class PasswordChangeSerializer(serializers.Serializer):
                 self.error_message['password_mismatch'], code='password_mismatch')
         return data
 
-    def save(self, commit=True):
+    def save(self):
         password = self.validated_data.get('new_password1')
         self.user.set_password(password)
-        if commit:
-            self.user.save()
+        self.user.save()
         return self.user
 
 
@@ -92,26 +89,20 @@ class PhoneSerializer(serializers.Serializer):
         self.user = request.user
         super().__init__(*args, **kwargs)
 
-    def validate_phone(self, value):
+    def validate_phone(self, phone):
         # Check if phone is correct format
-        if value == '':
+        if phone == '':
             return None
-        if not (validate_phonenumber(value)):
+        if not (validate_phonenumber(phone)):
             raise ValidationError("Số điện thoại không hợp lệ")
-        return value
+        return phone
 
     def save(self):
         self.user.phone = self.validated_data['phone']
         self.user.save()
 
 
-class AddressSerializerAbstract(serializers.ModelSerializer):
-    class Meta:
-        model = Address
-        fields = '__all__'
-
-
-class UserAddressSerializer(AddressSerializerAbstract):
+class UserAddressSerializer(serializers.ModelSerializer):
     def __init__(self, request, *args, **kwargs):
         # Attach user to self for later usage
         assert request.user.is_authenticated, ("User must be login")
@@ -135,7 +126,8 @@ class UserAddressSerializer(AddressSerializerAbstract):
         Address.objects.filter(pk=address_id).update(
             **self.validated_data)
 
-    class Meta(AddressSerializerAbstract.Meta):
+    class Meta:
+        model = Address
         fields = ('street', 'province', 'city',)
         extra_kwargs = {'province': {'allow_null': True},
                         'city': {'allow_null': True}}
