@@ -22,7 +22,7 @@ def tearDownModule():
     tearDownTestOrderApp()
 
 
-@tag('orders', 'order_api_view', 'cr')
+@tag('orders', 'order_api_view')
 class TestCheckOrderInformationView(APITestCase):
     def setUp(self):
         self.fake_data = setFakeData()
@@ -37,9 +37,10 @@ class TestCheckOrderInformationView(APITestCase):
         phone_number = self.fake_data['phone_number']
         response = self.client.get(
             f'{CHECK_ORDER_INFOR_URL}?order_id={order_id}&phone_number={phone_number}')
+        data = response.data
 
 
-@tag('orders', 'order_api_view', 'cr')
+@ tag('orders', 'order_api_view')
 class TestCreateOrderView(APITestCase):
     def setUp(self):
         self.fake_data = setFakeData()
