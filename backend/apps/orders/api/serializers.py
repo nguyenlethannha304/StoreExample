@@ -2,7 +2,7 @@ from math import prod
 from operator import itemgetter
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from ..models import ItemOrder, Order, OrderStatus, item_order_factory_method
+from ..models import ItemOrder, Order, OrderState, item_order_factory_method
 from apps.utils.tools import validate_phonenumber
 from django.apps import apps
 from django.db import transaction
@@ -14,19 +14,10 @@ Address = apps.get_model('users', 'Address')
 City = apps.get_model('users', 'City')
 
 
-class StatusSerializer(serializers.ModelSerializer):
+class StateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = OrderStatus
-        fields = ['status', 'description', 'created_time']
-
-
-class OrderInformationSerializer(serializers.ModelSerializer):
-    status = StatusSerializer(many=True)
-
-    class Meta:
-        model = Order
-        fields = [
-            'total_price', 'address', 'created_time', 'status']
+        model = OrderState
+        fields = ['state', 'description', 'created_time']
 
 
 class ProductForCreateOrderSerializer(serializers.ModelSerializer):
@@ -48,6 +39,16 @@ class AddressForCreateOrderSerializer(serializers.ModelSerializer):
         if not city_exists_boolean:
             raise ValidationError('Địa chỉ không hợp lệ')
         return data
+
+
+class OrderInformationSerializer(serializers.ModelSerializer):
+    address = AddressForCreateOrderSerializer()
+
+    class Meta:
+        model = Order
+        fields = [
+            'id', 'item_price', 'shipping_fee',
+            'total_price', 'phone_number', 'created_time', 'address']
 
 
 class CreateOrderSerializer(serializers.Serializer):

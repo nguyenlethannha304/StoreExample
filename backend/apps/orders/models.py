@@ -1,15 +1,40 @@
+from datetime import date
 from django.db import models
 from django.apps import apps
 from django.db.models import constraints, Q
 from django.contrib.auth import get_user_model
 from django.utils.functional import cached_property
 import uuid
+import random
 # Create your models here.
 UserModel = get_user_model()
+# Product model
+RANDOM_CHAR_LIST = 'abcdefghijklmnpqrstuvwxyz123456789'
+
+
+def create_random_order_id():
+    '''format YYMMDDRRRRRR
+    YY:Year
+    MM:Month
+    DD:Day
+    R: random char from 23 letters (not o) and 8 digits (not 0)'''
+    YYMMDD = date.today().strftime('%y%m%d')
+    return get_random_order_id(YYMMDD)
+
+
+def get_random_order_id(YYMMDD):
+    random_id = ''
+    while not random_id:
+        random_char_list = random.choices(population=RANDOM_CHAR_LIST, k=6)
+        random_id = YYMMDD + ''.join(random_char_list)
+        if Order.objects.filter(id=random_id).exists():
+            random_id = ''
+    return random_id
 
 
 class Order(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+    id = models.CharField(default=create_random_order_id,
+                          primary_key=True, editable=False, max_length=12)
     item_price = models.PositiveBigIntegerField(default=0)
     shipping_fee = models.PositiveBigIntegerField(default=0)
     total_price = models.PositiveBigIntegerField(default=0)
@@ -30,12 +55,12 @@ class UserOrder(models.Model):
     orders = models.ManyToManyField(Order, related_name='+')
 
 
-class OrderStatus(models.Model):
-    STATUS_CHOICES = [('PE', 'Pending')]
+class OrderState(models.Model):
+    STATE_CHOICES = [('PE', 'Pending')]
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     order = models.ForeignKey(
-        Order, related_name='status', on_delete=models.CASCADE)
-    status = models.CharField(max_length=3, choices=STATUS_CHOICES)
+        Order, related_name='state', on_delete=models.CASCADE)
+    state = models.CharField(max_length=3, choices=STATE_CHOICES)
     description = models.TextField(blank=True)
     created_time = models.DateTimeField(auto_now_add=True)
 

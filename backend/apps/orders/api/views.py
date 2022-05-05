@@ -2,10 +2,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from http import HTTPStatus
 from django.db.models import Prefetch
-from django.db import DatabaseError, transaction
-from .serializers import CreateOrderSerializer, OrderInformationSerializer
-from ..models import Order
+from django.db import DatabaseError, transaction, connection
+from .serializers import CreateOrderSerializer, OrderInformationSerializer, StateSerializer
+from ..models import Order, OrderState
 import json
+from django.conf import settings
+import uuid
+import copy
 
 
 class CheckOrderInformationView(APIView):
@@ -15,22 +18,38 @@ class CheckOrderInformationView(APIView):
     def get(self, request, *args, **kwargs):
         order_id, phone_number = self.get_order_id_and_phone_number_from_queryparams(
             request)
-        if order_id and phone_number:
-            order_instance = self.get_order_instance(order_id, phone_number)
-            serializer = OrderInformationSerializer(order_instance)
+        if self.is_order_exist(order_id, phone_number):
+            order_states = self.get_order_states(order_id)
+            order_serializer, order_state_serializer = self.serializer_order_and_states(
+                self.order_instance, order_states)
+            data = copy.deepcopy(order_serializer.data)
+            data.update({'states': order_state_serializer.data})
+            return Response(data=json.dumps(data), status=HTTPStatus.OK)
         return Response(status=HTTPStatus.BAD_REQUEST)
 
+    def is_order_exist(self, order_id, phone_number):
+        self.order_instance = self.get_order_instance(order_id, phone_number)
+        return self.order_instance
+
     def get_order_instance(self, order_id, phone_number):
-        queryset = Order.objects.prefetch_related('status')
-        queryset = queryset.only(
-            'total_price', 'address', 'created_time', 'status__status', 'status__description', 'status__created_time')
-        instance = queryset.get(id=order_id, phone_number=phone_number)
-        return instance
+        query = Order.objects.only('id', 'item_price', 'shipping_fee',
+                                   'total_price', 'phone_number', 'created_time', 'address__street', 'address__province', 'address__city')
+        query = query.select_related('address')
+        return query.get(pk=order_id, phone_number=phone_number)
+
+    def get_order_states(self, order_id):
+        query = OrderState.objects.filter(order_id=order_id)
+        return query.only('state', 'description', 'created_time')
 
     def get_order_id_and_phone_number_from_queryparams(self, request):
         order_id = request.query_params.get('order_id', None)
         phone_number = request.query_params.get('phone_number', None)
         return order_id, phone_number
+
+    def serializer_order_and_states(self, order_instance, order_states):
+        order_serializer = OrderInformationSerializer(order_instance)
+        order_state_serializer = StateSerializer(order_states, many=True)
+        return order_serializer, order_state_serializer
 
 
 api_check_order_information_view = CheckOrderInformationView.as_view()
