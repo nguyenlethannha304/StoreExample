@@ -15,7 +15,7 @@ export class LogoutComponent implements OnInit {
 
   ngOnInit(): void {
     // Clear tokens and navigate back to home page
-    this.authTokenSer.clear();
+    this.authTokenSer.logout();
     this.navSer.navigateTo('home');
   }
 }

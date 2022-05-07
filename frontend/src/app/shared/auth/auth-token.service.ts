@@ -15,8 +15,10 @@ export class AuthTokenService {
   private _accessTokenSetTime: number = 0;
   private _refreshToken: string = '';
   private _refreshTokenSetTime: number = 0;
+  // Name to retrieve from LocalStorage
   private _refreshTokenName = 'refresh-token';
   private _refreshTokenSetTimeName = 'refresh-token-set-time';
+
   private redirect: string;
   constructor(
     private navSer: NavigateService,
@@ -52,47 +54,35 @@ export class AuthTokenService {
         },
       });
   };
-  clear = () => {
+  logout = () => {
     // Clear token and navigate to homepage
     this.accessToken = '';
     this.refreshToken = '';
     window.localStorage.setItem(this._refreshTokenName, '');
   };
-  get accessToken(): string {
+  get accessToken$(): Observable<string> {
+    if (this.accessToken != '' && !this.isTokenExpire('access')) {
+      // Get token from cache if not expired
+      return of(this.accessToken);
+    }
+    if (this.refreshToken !== '' && !this.isTokenExpire('refresh')) {
+      return this.sendRefreshToServerToGetAccessToken();
+    }
+    return of('');
+  }
+  private get accessToken(): string {
     return this._accessToken;
   }
-  set accessToken(value: string) {
+  private set accessToken(value: string) {
     this._accessToken = value;
     if (value != '') {
       this._accessTokenSetTime = new Date().getTime();
     }
   }
-  get accessToken$(): Observable<string> {
-    if (this.accessToken != '' && !this.isTokenExpire('access')) {
-      // Get token from cache if not expired
-      return of(this.accessToken);
-    } else if (this.refreshToken !== '' && !this.isTokenExpire('refresh')) {
-      // Send refreshToken to server to get accessToken
-      return this.http
-        .post<AccessToken>(`${e.api}/token/refresh_token/`, {
-          refresh: this.refreshToken,
-        })
-        .pipe(
-          map((body) => body.access),
-          tap((accessToken) => {
-            // Save token after getting from server
-            this.accessToken = accessToken;
-          }),
-          catchError((err, caught) => of(''))
-        );
-    } else {
-      return of('');
-    }
-  }
-  get refreshToken(): string {
+  private get refreshToken(): string {
     return this._refreshToken;
   }
-  set refreshToken(value: string) {
+  private set refreshToken(value: string) {
     this._refreshToken = value;
     if (value != '') {
       // Save to local storage
@@ -104,7 +94,7 @@ export class AuthTokenService {
       );
     }
   }
-  isTokenExpire = (type: 'access' | 'refresh'): boolean => {
+  private isTokenExpire = (type: 'access' | 'refresh'): boolean => {
     let duration = 0;
     let tokenSetTime = 0;
     if (type == 'access') {
@@ -116,7 +106,7 @@ export class AuthTokenService {
     }
     return tokenSetTime + duration + 10000 <= new Date().getTime(); // Add 10000 or 10 seconds
   };
-  getRefreshTokenFromLocalStorage = (): [string, number] => {
+  private getRefreshTokenFromLocalStorage = (): [string, number] => {
     let refreshToken = window.localStorage.getItem(this._refreshTokenName);
     // Check if refreshToken saved in localStorage
     if (refreshToken != null) {
@@ -132,4 +122,18 @@ export class AuthTokenService {
     // Return empty
     return ['', 0];
   };
+  private sendRefreshToServerToGetAccessToken() {
+    return this.http
+      .post<AccessToken>(`${e.api}/token/refresh_token/`, {
+        refresh: this.refreshToken,
+      })
+      .pipe(
+        map((body) => body.access),
+        tap((accessToken) => {
+          // Save token after getting from server
+          this.accessToken = accessToken;
+        }),
+        catchError((err, caught) => of(''))
+      );
+  }
 }

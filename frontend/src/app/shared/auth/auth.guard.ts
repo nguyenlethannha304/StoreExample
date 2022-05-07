@@ -30,17 +30,19 @@ export class AuthGuard implements CanActivate {
     | UrlTree {
     return this.authTokenSer.accessToken$.pipe(
       map((accessToken) => {
-        if (accessToken != '' && !this.authTokenSer.isTokenExpire('access')) {
-          // If accessToken existed and not expired
+        if (accessToken != '') {
+          // If accessToken existed
           return true;
-        } else {
-          // Navigate to Login page with queryParam: ?next=state.url
-          return this.router.createUrlTree(
-            [`${this.navSer.getUrlFromName('users:login')}`],
-            { queryParams: { next: `${state.url}` } }
-          );
         }
+        return this.navigateToLoginPage(state);
       })
+    );
+  }
+  navigateToLoginPage(state: RouterStateSnapshot) {
+    // Navigate to login page with queryparam next=current-page-url
+    return this.router.createUrlTree(
+      [`${this.navSer.getUrlFromName('users:login')}`],
+      { queryParams: { next: `${state.url}` } }
     );
   }
 }
