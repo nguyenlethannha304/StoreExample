@@ -1,5 +1,6 @@
 from rest_framework import views
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from ..models import Cart, CartItem
 from .serializers import *
 from rest_framework.response import Response
@@ -19,7 +20,7 @@ def count_product_in_cart(user):
     count = Cart.objects.get(user=user).count
     if count < 0:
         count = Cart.calculate_count_attribute_by_cart_items(user)
-    return json.dumps(count)
+    return count
 
 
 class CartCountView(views.APIView):
@@ -28,7 +29,7 @@ class CartCountView(views.APIView):
     def get(self, request, *args, **kwargs):
         # Get count attribute of cart
         count = count_product_in_cart(request.user)
-        return Response(data=count)
+        return Response(data=json.dumps(count))
 
 
 api_cart_count_view = CartCountView.as_view()
@@ -40,17 +41,6 @@ class CartView(views.APIView):
 
     def redirect_to_get_request(self):
         return Response(status=HTTPStatus.SEE_OTHER, headers={'Location': '/cart/'})
-
-    def delete(self, request, *args, **kwargs):
-        # Delete item from the cart
-        cart_id = request.user.pk
-        cartitem_id = request.data['cartitem_id']
-        query_result = CartItem.objects.filter(
-            pk=cartitem_id, cart_id=cart_id).delete()
-        if query_result:
-            # Delete successfully
-            return Response(status=HTTPStatus.OK)
-        return self.redirect_to_get_request()
 
     def post(self, request, *args, **kwargs):
         # Add cart item to the cart (Or increase quantity if cart_item exist)
@@ -92,6 +82,19 @@ class CartView(views.APIView):
 
 
 api_cart_view = CartView.as_view()
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def api_cart_item_delete_view(request, id):
+    cart_id = request.user.pk
+    if is_cart_item_exist(id, cart_id):
+        CartItem.objects.filter(pk=id, cart_id=cart_id).delete()
+    return Response(status=HTTPStatus.OK)
+
+
+def is_cart_item_exist(id, cart_id):
+    return CartItem.objects.filter(pk=id, cart_id=cart_id).exists()
 
 
 class UnauthorizedCartView(views.APIView):

@@ -16,6 +16,7 @@ Product = apps.get_model('products', 'Product')
 # Url
 CART_APP_URL = '/api/carts/'
 CART_COUNT_URL = CART_APP_URL + 'count/'
+CART_ITEM_DELETE_URL = CART_APP_URL + 'item-delete/'
 CART_URL = CART_APP_URL + ''
 CART_UNAUTHORIZED_URL = CART_APP_URL + 'cart-product-information/'
 
@@ -59,15 +60,6 @@ class TestCartView(APITestCase):
         response = self.client.get(CART_URL)
         self.assertEqual(response.status_code, HTTPStatus.UNAUTHORIZED)
 
-    def test_delete_request(self):
-        user_with_one_item = UserModel.objects.all()[0]
-        self.client.force_authenticate(user=user_with_one_item)
-        item_cart_of_user = CartItem.objects.filter(
-            cart__user=user_with_one_item)[0]
-        response = self.client.delete(
-            CART_URL, data={'cartitem_id': item_cart_of_user.pk})
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-
     def test_post_request(self):
         user_with_0_item = UserModel.objects.all()[1]
         self.client.force_authenticate(user=user_with_0_item)
@@ -92,6 +84,21 @@ class TestCartView(APITestCase):
         user_with_1_item = UserModel.objects.all()[0]
         self.client.force_authenticate(user=user_with_1_item)
         response = self.client.get(CART_URL)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+
+@tag('carts', 'carts_api_view')
+class TestCartItemDeleteView(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+    def test_delete_request(self):
+        user_with_one_item = UserModel.objects.all()[0]
+        self.client.force_authenticate(user=user_with_one_item)
+        item_cart_of_user = CartItem.objects.filter(
+            cart__user=user_with_one_item)[0]
+        response = self.client.delete(
+            f'{CART_ITEM_DELETE_URL}{item_cart_of_user.pk}/')
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
 
