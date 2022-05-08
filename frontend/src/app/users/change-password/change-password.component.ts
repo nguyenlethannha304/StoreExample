@@ -65,9 +65,7 @@ export class ChangePasswordComponent implements OnInit {
         })
         .subscribe({
           next: () => {
-            this.messageSer.showSuccessAutoDestroyMessage(
-              'Mật khẩu thay đổi thành công'
-            );
+            this.messageSer.createSucessMessage('Mật khẩu thay đổi thành công');
           },
           error: (errors) => {
             renderErrorsFromBackend(

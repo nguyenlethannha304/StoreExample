@@ -65,7 +65,7 @@ export class RegisterComponent implements OnInit {
       .post(`${e.api}/users/register`, body, { observe: 'response' })
       .subscribe({
         next: (response: HttpEvent<EmptyResponse>) => {
-          this.messageSer.showSuccessAutoDestroyMessage(
+          this.messageSer.createSucessMessage(
             `Bạn đã đăng ký thành công. Email đăng ký của bạn là <span>${email}</span>`
           );
         },

@@ -83,7 +83,7 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
       })
       .subscribe({
         next: () => {
-          this.messageSer.showSuccessAutoDestroyMessage(
+          this.messageSer.createSucessMessage(
             'Thông tin cá nhân thay đổi thành công'
           );
         },
