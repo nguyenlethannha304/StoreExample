@@ -1,104 +1,119 @@
 import {
   Component,
   ElementRef,
-  OnDestroy,
+  OnChanges,
   OnInit,
   Renderer2,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { Observer } from 'rxjs';
-import { Message } from '../../interface/message';
+import { Message, MessageOptions } from '../../interface/message';
+import { errorIcon, successIcon } from '../../services/icons/icons';
 import { MessageService } from '../../services/message/message.service';
-
 @Component({
   selector: 'app-message',
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.css'],
-  host: {
-    class: 'position-absolute top-0 start-0 w-100 h-100 show',
-  },
+  host: { class: 'd-none position-fixed top-0 left-0' },
 })
-export class MessageComponent implements OnInit, OnDestroy {
-  messageContent: string;
-  messageLevel: number = -1;
-  autoDestroy: boolean = false;
+export class MessageComponent implements OnInit {
+  message: Message;
+  icon: string;
+  content: string;
+  actionFunction: Function = null;
+  // boxShadow atributes
+  isBoxShadowShown: boolean;
+  boxShadowDestroMessage: boolean;
+  // Time out for destroy message
+  destroyMessageTimeOut: null | ReturnType<typeof setTimeout> = null;
   constructor(
-    private el: ElementRef,
-    private render: Renderer2,
-    public messageSer: MessageService
+    private hostElement: ElementRef,
+    private messageService: MessageService,
+    private render: Renderer2
   ) {}
-  @ViewChild('messageContainer') messageContainer: ElementRef;
-  @ViewChild('iconContainer') iconContainer: ElementRef;
-  @ViewChild('contentContainer') contentContainer: ElementRef;
-  @ViewChild('closeButton') closeButton: ElementRef;
   ngOnInit(): void {
-    this.messageSer.messageSubject.subscribe(this.observer);
-  }
-  ngOnDestroy(): void {
-    this.messageSer.messageSubject.unsubscribe();
-  }
-  observer: Observer<Message> = {
-    next: (message: Message) => {
-      this.createMessage(message);
-      this.autoDestroy = message.autoDestroy;
-      this.closeButton.nativeElement;
-    },
-    error: (error) => {},
-    complete: () => {},
-  };
-  createMessage(message: Message) {
-    this.messageLevel = message.level;
-    this.messageContent = message.content;
-    this.autoDestroy = message.autoDestroy;
-    this.changeMessageClass();
-    this.assignIcon();
-    // Make message visible
-    this.render.addClass(this.messageContainer.nativeElement, 'visible');
-  }
-  messageClassNamePattern = /alert-\w+?/;
-  changeMessageClass() {
-    // Remove old message class
-    Array.from(this.messageContainer.nativeElement.classList).forEach(
-      (className) => {
-        let match = (className as string).match(this.messageClassNamePattern);
-        if (match) {
-          this.render.removeClass(
-            this.messageContainer.nativeElement,
-            match[0]
-          );
-        }
-      }
-    );
-    // Add new message class
-    let className =
-      this.messageSer.messageClass[
-        this.messageLevel as keyof typeof this.messageSer.messageClass
-      ];
-    this.render.addClass(this.messageContainer.nativeElement, className);
-  }
-  assignIcon() {
-    // Remove old icon before assign
-    let iconContainerChildren =
-      this.iconContainer.nativeElement.querySelectorAll('*');
-    Array.from(iconContainerChildren).forEach((child) => {
-      this.render.removeChild(this.iconContainer.nativeElement, child);
+    this.messageService.message.subscribe((message) => {
+      this.message = message;
+      this.renderMessage();
     });
-    // Assign new icon
-    let iconString =
-      this.messageSer.icons[
-        this.messageLevel as keyof typeof this.messageSer.icons
-      ];
+  }
+  renderMessage() {
+    this.resetMessage();
+    this.renderMessageDirector();
+    this.showMessageComponent();
+    this.setTimeDestroyMessage(this.message.duration);
+  }
+  destroyMessage(destroy: boolean = true) {
+    if (destroy) {
+      this.hideMessageComponent();
+      clearTimeout(this.destroyMessageTimeOut);
+    }
+  }
+  resetMessage() {
+    this.setIcon('');
+    this.setContent('');
+    this.setActionButton(null);
+    this.destroyMessageTimeOut = null;
+  }
+  private showMessageComponent() {
+    this.hostElement.nativeElement.classList.remove('d-none');
+  }
+  private hideMessageComponent() {
+    this.hostElement.nativeElement.classList.add('d-none');
+  }
+  private setTimeDestroyMessage(duration: number) {
+    this.destroyMessageTimeOut = setTimeout(
+      () => this.destroyMessage(),
+      duration * 1000
+    );
+  }
+  // MESSAGE BUILDER
+  private renderMessageDirector() {
+    this.setGeneral();
+    if (this.message.level == 20) {
+      return this.renderSuccessMessageBuilder();
+    }
+    if (this.message.level == 21) {
+      return this.renderConfirmMessageBuilder();
+    }
+    if (this.message.level == 40) {
+      return this.renderErrorMessageBuilder();
+    }
+    console.error('New type of message discovered');
+  }
+  private renderSuccessMessageBuilder() {
+    this.setIcon(successIcon);
+    this.setContent(this.message.content);
+  }
+  private renderErrorMessageBuilder() {
+    this.setIcon(errorIcon);
+    this.setContent(this.message.content);
+  }
+  private renderConfirmMessageBuilder() {
+    this.setContent(this.message.content);
+    this.setActionButton(this.message.actionFunction);
+  }
+  // BUILDER STEP
+  @ViewChild('iconContainer') iconContainer: ElementRef;
+  setIcon(icon: string) {
+    // set icon to html
+    this.icon = icon;
     this.render.setProperty(
       this.iconContainer.nativeElement,
       'innerHTML',
-      iconString
+      this.icon
     );
   }
-  removeMessage() {
-    if (this.autoDestroy)
-      this.render.removeClass(this.messageContainer.nativeElement, 'visible');
+  setContent(content: string) {
+    this.content = content;
   }
-  closeButtonClick() {
-    this.removeMessage();
+  setActionButton(actionFunction: Function) {
+    this.actionFunction = actionFunction;
   }
+  setGeneral() {
+    this.boxShadowDestroMessage =
+      this.message.messageOptions['boxShadowDestroMessage'];
+    this.isBoxShadowShown = this.message.messageOptions['isBoxShadowShown'];
+  }
+  //
 }
