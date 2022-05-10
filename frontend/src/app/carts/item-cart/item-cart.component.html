@@ -1,13 +1,13 @@
 <div class="thumbnail-container" style="height:4rem">
-    <img src="{{product.thumbnail}}" alt="" style="height:4rem">
+    <img src="{{cartItem.product.thumbnail}}" alt="" style="height:4rem">
 </div>
 <div class="name-and-price-container ps-3">
-    <h6 class="name m-0 text-capitalize" style="height:50%">{{product.name}}</h6>
+    <h6 class="name m-0 text-capitalize" style="height:50%">{{cartItem.product.name}}</h6>
         <pre class="price m-0 fw-bold">{{getPrice() | currency}}   </pre>
         <div class="quantity-change-container d-flex">
-            <div class="quantity-change decrease-quantity" (click)="decreaseQuantity()">-</div>
+            <div class="quantity-change decrease-quantity" (click)="changeQuantity(-1)">-</div>
             <div class="quantity d-flex align-items-center"><pre class="m-0 fw-bold"> {{cartItem.quantity}} </pre></div>
-            <div class="quantity-change incrase-quantity" (click)="increaseQuantity()">+</div>
+            <div class="quantity-change incrase-quantity" (click)="changeQuantity(1)">+</div>
         </div>
 
 </div>

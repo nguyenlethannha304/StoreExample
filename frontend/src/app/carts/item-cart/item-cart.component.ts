@@ -3,12 +3,16 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  EventEmitter,
+  Input,
   OnInit,
+  Output,
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { CartItem, Product } from '../cart';
+import { Cart, CartItem, Product } from '../cart';
 import { trashIcon } from 'src/app/shared/services/icons/icons';
+import { debounceTime, Subject } from 'rxjs';
 @Component({
   selector: 'app-item-cart',
   templateUrl: './item-cart.component.html',
@@ -16,21 +20,20 @@ import { trashIcon } from 'src/app/shared/services/icons/icons';
   host: { class: 'd-flex p-1 ps-3 pe-3 m-0' },
 })
 export class ItemCartComponent implements OnInit, AfterViewInit {
-  constructor(private render: Renderer2) {}
-  cartItem: CartItem = {
-    id: '1234',
-    quantity: 10,
-    product: {
-      id: '1234',
-      name: 'ghe voi tieu de dai oi la dai luon a hihihi',
-      quantity: 100,
-      price: 10000,
-      thumbnail: '/assets/example.jpg',
-    },
-  };
-  product: Product;
+  @Input('item') cartItem: CartItem;
+  @Output() deleteCartItemRequest: EventEmitter<string>;
+  @Output() changeQuantityRequest: EventEmitter<Partial<CartItem>>;
+  quantity: CartItem['quantity'];
+  changeQuantitySubject: Subject<Partial<CartItem>>;
+  constructor(private render: Renderer2) {
+    // Delay send value when change quantity
+    this.changeQuantitySubject = new Subject<Partial<CartItem>>();
+    this.changeQuantitySubject
+      .pipe(debounceTime(2000))
+      .subscribe((value) => this.changeQuantityRequest.emit(value));
+  }
   ngOnInit(): void {
-    this.product = this.cartItem.product;
+    this.quantity = this.cartItem.quantity;
   }
   ngAfterViewInit(): void {
     this.render.setProperty(
@@ -40,10 +43,17 @@ export class ItemCartComponent implements OnInit, AfterViewInit {
     );
   }
   getPrice() {
-    return this.product.price * this.cartItem.quantity;
+    return this.cartItem.quantity * this.cartItem.product.price;
   }
-  decreaseQuantity() {}
-  increaseQuantity() {}
-  deleteCartItem() {}
+  changeQuantity(value: number) {
+    this.quantity += value;
+    this.changeQuantitySubject.next({
+      id: this.cartItem.id,
+      quantity: this.quantity,
+    });
+  }
+  deleteCartItem() {
+    this.deleteCartItemRequest.emit(this.cartItem.id);
+  }
   @ViewChild('deleteContainer') deleteContainer: ElementRef;
 }
