@@ -93,6 +93,9 @@ class CartOfflineState implements CartState {
   // Used for anonymous users
   constructor(private cartService: CartService) {}
   countCartItem$(): Observable<number> {
+    if (this.getItemCartFromLocalStorage() == null) {
+      return of(0);
+    }
     return of(this.getItemCartFromLocalStorage().length);
   }
   getCartItem$(): Observable<CartItem[]> {

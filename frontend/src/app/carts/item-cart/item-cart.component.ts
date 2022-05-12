@@ -21,8 +21,8 @@ import { debounceTime, Subject } from 'rxjs';
 })
 export class ItemCartComponent implements OnInit, AfterViewInit {
   @Input('item') cartItem: CartItem;
-  @Output() deleteCartItemRequest: EventEmitter<string>;
-  @Output() changeQuantityRequest: EventEmitter<Partial<CartItem>>;
+  @Output() deleteCartItemRequest = new EventEmitter<string>();
+  @Output() changeQuantityRequest = new EventEmitter<Partial<CartItem>>();
   quantity: CartItem['quantity'];
   changeQuantitySubject: Subject<Partial<CartItem>>;
   constructor(private render: Renderer2) {

@@ -1,4 +1,11 @@
-.quantity-change {
+.thumbnail-container {
+    width: 4rem;
+    height: 4rem;
+}
+.cart-item-information {
+    flex: 1 1 auto
+}
+.quantity-change-button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -6,5 +13,5 @@
     height: 1.5rem;
     border-radius: 1rem;
     background-color: gray;
-    color: white;
+    cursor: pointer;
 }
