@@ -10,6 +10,7 @@ import { AboutComponent } from './common-pages/about/about.component';
 import { ShareModule } from './shared/share.module';
 // Import Extension for String
 import { httpInterceptorProviders } from './shared/interceptors';
+import { OrdersModule } from './orders/orders.module';
 @NgModule({
   declarations: [
     AppComponent,
@@ -17,7 +18,7 @@ import { httpInterceptorProviders } from './shared/interceptors';
     HomeComponent,
     AboutComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, ShareModule],
+  imports: [BrowserModule, AppRoutingModule, ShareModule, OrdersModule],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

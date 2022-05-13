@@ -16,7 +16,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./users/users.module').then((m) => m.UsersModule),
   },
-  { path: 'carts', loadChildren: () => import('./carts/carts.module').then(m => m.CartsModule) },
+  // Cart Module
+  {
+    path: 'carts',
+    loadChildren: () =>
+      import('./carts/carts.module').then((m) => m.CartsModule),
+  },
+  { path: 'orders', loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule) },
   // 404 NOT FOUND
   { path: '**', component: NotFoundComponent },
 ];
