@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { httpInterceptorProviders } from './interceptors';
 import { MessageComponent } from './components/message/message.component';
 import { CloseButtonDirective } from './directive/close-button.directive';
+import { SelectDirective } from './directive/form/select.directive';
 // import './extensions';
 import { CurrencyPipe } from './pipe/currency.pipe';
 @NgModule({
@@ -27,6 +28,7 @@ import { CurrencyPipe } from './pipe/currency.pipe';
     ObjectToKeysPipe,
     CloseButtonDirective,
     CurrencyPipe,
+    SelectDirective,
   ],
   exports: [
     MessageComponent,
@@ -40,6 +42,7 @@ import { CurrencyPipe } from './pipe/currency.pipe';
     ObjectToKeysPipe,
     CloseButtonDirective,
     CurrencyPipe,
+    SelectDirective,
   ],
   providers: [httpInterceptorProviders],
   imports: [CommonModule, HttpClientModule],
