@@ -1,0 +1,27 @@
+
+:host > * {
+    padding: 0.5rem 2rem;
+    border:1px solid rgb(180, 178, 178);
+    border-left: 0;
+    border-right: 0;
+}
+/* CART-INFOR */
+.order-information {
+    color:hsl(var(--cl-blue-light));
+}
+/* ADDRESS */
+form > * {
+    margin: 1rem 0;
+}
+input {
+    width: 80vw;
+    border-color: gray;
+    color: black;
+}
+select {
+    background-color: #fff;
+    width: 50vw;
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+}
+/* ORDER SUMMARY */

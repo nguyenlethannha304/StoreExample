@@ -1,0 +1,60 @@
+<div class="heading d-flex">
+    <i class="shaft-arrow-symbol mt-1"></i>
+    <h5 class="text-center flex-grow-1">Thông Tin Thanh Toán</h5>
+</div>
+<div class="cart-information">
+    <div class="cart-information-summary d-flex align-items-center">
+        <div #cartIconContainer class="cart-icon me-2" style="width:2rem; height:2rem"></div>
+        <p (click)="toggleOrderDetail()" class="order-information m-0">Thông tin đơn hàng <i class="arrow-symbol" [ngClass]="isOrderDetailOpen? 'up': 'down'"></i></p>
+        <p class="ms-auto mt-0 mb-0 fw-bold">750.000d</p>
+    </div>
+    <hr class="mt-2 mb-3" *ngIf="isOrderDetailOpen">
+    <div class="cart-information-list" *ngIf="isOrderDetailOpen">
+    </div>
+</div>
+<div class="address-information">
+    <h6>Thông tin giao hàng</h6>
+    <form action="" [formGroup]="shippingInformationForm">
+        <div InputContainer class="name-input-container">
+            <input InputElement placeholder="Họ và tên" type="text" name="name" formControlName="name">
+        </div>
+        <div InputContainer class="email-input-container">
+            <input InputElement placeholder="Email" type="email" name="email" formControlName="email">
+        </div>
+        <div InputContainer class="phone-input-container">
+            <input InputElement placeholder="Điện thoại" type="text" name="phone" formControlName="phone">
+        </div>
+        <div InputContainer class="street-input-container">
+            <input InputElement placeholder="Địa chỉ" type="text" name="street" formControlName="street">
+        </div>
+        <div InputContainer class="province-input-container">
+            <select selectElement name="Province" id="province" formControlName="province">
+                <option value="null" disabled selected>Chọn Tỉnh thành</option>
+                <option value="some">Quy Nhon</option>
+            </select>
+        </div>
+        <div class="city-input-container">
+            <select selectElement name="City" id="city" formControlName="city">
+                <option value="null" disabled selected>Chọn Thành phố</option>
+            </select>
+        </div>
+    </form>
+</div>
+<div class="order-summary">
+    <div class="order-price d-flex">
+        <p>Tiền hàng</p>
+        <p class="ms-auto">750.000đ</p>
+    </div>
+    <div class="shipping-price d-flex">
+        <p>Phí vận chuyển</p>
+        <p class="ms-auto">0đ</p>
+    </div>
+    <hr class="m-1" style="width:80">
+    <div class="order-total d-flex mt-3">
+        <p class="fw-bold">Tổng tiền</p>
+        <p class="fw-bold ms-auto">750.000đ</p>
+    </div>
+    <div class="order-action d-flex pb-2">
+        <button (click)="submitOrder()" class="ms-auto" [ButtonElement]="'primary'" style="width: 8rem; border-radius: 1rem;">Đặt hàng</button>
+    </div>
+</div>
