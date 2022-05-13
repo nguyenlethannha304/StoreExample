@@ -30,6 +30,7 @@ svg {
 .h-0 {
   height: 0;
 }
+/* Colors */
 .color-cl-blue-light {
   color: hsl(var(--cl-blue-light));
 }
@@ -41,6 +42,12 @@ svg {
 }
 .background-cl-blue {
   background-color: hsl(var(--cl-blue));
+}
+.primary-color {
+  color: hsl(var(--cl-blue));
+}
+.primary-background-color {
+background-color: hsl(var(--cl-blue));
 }
 /************ 
 FORM SECTION
@@ -149,4 +156,60 @@ button + button {
 }
 .close-button:hover > svg {
   fill: var(--bs-gray-800);
+}
+/* Effect */
+.move-down-when-click:active{
+  transform: translateY(0.2rem);
+}
+/* Symbols */
+.plus-symbol, .subtract-symbol{
+  position: relative;
+}
+.plus-symbol:after, .plus-symbol:before, .subtract-symbol::before {
+  position: absolute;
+  content: ' ';
+  top: -0.5rem;
+  height: 1rem;
+  width: 0.125rem;
+  background-color:#fff;
+}
+.plus-symbol:after, .subtract-symbol::before {
+  transform: rotate(90deg);
+}
+.arrow-symbol {
+  padding: 0.2rem;
+  border-color: inherit;
+  border-style: solid;
+  border-width: 0.1rem 0.1rem 0 0;
+  display: inline-block;
+  margin: 0.125rem 0.25rem;
+}
+.arrow-symbol.up {
+  transform: rotate(-45deg);
+}
+.arrow-symbol.down {
+  transform: rotate(135deg);
+}
+.arrow-symbol.left {
+  transform: rotate(-135deg);
+}
+.arrow-symbol.right {
+  transform: rotate(45deg);
+}
+.shaft-arrow-symbol{
+  position: relative;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent; 
+  border-right:10px solid black;
+}
+.shaft-arrow-symbol::after {
+  position: absolute;
+  top:-0.1rem;
+  left: 0.25rem;
+  background-color: black;
+  content: ' ';
+  width: 2rem;
+  height: 0.25rem;
 }
