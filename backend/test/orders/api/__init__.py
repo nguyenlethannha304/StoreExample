@@ -12,7 +12,7 @@ Province = apps.get_model('users', 'Province')
 Order = apps.get_model('orders', 'Order')
 ItemOrder = apps.get_model('orders', 'ItemOrder')
 FAKE_DATA_CREATE_ORDER = {'products': [], 'address': {
-}, 'use_profile_contact': False, 'phone_number': '0979311359', 'item_price': 0, 'total_price': 0}
+}, 'use_profile_contact': False, 'phone_number': '0979311359', 'item_price': 0, 'total_price': 0, 'email': 'abc@gmail.com'}
 
 
 def chose_random_number_lte_5():
@@ -28,7 +28,7 @@ def setFakeData(use_profile_contact=False):
         random_quantity = chose_random_number_lte_5()
         item_price += random_quantity*product.price
         fake_data['products'].append(
-            {'id': product.pk.__str__(), 'quantity': random_quantity})
+            {'id': product.pk.__str__(), 'quantity': random_quantity, 'price': product.price*random_quantity})
     fake_data['item_price'] = item_price
     fake_data['total_price'] = item_price
     # address

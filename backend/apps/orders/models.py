@@ -38,6 +38,7 @@ class Order(models.Model):
     item_price = models.PositiveBigIntegerField(default=0)
     shipping_fee = models.PositiveBigIntegerField(default=0)
     total_price = models.PositiveBigIntegerField(default=0)
+    email = models.EmailField()
     phone_number = models.CharField(max_length=12)
     address = models.ForeignKey(
         'users.Address', related_name='+', on_delete=models.SET_NULL, null=True)
@@ -84,8 +85,7 @@ class ItemOrder(models.Model):
     price = models.PositiveBigIntegerField(default=0)
 
     def calculate_price(self):
-        self.price = self.product.price*self.quantity
-        return self.price
+        return self.product.price*self.quantity
 
     class Meta:
         unique_together = ['order', 'product']

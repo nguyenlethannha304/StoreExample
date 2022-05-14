@@ -20,11 +20,10 @@ class StateSerializer(serializers.ModelSerializer):
         fields = ['state', 'description', 'created_time']
 
 
-class ProductForCreateOrderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Product
-        fields = ['id', 'quantity']
-        extra_kwargs = {'id': {'read_only': False}}
+class ProductForCreateOrderSerializer(serializers.Serializer):
+    id = serializers.UUIDField()
+    quantity = serializers.IntegerField(min_value=0)
+    price = serializers.IntegerField(min_value=0)
 
 
 class AddressForCreateOrderSerializer(serializers.ModelSerializer):
@@ -59,6 +58,7 @@ class CreateOrderSerializer(serializers.Serializer):
         min_value=0, required=False, default=0)
     total_price = serializers.IntegerField(min_value=0)
     # Contact
+    email = serializers.EmailField()
     address = AddressForCreateOrderSerializer(required=False)
     phone_number = serializers.CharField(required=False)
     use_profile_contact = serializers.BooleanField(default=False)
@@ -92,7 +92,7 @@ class CreateOrderSerializer(serializers.Serializer):
         self.product_query = self.get_product_query()
         self.validate_must_supply_address_or_use_profile_contact(data)
         self.validate_quantity_value(self.product_query)
-        self.validate_item_price_value(self.product_query, data['item_price'])
+        self.validate_item_price_value(self.product_query, data)
         return data
 
     def get_product_list_id(self, data):
@@ -103,10 +103,10 @@ class CreateOrderSerializer(serializers.Serializer):
         return rv
 
     def get_product_dict(self, data):
-        '''return {'id' : 'quantity'} dict from data '''
+        '''return {'id' : ('quantity', 'price')} dict from data '''
         rv = {}
         for product in data['products']:
-            rv[product['id']] = product['quantity']
+            rv[product['id']] = (product['quantity'], product['price'])
         return rv
 
     def get_product_query(self):
@@ -121,17 +121,21 @@ class CreateOrderSerializer(serializers.Serializer):
     def validate_quantity_value(self, product_query):
         '''quantity in data <= quantity in query db'''
         for product in product_query:
-            data_quantity = self.product_dict[product.pk]
+            data_quantity = self.product_dict[product.pk][0]
             if data_quantity > product.quantity:
                 raise ValidationError('Không đủ sản phẩm trong kho')
 
-    def validate_item_price_value(self, product_query, data_item_price):
+    def validate_item_price_value(self, product_query, data):
         '''item_price in data == item_price in query db'''
         query_product_price = 0
         for product in product_query:
-            quantity = self.product_dict[product.pk]
-            query_product_price += product.price*quantity
-        if query_product_price != data_item_price:
+            data_quantity = self.product_dict[product.pk][0]
+            data_price = self.product_dict[product.pk][1]
+            query_price = product.price*data_quantity
+            if query_price != data_price:
+                raise ValidationError('Giá hàng hoá đã thay đổi')
+            query_product_price += product.price*data_quantity
+        if query_product_price != data['item_price']:
             raise ValidationError("Giá hàng hoá đã thay đổi")
 
     def save(self):
@@ -144,6 +148,7 @@ class CreateOrderSerializer(serializers.Serializer):
             'item_price', 'shipping_fee', 'total_price', )(self.validated_data)
         address = self.get_address()
         phone_number = self.get_phone_number()
+        email = self.get_email()
         order = Order.objects.create(
             item_price=item_price, shipping_fee=shipping_fee, total_price=total_price, phone_number=phone_number, address=address)
         return order
@@ -151,7 +156,7 @@ class CreateOrderSerializer(serializers.Serializer):
     def create_order_items(self, order):
         product_query = self.product_query
         for product in product_query:
-            quantity = self.product_dict[product.id]
+            quantity = self.product_dict[product.id][0]
             # Subtract quantity in db
             Product.objects.filter(pk=product.pk).update(
                 quantity=F('quantity') - quantity)
@@ -169,3 +174,8 @@ class CreateOrderSerializer(serializers.Serializer):
         if self.validated_data['use_profile_contact']:
             return self.user_address  # Create from validate_use_profile_contact
         return Address.objects.create(**self.validated_data['address'])
+
+    def get_email(self):
+        if self.validated_data['use_profile_contact']:
+            return self.context['user'].email
+        return self.validated_data['email']
