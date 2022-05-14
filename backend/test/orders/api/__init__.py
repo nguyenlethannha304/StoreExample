@@ -10,7 +10,7 @@ City = apps.get_model('users', 'City')
 Province = apps.get_model('users', 'Province')
 # order app models
 Order = apps.get_model('orders', 'Order')
-ItemOrder = apps.get_model('orders', 'ItemOrder')
+OrderItem = apps.get_model('orders', 'OrderItem')
 FAKE_DATA_CREATE_ORDER = {'products': [], 'address': {
 }, 'use_profile_contact': False, 'phone_number': '0979311359', 'item_price': 0, 'total_price': 0, 'email': 'abc@gmail.com'}
 

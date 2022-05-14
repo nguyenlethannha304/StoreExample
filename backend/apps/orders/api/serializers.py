@@ -2,7 +2,7 @@ from math import prod
 from operator import itemgetter
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from ..models import ItemOrder, Order, OrderState, item_order_factory_method
+from ..models import OrderItem, Order, OrderState, item_order_factory_method
 from apps.utils.tools import validate_phonenumber
 from django.apps import apps
 from django.db import transaction

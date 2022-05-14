@@ -19,7 +19,7 @@ Province = apps.get_model('users', 'Province')
 UserModel = get_user_model()
 # order app models
 Order = apps.get_model('orders', 'Order')
-ItemOrder = apps.get_model('orders', 'ItemOrder')
+OrderItem = apps.get_model('orders', 'OrderItem')
 
 
 def setUpModule():

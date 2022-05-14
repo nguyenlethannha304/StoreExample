@@ -70,12 +70,12 @@ class OrderState(models.Model):
 
 
 def item_order_factory_method(order, product, quantity):
-    item_order = ItemOrder(order=order, product=product, quantity=quantity)
+    item_order = OrderItem(order=order, product=product, quantity=quantity)
     item_order.calculate_price()
     return item_order.save()
 
 
-class ItemOrder(models.Model):
+class OrderItem(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     order = models.ForeignKey(
         Order, related_name='items', on_delete=models.SET_NULL, null=True)
