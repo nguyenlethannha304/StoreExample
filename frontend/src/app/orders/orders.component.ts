@@ -39,7 +39,6 @@ export class OrdersComponent implements OnInit, AfterViewInit {
   }
   // ADDRESS-FORM
   shippingInformationForm = this.fb.group({
-    name: this.fb.control(''),
     email: this.fb.control('', [], []),
     phone: this.fb.control(''),
     address: this.fb.group({
