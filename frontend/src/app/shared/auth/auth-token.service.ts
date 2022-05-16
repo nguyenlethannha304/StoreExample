@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { catchError, Observable, of, map, tap, Observer } from 'rxjs';
-import { NavigateService } from '../services/navigate/navigate.service';
+import { catchError, Observable, of, tap } from 'rxjs';
 import { environment as e } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -11,10 +10,13 @@ import {
   UNIXTime,
 } from '../interface/token';
 import { FormErrors } from '../interface/errors';
+const TOKEN_PAIR_URL = `${e.api}/token/token_pair/`; // Post username and password to get token pair
+const REFRESH_TOKEN_URL = `${e.api}/token/refresh_token/`; // Post refresh token to get access token
 @Injectable({
   providedIn: 'root',
 })
 export class AuthTokenService {
+  // TOKEN
   private _accessToken: AccessToken = '';
   private _accessTokenSetTime: UNIXTime = 0;
   private _refreshToken: RefreshToken = '';
@@ -24,11 +26,7 @@ export class AuthTokenService {
   private _refreshTokenSetTimeName = 'refresh-token-set-time';
 
   private redirect: string;
-  constructor(
-    private navSer: NavigateService,
-    private http: HttpClient,
-    private router: Router
-  ) {
+  constructor(private http: HttpClient, private router: Router) {
     [this._refreshToken, this._refreshTokenSetTime] =
       this.getRefreshTokenFromLocalStorage();
   }
@@ -40,7 +38,7 @@ export class AuthTokenService {
   ) => {
     // submit username and password to server to get 2 tokens
     this.http
-      .post<TokenPair>(`${e.api}/token/token_pair/`, {
+      .post<TokenPair>(TOKEN_PAIR_URL, {
         username,
         password,
       })
@@ -128,7 +126,7 @@ export class AuthTokenService {
   };
   private sendRefreshToServerToGetAccessToken() {
     return this.http
-      .post<AccessToken>(`${e.api}/token/refresh_token/`, {
+      .post<AccessToken>(REFRESH_TOKEN_URL, {
         refresh: this.refreshToken,
       })
       .pipe(

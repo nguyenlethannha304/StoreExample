@@ -3,7 +3,7 @@ import { FactoryInterface } from 'src/app/shared/interface/share';
 // USER INFORMATION
 export type Phone = string;
 export const Phone: FactoryInterface<Phone> = {
-  create(phone: Phone) {
+  init(phone: Phone) {
     return this.isValid(phone) ? phone : null;
   },
   isValid(phone: Phone): boolean {
@@ -15,7 +15,7 @@ export const Phone: FactoryInterface<Phone> = {
 };
 export type Email = string;
 export const Email: FactoryInterface<Email> = {
-  create(email: Email) {
+  init(email: Email) {
     return this.isValid(email) ? email : null;
   },
   isValid(email: Email): boolean {
@@ -27,7 +27,7 @@ export const Email: FactoryInterface<Email> = {
 };
 export type Username = Email | Phone;
 export const Username: FactoryInterface<Username> = {
-  create(username: Username) {
+  init(username: Username) {
     return this.isValid(username) ? username : null;
   },
   isValid(username: Username) {
@@ -39,7 +39,7 @@ export const Username: FactoryInterface<Username> = {
 };
 export type Password = string;
 export const Password: FactoryInterface<Password> = {
-  create(password: Password) {
+  init(password: Password) {
     return this.isValid(password) ? password : null;
   },
   isValid(password: Password): boolean {
@@ -57,7 +57,7 @@ export type Address = {
   province: Province['id'];
 };
 export const Address: FactoryInterface<Address> = {
-  create(address: Address, provinceWithCityList: ProvinceWithCities[]) {
+  init(address: Address, provinceWithCityList: ProvinceWithCities[]) {
     return this.isValid(address, provinceWithCityList) ? address : null;
   },
   isValid(

@@ -34,11 +34,11 @@ describe('MessageComponent', () => {
       '.message-content-container'
     );
     // Check first message
-    mesSer.showSuccessAutoDestroyMessage(exampleMessage);
+    mesSer.createSucessMessage(exampleMessage);
     fixture.detectChanges();
     expect(contentContainerElement.textContent).toBe(exampleMessage);
     // Check second message
-    mesSer.showSuccessAutoDestroyMessage(anotherMessage);
+    mesSer.createSucessMessage(anotherMessage);
     fixture.detectChanges();
     expect(contentContainerElement.textContent).toBe(anotherMessage);
   });

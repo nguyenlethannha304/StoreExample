@@ -40,7 +40,7 @@ export class ProductListComponent implements OnInit {
     let page = this.page;
     let offset = this.offset;
     this.productService
-      .getProducts(slug, kind, page, offset)
+      .getProductList(slug, kind, page, offset)
       .subscribe((responseBody) => {
         this.products = responseBody.results;
         this.count = responseBody.count;

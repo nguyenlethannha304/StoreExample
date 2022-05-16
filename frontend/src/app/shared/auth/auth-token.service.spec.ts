@@ -33,7 +33,7 @@ fdescribe('AuthTokenService', () => {
     // Call function
     service.login('fake username', 'fake password', () => {}, '/');
     // Expect result
-    expect(service.accessToken).toBe(expectedTokenPair.access);
-    expect(service.refreshToken).toBe(expectedTokenPair.refresh);
+    debugger;
+    expect(service.accessToken$).toBe(of(expectedTokenPair.access));
   });
 });
