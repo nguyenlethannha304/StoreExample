@@ -1,28 +1,28 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-String.prototype.rsplit = function (
-  separator: string,
-  maxSplit: number = 0
-): Array<string> {
-  let textArray = this.split(separator);
-  let arrayLength = textArray.length;
-  if (arrayLength == 1 || maxSplit >= arrayLength) {
-    return textArray;
-  }
-  if (maxSplit) {
-    let result = [
-      textArray.slice(0, arrayLength - maxSplit + 1).join(separator),
-    ];
-    for (let i = 1; i <= maxSplit - 1; i++) {
-      result = result.concat(textArray[arrayLength - maxSplit + i]);
-    }
-    return result;
-  } else {
-    //   Array['startString to lastSeparator', 'lastSeparator to endString']
-    return [textArray.slice(0, arrayLength - 1).join('@')].concat(
-      textArray[arrayLength - 1]
-    );
-  }
-};
+// String.prototype.rsplit = function (
+//   separator: string,
+//   maxSplit: number = 0
+// ): Array<string> {
+//   let textArray = this.split(separator);
+//   let arrayLength = textArray.length;
+//   if (arrayLength == 1 || maxSplit >= arrayLength) {
+//     return textArray;
+//   }
+//   if (maxSplit) {
+//     let result = [
+//       textArray.slice(0, arrayLength - maxSplit + 1).join(separator),
+//     ];
+//     for (let i = 1; i <= maxSplit - 1; i++) {
+//       result = result.concat(textArray[arrayLength - maxSplit + i]);
+//     }
+//     return result;
+//   } else {
+//     //   Array['startString to lastSeparator', 'lastSeparator to endString']
+//     return [textArray.slice(0, arrayLength - 1).join('@')].concat(
+//       textArray[arrayLength - 1]
+//     );
+//   }
+// };
 
 export const isTwoPasswordSame = (
   firstPassName: string,
@@ -61,6 +61,12 @@ export const isPasswordValid = (): ValidatorFn => {
     return { password: 'Mật khẩu phải ít nhất 8 ký tự' };
   };
 };
+export const isPassword = (password: string): boolean => {
+  if (password.length < 8) {
+    return false;
+  }
+  return true;
+};
 export const isPhoneNumber = (phone: string): boolean => {
   const PHONE_PATTERN: RegExp = /(\+84|0)\d{9}/;
   return PHONE_PATTERN.test(phone);
@@ -71,16 +77,23 @@ export const isEmail = (email: string): boolean => {
   }
   const LOCAL_PATTERN: RegExp = getLocalPattern();
   const DOMAIN_PATTERN: RegExp = getDomainPattern();
-  let [localPart, domain]: Array<string> = email.rsplit('@');
+  let [localPart, domainPart]: Array<string> = email.rsplit('@');
+  if (!emailAddressLengthValid(localPart, domainPart)) {
+    return false;
+  }
+  if (!LOCAL_PATTERN.test(localPart) || !DOMAIN_PATTERN.test(domainPart)) {
+    return false;
+  }
+  return true;
+};
+const emailAddressLengthValid = (
+  localPart: string,
+  domainPart: string
+): boolean => {
   if (localPart.length == 0 || localPart.length > 64) {
-    //   localPart can't be more than 64 chars
     return false;
   }
-  if (domain.length == 0 || domain.length > 255) {
-    //   domain can't be more than 255 chars
-    return false;
-  }
-  if (!LOCAL_PATTERN.test(localPart) || !DOMAIN_PATTERN.test(domain)) {
+  if (domainPart.length == 0 || domainPart.length > 255) {
     return false;
   }
   return true;

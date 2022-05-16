@@ -3,7 +3,7 @@ import {
   ProductDetail,
   ProductList,
 } from './products/shared/interface/products';
-import { Profile } from './users/shared/interface/profile';
+import { Profile } from './users/shared/interface/users';
 // Data for users module
 export const provinces = [
   {

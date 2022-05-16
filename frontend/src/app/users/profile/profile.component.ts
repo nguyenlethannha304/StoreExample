@@ -4,11 +4,9 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  OnChanges,
   OnDestroy,
   OnInit,
   Renderer2,
-  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
@@ -16,14 +14,20 @@ import { isPhoneNumberValid } from '../shared/validate/validate';
 import { environment as e } from 'src/environments/environment';
 import {
   City,
-  Profile,
   Province,
   ProvinceWithCities,
-} from '../shared/interface/profile';
+  Profile,
+  Phone,
+  Address,
+} from '../shared/interface/users';
 import { EmptyResponse } from 'src/app/shared/interface/empty-response';
 import { MessageService } from 'src/app/shared/services/message/message.service';
 import { renderErrorsFromBackend } from 'src/app/shared/common-function';
 import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
+import {
+  createParameterForObject,
+  createObject,
+} from 'src/app/shared/interface/share';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -71,16 +75,27 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.profileForm.get('city');
   }
   onSubmit() {
-    let body = {
-      phone: this.phone.value,
-      street: this.street.value,
-      city: this.city.value,
-      province: this.province.value,
-    };
+    try {
+      var body = this.getBodyOnSubmit();
+    } catch (e) {
+      if (e instanceof Error) {
+        this.messageSer.createErrorMessage(e.message);
+        return;
+      }
+    }
     this.http
-      .post<EmptyResponse>(`${e.api}/users/profile/`, body, {
-        headers: { Authorization: '' },
-      })
+      .post<EmptyResponse>(
+        `${e.api}/users/profile/`,
+        {
+          phone: body.phone,
+          street: body.address.street,
+          city: body.address.city,
+          province: body.address.province,
+        },
+        {
+          headers: { Authorization: '' },
+        }
+      )
       .subscribe({
         next: () => {
           this.messageSer.createSucessMessage(
@@ -94,6 +109,21 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
           this.navSer.navigateTo('users:profile');
         },
       });
+  }
+  getBodyOnSubmit() {
+    let body = createObject(
+      createParameterForObject('phone', this.phone.value, Phone),
+      createParameterForObject(
+        'address',
+        {
+          street: this.street.value,
+          city: this.city.value,
+          province: this.province.value,
+        },
+        Address
+      )
+    ) as { phone: Phone; address: Address };
+    return body;
   }
   updateCityInformation() {
     this.profile.province = this.province.value;

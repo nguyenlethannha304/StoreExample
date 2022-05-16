@@ -16,7 +16,13 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthTokenService } from 'src/app/shared/auth/auth-token.service';
 import { renderErrorsFromBackend } from 'src/app/shared/common-function';
 import { FormErrors } from 'src/app/shared/interface/errors';
+import {
+  createParameterForObject,
+  createObject,
+} from 'src/app/shared/interface/share';
+import { MessageService } from 'src/app/shared/services/message/message.service';
 import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
+import { Password, Username } from '../shared/interface/users';
 import {
   isPhoneNumberValid,
   isEmailValid,
@@ -31,6 +37,7 @@ export class LoginComponent implements OnInit {
   constructor(
     public navSer: NavigateService,
     private authTokenSer: AuthTokenService,
+    private messageSer: MessageService,
     private route: ActivatedRoute,
     private render: Renderer2
   ) {}
@@ -55,11 +62,25 @@ export class LoginComponent implements OnInit {
   };
   onSubmit() {
     if (this.loginForm.valid) {
-      let username = this.username.value;
-      let password = this.password.value;
+      // let body = getBody(
+      //   { value: username, factory: Username },
+      //   { value: password, factory: Password }
+      // );
+      try {
+        var body = createObject(
+          createParameterForObject('username', this.username.value, Username),
+          createParameterForObject('password', this.password.value, Password)
+        ) as { username: Username; password: Password };
+      } catch (e) {
+        if (e instanceof Error) {
+          this.messageSer.createErrorMessage(e.message);
+          return;
+        }
+      }
+      console.log(body);
       this.authTokenSer.login(
-        username,
-        password,
+        body.username,
+        body.password,
         this.renderLoginFormErrors,
         this.redirectAfterLogin
       );

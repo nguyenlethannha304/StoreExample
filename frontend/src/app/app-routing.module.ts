@@ -22,7 +22,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./carts/carts.module').then((m) => m.CartsModule),
   },
-  { path: 'orders', loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule) },
+  // { path: 'orders', loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule) },
   // 404 NOT FOUND
   { path: '**', component: NotFoundComponent },
 ];

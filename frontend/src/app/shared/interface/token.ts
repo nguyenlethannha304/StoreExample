@@ -1,10 +1,11 @@
+import { FactoryInterface } from './share';
 export interface TokenPair {
-  access: string;
-  refresh: string;
+  access: AccessToken;
+  refresh: RefreshToken;
 }
-export interface AccessToken {
-  access: string;
-}
+export type AccessToken = string;
+export type RefreshToken = string;
 export interface AuthError {
   detail: string;
 }
+export type UNIXTime = number;

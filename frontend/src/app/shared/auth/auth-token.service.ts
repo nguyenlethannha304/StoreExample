@@ -3,18 +3,22 @@ import { catchError, Observable, of, map, tap, Observer } from 'rxjs';
 import { NavigateService } from '../services/navigate/navigate.service';
 import { environment as e } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { TokenPair } from '../interface/token';
 import { Router } from '@angular/router';
-import { AccessToken } from '../interface/token';
+import {
+  AccessToken,
+  TokenPair,
+  RefreshToken,
+  UNIXTime,
+} from '../interface/token';
 import { FormErrors } from '../interface/errors';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthTokenService {
-  private _accessToken: string = '';
-  private _accessTokenSetTime: number = 0;
-  private _refreshToken: string = '';
-  private _refreshTokenSetTime: number = 0;
+  private _accessToken: AccessToken = '';
+  private _accessTokenSetTime: UNIXTime = 0;
+  private _refreshToken: RefreshToken = '';
+  private _refreshTokenSetTime: UNIXTime = 0;
   // Name to retrieve from LocalStorage
   private _refreshTokenName = 'refresh-token';
   private _refreshTokenSetTimeName = 'refresh-token-set-time';
@@ -60,7 +64,7 @@ export class AuthTokenService {
     this.refreshToken = '';
     window.localStorage.setItem(this._refreshTokenName, '');
   };
-  get accessToken$(): Observable<string> {
+  get accessToken$(): Observable<AccessToken> {
     if (this.accessToken != '' && !this.isTokenExpire('access')) {
       // Get token from cache if not expired
       return of(this.accessToken);
@@ -70,19 +74,19 @@ export class AuthTokenService {
     }
     return of('');
   }
-  private get accessToken(): string {
+  private get accessToken(): AccessToken {
     return this._accessToken;
   }
-  private set accessToken(value: string) {
+  private set accessToken(value: AccessToken) {
     this._accessToken = value;
     if (value != '') {
       this._accessTokenSetTime = new Date().getTime();
     }
   }
-  private get refreshToken(): string {
+  private get refreshToken(): RefreshToken {
     return this._refreshToken;
   }
-  private set refreshToken(value: string) {
+  private set refreshToken(value: RefreshToken) {
     this._refreshToken = value;
     if (value != '') {
       // Save to local storage
@@ -106,7 +110,7 @@ export class AuthTokenService {
     }
     return tokenSetTime + duration + 10000 <= new Date().getTime(); // Add 10000 or 10 seconds
   };
-  private getRefreshTokenFromLocalStorage = (): [string, number] => {
+  private getRefreshTokenFromLocalStorage = (): [RefreshToken, UNIXTime] => {
     let refreshToken = window.localStorage.getItem(this._refreshTokenName);
     // Check if refreshToken saved in localStorage
     if (refreshToken != null) {
@@ -128,7 +132,6 @@ export class AuthTokenService {
         refresh: this.refreshToken,
       })
       .pipe(
-        map((body) => body.access),
         tap((accessToken) => {
           // Save token after getting from server
           this.accessToken = accessToken;
