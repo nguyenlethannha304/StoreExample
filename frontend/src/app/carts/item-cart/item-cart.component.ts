@@ -10,7 +10,7 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { Cart, CartItem, Product } from '../cart';
+import { CartItem } from '../cart';
 import { trashIcon } from 'src/app/shared/services/icons/icons';
 import { debounceTime, Subject } from 'rxjs';
 @Component({
