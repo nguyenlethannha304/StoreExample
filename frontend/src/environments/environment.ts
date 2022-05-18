@@ -7,6 +7,8 @@ export const environment = {
   api: 'http://127.0.0.1:8000/api',
   accessTokenExpireIn: 5 * 60 * 1000, // 5 mins
   refreshTokenExpireIn: 1 * 24 * 60 * 60 * 1000, // 1 days
+  //tokenTimeExpire will be set one hour lesser than backEnd unless use fullTime
+  fullTimeExtend: 3600 * 1000,
 };
 
 /*
