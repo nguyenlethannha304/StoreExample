@@ -1,9 +1,9 @@
-import { ValueConverter } from '@angular/compiler/src/render3/view/template';
-import { isEmailValid } from 'src/app/users/shared/validate/validate';
-
 export interface FactoryInterface<T> {
-  init(value: T, ...args: unknown[]): T;
-  isValid(value: T, ...args: unknown[]): boolean;
+  init: (value: T, ...args: unknown[]) => T;
+  isValid: (value: T, ...args: unknown[]) => boolean;
+}
+export interface AdapterInterface<T, U> {
+  convert(value: T): U;
 }
 export type UUID = string;
 export const UUID: FactoryInterface<UUID> = {
@@ -29,22 +29,21 @@ export const PositiveInteger: FactoryInterface<PositiveInteger> = {
     throw new Error(`${value} phải nguyên dương và lớn hơn hoặc bằng không`);
   },
 };
-export interface CreateFieldData<T> {
+export interface CreateKeyValueFromFactory<T> {
   keyName: string;
   value: T;
   factory: FactoryInterface<T>;
 }
-export const createParameterForObject = (
+export const createKeyValueForObject = (
   keyName: string,
   value: any,
   factory: FactoryInterface<any> = null
-): CreateFieldData<any> => {
+): CreateKeyValueFromFactory<any> => {
   return { keyName, value, factory };
 };
-export const createObject = (...fields: CreateFieldData<any>[]): any => {
-  // create an object with {
-  // [key:field.keyName]: field.factory? field.factory.init(value): field.value
-  // }
+export const createObject = (
+  ...fields: CreateKeyValueFromFactory<any>[]
+): any => {
   let object = {};
   for (let field of fields) {
     if (field.factory != null) {
