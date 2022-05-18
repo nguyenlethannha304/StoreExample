@@ -26,7 +26,7 @@ export type Product = {
   image: string;
   thumbnail: string;
   description: string;
-  type: Pick<Type, 'id'>;
+  type: Type['id'];
 };
 
 type Rating = number;
@@ -41,7 +41,7 @@ const Rating: FactoryInterface<Rating> = {
     throw new Error(`Giá trị đánh giá ${value} không hợp lệ`);
   },
 };
-export type ProductList = {
+export type ProductCardList = {
   results: ProductCard[];
   count: number;
 };

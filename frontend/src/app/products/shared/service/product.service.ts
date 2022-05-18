@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ProductDetail, ProductList } from '../interface/products';
+import { ProductDetail, ProductCardList } from '../interface/products';
 import { environment as e } from 'src/environments/environment';
 import { UUID } from 'src/app/shared/interface/share';
 @Injectable({
@@ -14,10 +14,10 @@ export class ProductService {
     kind: 't' | 'c',
     page: number,
     offset: number
-  ): Observable<ProductList> {
+  ): Observable<ProductCardList> {
     // slug of type or category
     // kind = 't' => get products based on type; kind = 'c' => get products based on category
-    return this.httpClient.get<ProductList>(
+    return this.httpClient.get<ProductCardList>(
       `${e.api}/products/${kind}/${slug}?page=${page}&offset=${offset}`
     );
   }
