@@ -25,7 +25,7 @@ import { MessageService } from 'src/app/shared/services/message/message.service'
 import { renderErrorsFromBackend } from 'src/app/shared/common-function';
 import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
 import {
-  createParameterForObject,
+  createKeyValueForObject,
   createObject,
 } from 'src/app/shared/interface/share';
 @Component({
@@ -93,7 +93,7 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
           province: body.address.province,
         },
         {
-          headers: { Authorization: '' },
+          headers: { Authorization: 'yes' },
         }
       )
       .subscribe({
@@ -112,8 +112,8 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   getBodyOnSubmit() {
     let body = createObject(
-      createParameterForObject('phone', this.phone.value, Phone),
-      createParameterForObject(
+      createKeyValueForObject('phone', this.phone.value, Phone),
+      createKeyValueForObject(
         'address',
         {
           street: this.street.value,
@@ -135,7 +135,7 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
   getProfile() {
     this.http
       .get<Profile>(`${e.api}/users/profile/`, {
-        headers: { Authorization: '' },
+        headers: { Authorization: 'yes' },
       })
       .subscribe((profile) => {
         this.profile = profile;

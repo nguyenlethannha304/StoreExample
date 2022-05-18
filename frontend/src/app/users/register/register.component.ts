@@ -19,9 +19,8 @@ import { NavigateService } from 'src/app/shared/services/navigate/navigate.servi
 import { renderErrorsFromBackend } from 'src/app/shared/common-function';
 import { Email, Password } from '../shared/interface/users';
 import {
-  createParameterForObject,
+  createKeyValueForObject,
   createObject,
-  hasNull,
 } from 'src/app/shared/interface/share';
 @Component({
   selector: 'app-register',
@@ -60,9 +59,9 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
     try {
       var body = createObject(
-        createParameterForObject('email', this.email.value, Email),
-        createParameterForObject('password1', this.pass.value, Password),
-        createParameterForObject('password2', this.confirmPass.value, Password)
+        createKeyValueForObject('email', this.email.value, Email),
+        createKeyValueForObject('password1', this.pass.value, Password),
+        createKeyValueForObject('password2', this.confirmPass.value, Password)
       ) as { email: Email; password1: Password; password2: Password };
     } catch (e) {
       if (e instanceof Error) {

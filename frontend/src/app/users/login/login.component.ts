@@ -17,7 +17,7 @@ import { AuthTokenService } from 'src/app/shared/auth/auth-token.service';
 import { renderErrorsFromBackend } from 'src/app/shared/common-function';
 import { FormErrors } from 'src/app/shared/interface/errors';
 import {
-  createParameterForObject,
+  createKeyValueForObject,
   createObject,
 } from 'src/app/shared/interface/share';
 import { MessageService } from 'src/app/shared/services/message/message.service';
@@ -68,8 +68,8 @@ export class LoginComponent implements OnInit {
       // );
       try {
         var body = createObject(
-          createParameterForObject('username', this.username.value, Username),
-          createParameterForObject('password', this.password.value, Password)
+          createKeyValueForObject('username', this.username.value, Username),
+          createKeyValueForObject('password', this.password.value, Password)
         ) as { username: Username; password: Password };
       } catch (e) {
         if (e instanceof Error) {

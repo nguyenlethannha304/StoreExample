@@ -57,15 +57,13 @@ export type Address = {
   province: Province['id'];
 };
 export const Address: FactoryInterface<Address> = {
-  init(address: Address, provinceWithCityList: ProvinceWithCities[]) {
+  init(address: Address, provinceWithCityList: unknown) {
     return this.isValid(address, provinceWithCityList) ? address : null;
   },
-  isValid(
-    address: Address,
-    provinceWithCitiesList: ProvinceWithCities[]
-  ): boolean {
+  isValid(address: Address, provinceWithCitiesList: unknown): boolean {
+    let ProvinceWithCitiesList = provinceWithCitiesList as ProvinceWithCities[];
     // Check if city belong to the province
-    let addressProvince = provinceWithCitiesList.find(
+    let addressProvince = ProvinceWithCitiesList.find(
       (province) => province.id == address.province
     );
     let addressCity = addressProvince.cities.find(

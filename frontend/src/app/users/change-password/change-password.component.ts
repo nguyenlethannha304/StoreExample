@@ -20,8 +20,8 @@ import { EmptyResponse } from 'src/app/shared/interface/empty-response';
 import { Password } from '../shared/interface/users';
 import {
   createObject,
-  CreateFieldData,
-  createParameterForObject,
+  CreateKeyValueFromFactory,
+  createKeyValueForObject,
 } from 'src/app/shared/interface/share';
 @Component({
   selector: 'app-change-password',
@@ -61,17 +61,13 @@ export class ChangePasswordComponent implements OnInit {
     if (this.changePassForm.valid) {
       try {
         var body = createObject(
-          createParameterForObject(
-            'old_password',
-            this.oldPass.value,
-            Password
-          ),
-          createParameterForObject(
+          createKeyValueForObject('old_password', this.oldPass.value, Password),
+          createKeyValueForObject(
             'new_password1',
             this.newPass.value,
             Password
           ),
-          createParameterForObject(
+          createKeyValueForObject(
             'new_password2',
             this.confirmPass.value,
             Password
@@ -89,7 +85,7 @@ export class ChangePasswordComponent implements OnInit {
       }
       this.http
         .post<EmptyResponse>(`${e.api}/users/change_password`, body, {
-          headers: { Authorization: '' },
+          headers: { Authorization: 'yes' },
           observe: 'body',
         })
         .subscribe({
