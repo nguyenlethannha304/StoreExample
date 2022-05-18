@@ -1,7 +1,7 @@
 import {
   ProductCard,
   ProductDetail,
-  ProductList,
+  ProductCardList,
 } from './products/shared/interface/products';
 import { Profile } from './users/shared/interface/users';
 // Data for users module
@@ -30,7 +30,7 @@ export const profile: Profile = {
   city: null,
 };
 // Data for products module
-export const productList: ProductList = {
+export const productList: ProductCardList = {
   results: [
     {
       id: 'a53c9e26-90ca-4371-beb0-98a41b84518c',
@@ -75,7 +75,7 @@ export const productList: ProductList = {
   ],
   count: 52,
 };
-export const productList2: ProductList = {
+export const productList2: ProductCardList = {
   results: [
     {
       id: 'a53c9e26-90ca-4371-beb0-98a41b84518c',
