@@ -17,7 +17,10 @@ export class AuthInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    if (request.headers.has('Authorization')) {
+    if (
+      request.headers.has('Authorization') &&
+      request.headers.get('Authorization') == 'yes'
+    ) {
       return from(authorizeRequest(request, next, this.authTokenSer));
     } else {
       return next.handle(request);
