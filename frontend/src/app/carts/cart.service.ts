@@ -4,6 +4,11 @@ import { AuthTokenService } from 'src/app/shared/auth/auth-token.service';
 import { Observable, of, map } from 'rxjs';
 import { MessageService } from '../shared/services/message/message.service';
 import { HttpClient, HttpStatusCode } from '@angular/common/http';
+import { environment as e } from 'src/environments/environment';
+const COUNT_URL = `${e.api}/carts/count/`;
+const AUTH_CART_URL = `${e.api}/carts/`;
+const DELETE_AUTH_CART_ITEM_URL = `${e.api}/item-delete/`;
+const RELATED_PRODUCT_URL = `${e.api}/carts/cart-product-information/`;
 @Injectable({
   providedIn: 'root',
 })
@@ -22,9 +27,16 @@ export class CartService {
     this.setCartState();
     this.countCartItems();
   }
+  countCartItems(): void {
+    let observable$ = this.state.countCartItem$();
+    observable$.subscribe((count) => (this.count = count));
+  }
   getCartItems(): void {
     let observable$ = this.state.getCartItem$();
     observable$.subscribe((cartItemList) => (this.cartItemList = cartItemList));
+  }
+  validateCartItem(cartItem: CartItem): boolean {
+    return true;
   }
   addCartItems(id: string, quantity: number) {
     let observable$ = this.state.addCartItem(id, quantity);
@@ -73,10 +85,6 @@ export class CartService {
       }
     });
   }
-  private countCartItems(): void {
-    let observable$ = this.state.countCartItem$();
-    observable$.subscribe((count) => (this.count = count));
-  }
 }
 // --------------------
 // CartState (Offline and Online)
@@ -99,8 +107,40 @@ class CartOfflineState implements CartState {
     return of(this.getItemCartFromLocalStorage().length);
   }
   getCartItem$(): Observable<CartItem[]> {
-    let cartItem = this.getItemCartFromLocalStorage();
-    return of(cartItem);
+    let cartItemList = this.getItemCartFromLocalStorage();
+    return this.getRelatedProductFromBackend(cartItemList);
+  }
+
+  private getRelatedProductFromBackend(
+    cartItemList: Pick<CartItem, 'id' | 'quantity'>[]
+  ): Observable<CartItem[]> {
+    let idList: Array<string> = [];
+    for (let cartItem of cartItemList) {
+      idList.push(cartItem.id);
+    }
+    let idListString = idList.join(',');
+    return this.cartService.http
+      .get<CartItem['product'][]>(
+        `${RELATED_PRODUCT_URL}?product-ids=${idListString}`
+      )
+      .pipe(
+        map((relatedProducts) => {
+          // Merge cartItemList and relatedProduct
+          let result: CartItem[] = [];
+          for (let cartItem of cartItemList) {
+            for (let relatedProduct of relatedProducts) {
+              if (cartItem.id == relatedProduct.id) {
+                result.push({
+                  id: cartItem.id,
+                  quantity: cartItem.quantity,
+                  product: relatedProduct,
+                });
+              }
+            }
+          }
+          return result;
+        })
+      );
   }
   addCartItem(id: string, quantity: number): Observable<boolean> {
     return this.saveItemCartToLocalStorage(id, quantity);
@@ -115,9 +155,9 @@ class CartOfflineState implements CartState {
   changeCartItemQuantity(id: string, quantity: number): Observable<boolean> {
     return this.saveItemCartToLocalStorage(id, quantity);
   }
-  private getItemCartFromLocalStorage(): CartItem[] {
+  private getItemCartFromLocalStorage(): Pick<CartItem, 'id' | 'quantity'>[] {
     let cartItemString = window.localStorage.getItem('itemCart');
-    return JSON.parse(cartItemString) as CartItem[];
+    return JSON.parse(cartItemString);
   }
   private saveItemCartToLocalStorage(
     id: string,
@@ -131,8 +171,8 @@ class CartOfflineState implements CartState {
   private saveItemCartToList(
     id: string,
     quantity: number,
-    cartItemList: CartItem[]
-  ): CartItem[] {
+    cartItemList: Pick<CartItem, 'id' | 'quantity'>[]
+  ): Pick<CartItem, 'id' | 'quantity'>[] {
     let newCartItemList = Object.assign({}, cartItemList);
     // Update item cart (item exists in the cart)
     for (let item of cartItemList) {
@@ -142,7 +182,7 @@ class CartOfflineState implements CartState {
       }
     }
     // Add new item to cart (item not exist in the cart)
-    newCartItemList.push({ id: id, quantity: quantity, product: null });
+    newCartItemList.push({ id: id, quantity: quantity });
     return newCartItemList;
   }
 }
@@ -156,21 +196,21 @@ class CartOnlineState implements CartState {
     this.authService = this.cartService.authService;
   }
   countCartItem$(): Observable<number> {
-    return this.http.get<number>('/api/carts/count/', {
-      headers: { Authorization: '' },
+    return this.http.get<number>(COUNT_URL, {
+      headers: { Authorization: 'yes' },
     });
   }
   getCartItem$(): Observable<CartItem[]> {
-    return this.http.get<CartItem[]>('/api/carts/', {
-      headers: { Authorization: '' },
+    return this.http.get<CartItem[]>(AUTH_CART_URL, {
+      headers: { Authorization: 'yes' },
     });
   }
   addCartItem(id: string, quantity: number): Observable<boolean> {
     return this.http
       .post(
-        '/api/cart/',
+        AUTH_CART_URL,
         { product_id: id, quantity: quantity },
-        { headers: { Authorization: '' }, observe: 'response' }
+        { headers: { Authorization: 'yes' }, observe: 'response' }
       )
       .pipe(
         map((response) => {
@@ -183,8 +223,8 @@ class CartOnlineState implements CartState {
   }
   deleteCartItem(id: string): Observable<boolean> {
     return this.http
-      .delete(`/api/carts/item-delete/${id}`, {
-        headers: { Authorization: '' },
+      .delete(`${DELETE_AUTH_CART_ITEM_URL}${id}`, {
+        headers: { Authorization: 'yes' },
         observe: 'response',
       })
       .pipe(
@@ -199,9 +239,9 @@ class CartOnlineState implements CartState {
   changeCartItemQuantity(id: string, quantity: number): Observable<boolean> {
     return this.http
       .put(
-        '/api/carts/',
+        AUTH_CART_URL,
         { id: id, quantity: quantity },
-        { headers: { Authorization: '' }, observe: 'response' }
+        { headers: { Authorization: 'yes' }, observe: 'response' }
       )
       .pipe(
         map((response) => {
