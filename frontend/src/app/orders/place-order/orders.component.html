@@ -6,7 +6,7 @@
     <div class="cart-information-summary d-flex align-items-center">
         <div #cartIconContainer class="cart-icon me-2" style="width:2rem; height:2rem"></div>
         <p (click)="toggleOrderDetail()" class="order-information m-0">Thông tin đơn hàng <i class="arrow-symbol" [ngClass]="isOrderDetailOpen? 'up': 'down'"></i></p>
-        <p class="ms-auto mt-0 mb-0 fw-bold">750.000d</p>
+        <p class="ms-auto mt-0 mb-0 fw-bold">{{orderService.calcTotalItemPrice() | currency}}</p>
     </div>
     <hr class="mt-2 mb-3" *ngIf="isOrderDetailOpen">
     <div class="cart-information-list" *ngIf="isOrderDetailOpen">
@@ -40,16 +40,16 @@
 <div class="order-summary">
     <div class="order-price d-flex">
         <p>Tiền hàng</p>
-        <p class="ms-auto">750.000đ</p>
+        <p class="ms-auto">{{orderService.calcTotalItemPrice(true) | currency}}</p>
     </div>
     <div class="shipping-price d-flex">
         <p>Phí vận chuyển</p>
-        <p class="ms-auto">0đ</p>
+        <p class="ms-auto">{{orderService.calcShippingFee() | currency}}</p>
     </div>
     <hr class="m-1" style="width:80">
     <div class="order-total d-flex mt-3">
         <p class="fw-bold">Tổng tiền</p>
-        <p class="fw-bold ms-auto">750.000đ</p>
+        <p class="fw-bold ms-auto">{{orderService.calcTotalPrice(true) | currency}}</p>
     </div>
     <div class="order-action d-flex pb-2">
         <button (click)="submitOrder()" class="ms-auto" [ButtonElement]="'primary'" style="width: 8rem; border-radius: 1rem;">Đặt hàng</button>

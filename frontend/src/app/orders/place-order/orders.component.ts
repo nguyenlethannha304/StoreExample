@@ -2,21 +2,35 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { CartItem, Product } from '../carts/cart';
-import { ProductDetail } from '../products/shared/interface/products';
+import { FormBuilder } from '@angular/forms';
+import { NavigateService } from '../../shared/services/navigate/navigate.service';
+import { OrdersService } from '../orders.service';
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.css'],
 })
-export class OrdersComponent implements OnInit, AfterViewInit {
-  constructor(private render: Renderer2, private fb: FormBuilder) {}
-  ngOnInit(): void {}
+export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
+  constructor(
+    private render: Renderer2,
+    private fb: FormBuilder,
+    public orderService: OrdersService,
+    public navService: NavigateService
+  ) {}
+  ngOnInit(): void {
+    this.emptyOrderHandler();
+  }
+  emptyOrderHandler() {
+    // Navigate back to home if the order is empty
+    if (this.orderService.orderItems == []) {
+      this.navService.navigateTo('home');
+    }
+  }
   ngAfterViewInit(): void {
     let icon = this.getCartIcon('#62B0FF');
     this.render.setProperty(
@@ -24,6 +38,9 @@ export class OrdersComponent implements OnInit, AfterViewInit {
       'innerHTML',
       icon
     );
+  }
+  ngOnDestroy(): void {
+    this.orderService.clear();
   }
   // CART-INFORMATION
   // cart icon

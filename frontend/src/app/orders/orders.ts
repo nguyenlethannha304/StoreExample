@@ -1,11 +1,36 @@
-export interface Orders {
+import { CartItem } from '../carts/cart';
+import { Product } from '../products/shared/interface/products';
+import { AdapterInterface, PositiveInteger } from '../shared/interface/share';
+import { Address, Email, Phone } from '../users/shared/interface/users';
+
+export type Order = {
+  products: OrderItem[];
   item_price: number;
   shipping_fee: number;
   total_price: number;
-  email: string;
-  phone_number: string;
+  email: Email;
+  phone_number: Phone;
+  address: Address;
+  use_profile_contact: boolean; //
+};
+export type OrderItem = {
+  id: Product['id']; //Product id
+  price: PositiveInteger;
+  quantity: PositiveInteger;
+};
+interface OrderItemFunction {
+  calcPrice: (cartItem: CartItem) => PositiveInteger;
 }
-export interface OrderItem {
-  id: string;
-  quantity: number;
-}
+export const OrderItem: AdapterInterface<CartItem, OrderItem> &
+  OrderItemFunction = {
+  convert(cartItem: CartItem): OrderItem {
+    return {
+      id: cartItem.product.id,
+      quantity: cartItem.quantity,
+      price: this['calcPrice'](cartItem),
+    };
+  },
+  calcPrice: (cartItem: CartItem): PositiveInteger => {
+    return cartItem.quantity * cartItem.product.price;
+  },
+};
