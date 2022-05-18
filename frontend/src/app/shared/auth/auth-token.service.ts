@@ -56,6 +56,12 @@ export class AuthTokenService {
         },
       });
   };
+  isLogin(isFullTimeExpire: boolean = false) {
+    if (this._accessToken && !this.isTokenExpire('access', isFullTimeExpire)) {
+      return true;
+    }
+    return false;
+  }
   logout = () => {
     // Clear token and navigate to homepage
     this.accessToken = '';
@@ -96,7 +102,10 @@ export class AuthTokenService {
       );
     }
   }
-  private isTokenExpire = (type: 'access' | 'refresh'): boolean => {
+  private isTokenExpire = (
+    type: 'access' | 'refresh',
+    isFullTimeExpire: boolean = false
+  ): boolean => {
     let duration = 0;
     let tokenSetTime = 0;
     if (type == 'access') {
@@ -105,6 +114,9 @@ export class AuthTokenService {
     } else if (type == 'refresh') {
       duration = e.refreshTokenExpireIn;
       tokenSetTime = this._refreshTokenSetTime;
+    }
+    if (isFullTimeExpire == true) {
+      duration += e.fullTimeExtend;
     }
     return tokenSetTime + duration + 10000 <= new Date().getTime(); // Add 10000 or 10 seconds
   };
