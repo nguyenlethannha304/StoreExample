@@ -24,8 +24,9 @@ class Address(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     street = models.CharField(max_length=255, blank=True)
     province = models.ForeignKey(
-        Province, on_delete=models.SET_NULL, null=True)
-    city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
+        Province, on_delete=models.SET_NULL, null=True, default=None)
+    city = models.ForeignKey(
+        City, on_delete=models.SET_NULL, null=True, default=None)
 
     def __bool__(self):
         if self.street and self.province and self.city:
@@ -75,7 +76,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     address = models.ForeignKey(
-        Address, related_name='+', on_delete=models.SET_NULL, null=True)
+        Address, related_name='+', on_delete=models.SET_NULL, null=True, default=None)
     objects = CustomUserManager()
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'

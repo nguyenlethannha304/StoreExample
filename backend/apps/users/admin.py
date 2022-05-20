@@ -1,10 +1,11 @@
+import json
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 from django import forms
-
+from django.conf import settings
 from .models import City, Province
 UserModel = get_user_model()
 
@@ -39,6 +40,16 @@ class UserCreationForm(forms.ModelForm):
         return user
 
 
+@admin.register(City)
+class City(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Province)
+class Province(admin.ModelAdmin):
+    pass
+
+
 class UserChangeForm(forms.ModelForm):
     """A form for updating users. Includes all the fields on
     the user, but replaces the password field with admin's
@@ -71,11 +82,16 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('email',)
 
 
-@admin.register(City)
-class CityAdmin(admin.ModelAdmin):
-    pass
+def create_province_and_its_cities():
+    json_path = f'{settings.BASE_DIR}/apps/users/local.json'
+    with open(json_path, 'r') as json_file:
+        data = json.load(json_file)
+        _create_province_and_its_cities_process(data)
 
 
-@admin.register(Province)
-class ProvinceAdmin(admin.ModelAdmin):
-    pass
+def _create_province_and_its_cities_process(data):
+    for item in data:
+        province = Province.objects.create(name=item['name'])
+        for district in item['districts']:
+            city = City.objects.create(
+                name=district['name'], province=province)
