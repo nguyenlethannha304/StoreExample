@@ -6,7 +6,7 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 from django import forms
 from django.conf import settings
-from .models import City, Province
+from .models import Address, City, Province
 UserModel = get_user_model()
 
 # Register your models here.
@@ -42,12 +42,18 @@ class UserCreationForm(forms.ModelForm):
 
 @admin.register(City)
 class City(admin.ModelAdmin):
-    pass
+    list_display = ('name', 'province')
+    list_filter = ('province',)
 
 
 @admin.register(Province)
 class Province(admin.ModelAdmin):
     pass
+
+
+@admin.register(Address)
+class AddressAdmin(admin.ModelAdmin):
+    exclude = ('id',)
 
 
 class UserChangeForm(forms.ModelForm):
@@ -67,10 +73,10 @@ class UserChangeForm(forms.ModelForm):
 class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
-    list_display = ('email', 'phone', 'is_active')
+    list_display = ('email', 'phone', 'is_active', 'address')
     list_filter = ('is_staff',)
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('email', 'phone', 'is_staff', 'is_active', 'address')}),
     )
     add_fieldsets = (
         (None, {
@@ -80,6 +86,11 @@ class UserAdmin(BaseUserAdmin):
     )
     search_fields = ('email', 'phone')
     ordering = ('email',)
+
+    def get_form(self, request, obj, **kwargs):
+        if obj is None:
+            kwargs['form'] = self.add_form
+        return super().get_form(request, obj, **kwargs)
 
 
 def create_province_and_its_cities():

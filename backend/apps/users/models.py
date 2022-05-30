@@ -13,11 +13,17 @@ from ..utils.tools import validate_phonenumber
 class Province(models.Model):
     name = models.CharField(max_length=255)
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 class City(models.Model):
     name = models.CharField(max_length=255)
     province = models.ForeignKey(
         Province, on_delete=models.CASCADE, null=True, related_name='cities')
+
+    def __str__(self):
+        return f'{self.name}'
 
 
 class Address(models.Model):
@@ -32,6 +38,9 @@ class Address(models.Model):
         if self.street and self.province and self.city:
             return True
         return False
+
+    def __str__(self):
+        return f'Street:{self.street}, City:{self.city}, Province:{self.province} '
 
 
 class CustomUserManager(UserManager):
