@@ -9,6 +9,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+MEDIA_ROOT = os.path.join(BASE_DIR, 'apps', 'static', 'image')
+MEDIA_URL = 'media/'
 # No Testing Built-in Password Validatation in development
 AUTH_PASSWORD_VALIDATORS = []
 # Faster hashing algorithms for testing purpose
