@@ -13,6 +13,9 @@ class Cart(models.Model):
         UserModel, primary_key=True, on_delete=models.CASCADE)
     count = models.PositiveIntegerField(default=0)
 
+    def __str__(self):
+        return '%s' % (self.user.email)
+
     @classmethod
     def change_cart_count(cls, id, number=1):
         '''Use negative number for subtract'''
