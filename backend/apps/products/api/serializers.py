@@ -19,7 +19,7 @@ class CategoryNestingTypesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['name', 'types']
+        fields = ['name', 'slug', 'types']
 
 
 class SubImageSerializer(serializers.ModelSerializer):
