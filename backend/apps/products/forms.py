@@ -1,7 +1,7 @@
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django import forms
 from django.core.files.images import ImageFile
-from .models import Product
+from .models import Product, SubImage
 from PIL import Image
 import io
 from django.utils.text import slugify
@@ -59,6 +59,18 @@ def _calculate_position_of_image_after_crop(image, new_width, new_height):
         upper += reduce_size/2
         lower -= reduce_size/2
     return (left, upper, right, lower)
+
+
+class SubImageForm(forms.ModelForm):
+    class Meta:
+        model = SubImage
+        fields = '__all__'
+
+    def clean_image(self):
+        image = self.cleaned_data['image']
+        if 'image' in self.changed_data:
+            image = crop_image_to_square(image)
+        return image
 
 
 class ProductModelForm(forms.ModelForm):

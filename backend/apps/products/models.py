@@ -41,8 +41,17 @@ class Product(models.Model):
     def __str__(self):
         return '%s' % (self.name)
 
+    def delete(self):
+        self.image.delete()
+        self.thumbnail.delete()
+        return super().delete()
+
 
 class SubImage(models.Model):
     product = models.ForeignKey(
         Product, related_name='sub_images', on_delete=models.CASCADE)
     image = models.ImageField()
+
+    def delete(self):
+        self.image.delete()
+        return super().delete()
