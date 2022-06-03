@@ -8,6 +8,7 @@ rest_framework/
 __pycache__/
 db.sqlite3
 migrations/
+backend/apps/static/image
 # Node Module
 frontend/node_modules/
 # Blue_print

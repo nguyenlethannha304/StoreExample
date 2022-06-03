@@ -48,7 +48,7 @@ class ProductListView(APIView):
         offset = self.get_offset(
             *args, **kwargs) if self.get_offset(*args, **kwargs) else self.page_size
         page_num = math.ceil(count / offset)
-        if page > page_num:
+        if page > page_num and page_num != 0:
             page = page_num
         top = page*offset
         if top > count:
