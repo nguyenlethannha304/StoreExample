@@ -1,0 +1,12 @@
+<h3 class="d-flex align-items-center ps-4" style="min-height:3rem">Danh Mục</h3>
+<div class="category-container" style="min-height:60vh;">
+    <div class="category" *ngFor="let category of menuBarData">
+        <div class="category-name d-flex align-items-center">{{category.name}}<i class="ms-auto me-5 arrow-symbol down"></i></div>
+        <div class="type-container">
+            <div class="type" (click)="navigateToProductList(category.slug,'c')">Tất cả</div>
+            <div class="type" *ngFor="let type of category.types" (click)="navigateToProductList(type.slug, 't')">
+                {{type.name}}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+.category-name {
+    border:0.5px gray solid;
+    min-height: 3rem;
+    padding-left: 4rem;
+    font-size: 1.5rem;
+}
+.type-container {
+    display: none;
+    background-color: #f4f4f4;
+    height: 0;
+}
+.show > .type-container {
+    display: block;
+    height: auto;
+}
+.show .arrow-symbol {
+    transform: rotate(-45deg);
+}
+.type {
+    display: flex;
+    align-items: center;
+    min-height:2.5rem;
+    padding-left: 5rem;
+}

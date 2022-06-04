@@ -10,6 +10,7 @@ import { PaginationComponent } from './shared/components/pagination/pagination.c
 import { SimilarProductsComponent } from './shared/components/similar-products/similar-products.component';
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { MenuBarComponent } from './menu-bar/menu-bar.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
     SimilarProductsComponent,
     ProductListComponent,
     ProductDetailComponent,
+    MenuBarComponent,
   ],
   imports: [CommonModule, ProductsRoutingModule, ShareModule],
 })

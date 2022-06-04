@@ -11,7 +11,9 @@ export type Type = {
   id: number;
   name: string;
   slug: string;
-  categories: Category[];
+};
+export type MenuBar = Category & {
+  types: Pick<Type, 'name' | 'slug'>[];
 };
 
 export type Product = {

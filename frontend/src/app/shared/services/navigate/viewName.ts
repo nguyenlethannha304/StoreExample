@@ -2,7 +2,7 @@ export const viewNameObject = {
   home: '/',
   about: 'about',
   carts: 'carts',
-  menuBar: 'menuBar',
+  menuBar: 'products/menu-bar',
   // Product module
   products: 'products',
   //Users module
