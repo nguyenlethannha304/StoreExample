@@ -2,9 +2,11 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  OnInit,
   Renderer2,
   ViewChild,
 } from '@angular/core';
+import { CartService } from 'src/app/carts/cart.service';
 import {
   homeIcon,
   menubarIcon,
@@ -23,12 +25,20 @@ import { NavigateService } from 'src/app/shared/services/navigate/navigate.servi
       'height:4rem; width:100vw; background-color:hsl(var(--cl-background))',
   },
 })
-export class MobileBottomNavComponent implements AfterViewInit {
-  constructor(public navi: NavigateService, private render: Renderer2) {}
+export class MobileBottomNavComponent implements OnInit, AfterViewInit {
+  public cartCount = 0;
+  constructor(
+    public navi: NavigateService,
+    private render: Renderer2,
+    public cartService: CartService
+  ) {}
   @ViewChild('homeContainer') homeContainer: ElementRef;
   @ViewChild('menuBarContainer') menuBarContainer: ElementRef;
   @ViewChild('cartContainer') cartContainer: ElementRef;
   @ViewChild('userContainer') userContainer: ElementRef;
+  ngOnInit(): void {
+    this.cartCount = this.cartService.count;
+  }
   ngAfterViewInit(): void {
     this.render.setProperty(
       this.homeContainer.nativeElement,
@@ -50,5 +60,13 @@ export class MobileBottomNavComponent implements AfterViewInit {
       'innerHTML',
       userIcon
     );
+    this.calculate_left_attribute_cartCount();
+  }
+  calculate_left_attribute_cartCount() {
+    let cartIcon = this.cartContainer.nativeElement.querySelector('path');
+    let leftAttribute = cartIcon.getBoundingClientRect().x;
+    let countNumber =
+      this.cartContainer.nativeElement.parentNode.querySelector('.cart-count');
+    countNumber.style.left = `${leftAttribute + 32}px`;
   }
 }

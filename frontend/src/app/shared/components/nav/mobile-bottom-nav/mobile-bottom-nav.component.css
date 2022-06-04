@@ -7,3 +7,14 @@ a {
   height: 100%;
   width: 100%;
 }
+.cart-count {
+  top: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: white;
+  background-color: #FF850A;
+  font-size: 1.25rem;
+  font-weight: bold;
+  border-radius: 1rem;
+  border: 0.1px solid #FF850A;
+}

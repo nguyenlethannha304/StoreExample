@@ -1,4 +1,4 @@
 <div #homeContainer (click)="navi.navigateTo('home')"></div>
 <div #menuBarContainer (click)="navi.navigateTo('menuBar')" ></div>
-<div #cartContainer (click)="navi.navigateTo('carts')" ></div>
+<div><div #cartContainer (click)="navi.navigateTo('carts')" ></div><div class="cart-count position-absolute d-flex align-items-center justify-content-center">{{cartCount}}</div></div>
 <div #userContainer (click)="navi.navigateTo('users:panel')" ></div>

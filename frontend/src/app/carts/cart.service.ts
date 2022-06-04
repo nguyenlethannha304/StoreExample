@@ -108,6 +108,9 @@ class CartOfflineState implements CartState {
   }
   getCartItem$(): Observable<CartItem[]> {
     let cartItemList = this.getItemCartFromLocalStorage();
+    if (cartItemList == null || cartItemList == []) {
+      return of([]);
+    }
     return this.getRelatedProductFromBackend(cartItemList);
   }
 
