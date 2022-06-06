@@ -22,11 +22,15 @@ export class AuthTokenService {
   private _refreshToken: RefreshToken = '';
   private _refreshTokenSetTime: UNIXTime = 0;
   // Name to retrieve from LocalStorage
+  private _accessTokenName = 'access-token';
+  private _accessTokenSetTimeName = 'access-token-set-time';
   private _refreshTokenName = 'refresh-token';
   private _refreshTokenSetTimeName = 'refresh-token-set-time';
 
   private redirect: string;
   constructor(private http: HttpClient, private router: Router) {
+    [this._accessToken, this._accessTokenSetTime] =
+      this.getAccessTokenFromLocalStorage();
     [this._refreshToken, this._refreshTokenSetTime] =
       this.getRefreshTokenFromLocalStorage();
   }
@@ -85,6 +89,11 @@ export class AuthTokenService {
     this._accessToken = value;
     if (value != '') {
       this._accessTokenSetTime = new Date().getTime();
+      window.localStorage.setItem(this._accessTokenName, this._accessToken);
+      window.localStorage.setItem(
+        this._accessTokenSetTimeName,
+        this._accessTokenSetTime.toString()
+      );
     }
   }
   private get refreshToken(): RefreshToken {
@@ -119,6 +128,18 @@ export class AuthTokenService {
       duration += e.fullTimeExtend;
     }
     return tokenSetTime + duration + 10000 <= new Date().getTime(); // Add 10000 or 10 seconds
+  };
+  private getAccessTokenFromLocalStorage = (): [AccessToken, UNIXTime] => {
+    let accessToken = window.localStorage.getItem(this._accessTokenName);
+    if (accessToken != null) {
+      this._accessTokenSetTime = parseInt(
+        window.localStorage.getItem(this._accessTokenSetTimeName)
+      );
+    }
+    if (!this.isTokenExpire('access')) {
+      return [accessToken, this._accessTokenSetTime];
+    }
+    return ['', 0];
   };
   private getRefreshTokenFromLocalStorage = (): [RefreshToken, UNIXTime] => {
     let refreshToken = window.localStorage.getItem(this._refreshTokenName);
