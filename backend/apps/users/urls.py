@@ -16,11 +16,11 @@ urlpatterns = [
 ]
 api_users_urlpatterns = [
     # Pre Url /api/users/
-    path('check_email_exists', view=check_email_exists),
-    path('register', view=api_user_creation_view),
-    path('change_password', view=api_user_password_change_view),
-    path('get_city/<int:province_id>', view=api_get_city_view),
-    path('get_province', view=api_get_province_view),
-    path('profile', view=api_profile_view),
-    path('get_provinces_cities', view=api_get_provinces_cities),
+    path('check_email_exists/', view=check_email_exists),
+    path('register/', view=api_user_creation_view),
+    path('change_password/', view=api_user_password_change_view),
+    path('get_city/<int:province_id>/', view=api_get_city_view),
+    path('get_province/', view=api_get_province_view),
+    path('profile/', view=api_profile_view),
+    path('get_provinces_cities/', view=api_get_provinces_cities),
 ]
