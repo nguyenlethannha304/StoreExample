@@ -84,7 +84,7 @@ export class ChangePasswordComponent implements OnInit {
         }
       }
       this.http
-        .post<EmptyResponse>(`${e.api}/users/change_password`, body, {
+        .post<EmptyResponse>(`${e.api}/users/change_password/`, body, {
           headers: { Authorization: 'yes' },
           observe: 'body',
         })
