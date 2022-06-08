@@ -48,7 +48,7 @@ class ProfileView(APIView):
         province_data = self.get_province_data(address)
         rv_dict = {'phone': request.user.phone, 'street': address.street,
                    'province': province_data, 'city': city_data}
-        return Response(data=json.dumps(rv_dict))
+        return Response(data=rv_dict)
 
     def get_city_data(self, address):
         if address.city != None:
