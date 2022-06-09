@@ -53,21 +53,26 @@ export const Password: FactoryInterface<Password> = {
 // ADDRESS INFORMATION
 export type Address = {
   street: string;
+  city: City;
+  province: Province;
+};
+export type AddressForSubmit = {
+  street: string;
   city: City['id'];
   province: Province['id'];
 };
-export const Address: FactoryInterface<Address> = {
-  init(address: Address, provinceWithCityList: unknown) {
+export const AddressForSubmit: FactoryInterface<AddressForSubmit> = {
+  init(address: AddressForSubmit, provinceWithCityList: unknown) {
     return this.isValid(address, provinceWithCityList) ? address : null;
   },
-  isValid(address: Address, provinceWithCitiesList: unknown): boolean {
+  isValid(address: AddressForSubmit, provinceWithCitiesList: unknown): boolean {
     let ProvinceWithCitiesList = provinceWithCitiesList as ProvinceWithCities[];
     // Check if city belong to the province
     let addressProvince = ProvinceWithCitiesList.find(
-      (province) => province.id == address.province
+      (province) => province.id === address.province
     );
     let addressCity = addressProvince.cities.find(
-      (city) => city.id == address.city
+      (city) => city.id === address.city
     );
     if (addressCity) {
       return true;

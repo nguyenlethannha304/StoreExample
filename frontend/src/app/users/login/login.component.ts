@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   Component,
   ElementRef,
@@ -57,15 +58,19 @@ export class LoginComponent implements OnInit {
   get password() {
     return this.loginForm.get('password');
   }
-  renderLoginFormErrors = (errors: FormErrors) => {
-    renderErrorsFromBackend(errors, this.formErrorContainer, this.render);
+  renderLoginFormErrors = (errors: HttpErrorResponse) => {
+    let objectError: FormErrors;
+    if (errors.status == 401) {
+      objectError = {
+        detail: 'Sai mật khẩu hoặc tên đăng nhập.',
+      };
+    } else {
+      objectError = errors.error;
+    }
+    renderErrorsFromBackend(objectError, this.formErrorContainer, this.render);
   };
   onSubmit() {
     if (this.loginForm.valid) {
-      // let body = getBody(
-      //   { value: username, factory: Username },
-      //   { value: password, factory: Password }
-      // );
       try {
         var body = createObject(
           createKeyValueForObject('username', this.username.value, Username),
@@ -77,7 +82,6 @@ export class LoginComponent implements OnInit {
           return;
         }
       }
-      console.log(body);
       this.authTokenSer.login(
         body.username,
         body.password,

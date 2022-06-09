@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
   AfterViewInit,
   Component,
@@ -18,7 +18,7 @@ import {
   ProvinceWithCities,
   Profile,
   Phone,
-  Address,
+  AddressForSubmit,
 } from '../shared/interface/users';
 import { EmptyResponse } from 'src/app/shared/interface/empty-response';
 import { MessageService } from 'src/app/shared/services/message/message.service';
@@ -28,6 +28,10 @@ import {
   createKeyValueForObject,
   createObject,
 } from 'src/app/shared/interface/share';
+import { tap, zip } from 'rxjs';
+import { FormErrors } from 'src/app/shared/interface/errors';
+import { formErrorAdapter } from 'src/app/shared/utils/form-errors-adapter';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -36,20 +40,19 @@ import {
 export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private navSer: NavigateService,
+    private router: Router,
     public location: Location,
     private http: HttpClient,
     private render: Renderer2,
     private messageSer: MessageService
   ) {}
 
-  ngOnInit(): void {
-    this.getProvinesCitiesData();
-    this.getProfile();
-  }
+  ngOnInit(): void {}
   ngAfterViewInit(): void {
-    this.renderProvinces();
-    this.renderCities();
-    this.renderProfile();
+    zip(this.getProvinesCitiesData(), this.getProfile()).subscribe((_) => {
+      this.renderProvinces();
+      this.renderProfile();
+    });
   }
   ngOnDestroy(): void {}
   // FORM SECTION
@@ -83,6 +86,7 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
         return;
       }
     }
+    console.log(body);
     this.http
       .post<EmptyResponse>(
         `${e.api}/users/profile/`,
@@ -102,27 +106,24 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
             'Thông tin cá nhân thay đổi thành công'
           );
         },
-        error: (errors) => {
+        error: (httpError: HttpErrorResponse) => {
+          let errors: FormErrors = formErrorAdapter(httpError);
           renderErrorsFromBackend(errors, this.formErrorContainer, this.render);
         },
         complete: () => {
-          this.navSer.navigateTo('users:profile');
+          this.navSer.navigateTo('home');
         },
       });
   }
   getBodyOnSubmit() {
     let body = createObject(
-      createKeyValueForObject('phone', this.phone.value, Phone),
-      createKeyValueForObject(
-        'address',
-        {
-          street: this.street.value,
-          city: this.city.value,
-          province: this.province.value,
-        },
-        Address
-      )
-    ) as { phone: Phone; address: Address };
+      createKeyValueForObject('phone', this.phone.value),
+      createKeyValueForObject('address', {
+        street: this.street.value,
+        city: this.city.value,
+        province: this.province.value,
+      })
+    ) as { phone: Phone; address: AddressForSubmit };
     return body;
   }
   updateCityInformation() {
@@ -133,28 +134,32 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
   // GET PROFILE
   profile: Profile;
   getProfile() {
-    this.http
+    return this.http
       .get<Profile>(`${e.api}/users/profile/`, {
         headers: { Authorization: 'yes' },
       })
-      .subscribe((profile) => {
-        this.profile = profile;
-      });
+      .pipe(
+        tap((profile) => {
+          this.profile = profile;
+        })
+      );
   }
   renderProfile() {
     this.phone.setValue(this.profile.phone);
     this.street.setValue(this.profile.street);
-    this.province.setValue(this.profile.province);
-    this.city.setValue(this.profile.city);
+    this.province.setValue(this.profile.province['id']);
+    this.renderCities(); // re-render city values
+    this.city.setValue(this.profile.city['id']);
   }
   // GET PROVINCES AND CITIES => SAVE to this.provincesCitiesData$
   provincesCitiesData: ProvinceWithCities[];
   getProvinesCitiesData() {
-    this.http
+    return this.http
       .get<ProvinceWithCities[]>(`${e.api}/users/get_provinces_cities/`)
-      .subscribe((data) => {
-        this.provincesCitiesData = data;
-      });
+      .pipe(tap((data) => (this.provincesCitiesData = data)));
+    // .subscribe((data) => {
+    //   this.provincesCitiesData = data;
+    // });
   }
   renderProvinces() {
     Array.from(this.provincesCitiesData).forEach(

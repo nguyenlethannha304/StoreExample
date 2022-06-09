@@ -22,6 +22,7 @@ import {
   createKeyValueForObject,
   createObject,
 } from 'src/app/shared/interface/share';
+import { AuthTokenService } from 'src/app/shared/auth/auth-token.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -33,10 +34,13 @@ export class RegisterComponent implements OnInit {
     private http: HttpClient,
     private messageSer: MessageService,
     private navSer: NavigateService,
-    private render: Renderer2
+    private render: Renderer2,
+    private authTokenService: AuthTokenService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.authTokenService.logout();
+  }
   // FORM SECTION
   @ViewChild('formErrorContainer') formErrorContainer: ElementRef;
   registerForm = new FormGroup(
@@ -70,7 +74,7 @@ export class RegisterComponent implements OnInit {
       }
     }
     this.http
-      .post(`${e.api}/users/register`, body, { observe: 'response' })
+      .post(`${e.api}/users/register/`, body, { observe: 'response' })
       .subscribe({
         next: (response) => {
           this.messageSer.createSucessMessage(

@@ -1,4 +1,4 @@
-<form class="form-custom" [formGroup]="profileForm">
+<form class="form-custom" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
     <h1 class="color-cl-blue-light mb-4">Thông Tin Cá Nhân</h1>
     <div #formErrorContainer id="form-errors" class="error"></div>
     <!-- Phone Input -->
@@ -30,7 +30,7 @@
         </div>
     </div>
     <div class="button-container">
-        <button [ButtonElement]="'primary'">Lưu</button>
+        <button [ButtonElement]="'primary'" [Type]="'submit'">Lưu</button>
         <button [ButtonElement]="'secondary'" (click)="location.back()">Huỷ</button>
     </div>
 </form>
