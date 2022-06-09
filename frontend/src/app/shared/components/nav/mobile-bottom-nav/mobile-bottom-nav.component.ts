@@ -26,7 +26,7 @@ import { NavigateService } from 'src/app/shared/services/navigate/navigate.servi
   },
 })
 export class MobileBottomNavComponent implements OnInit, AfterViewInit {
-  public cartCount = 0;
+  cartCount: number = 0;
   constructor(
     public navi: NavigateService,
     private render: Renderer2,
@@ -37,7 +37,9 @@ export class MobileBottomNavComponent implements OnInit, AfterViewInit {
   @ViewChild('cartContainer') cartContainer: ElementRef;
   @ViewChild('userContainer') userContainer: ElementRef;
   ngOnInit(): void {
-    this.cartCount = this.cartService.count;
+    this.cartService.cartCount$.subscribe(
+      (cartCount) => (this.cartCount = cartCount)
+    );
   }
   ngAfterViewInit(): void {
     this.render.setProperty(

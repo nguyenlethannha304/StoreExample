@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CartItem } from './cart';
 import { AuthTokenService } from 'src/app/shared/auth/auth-token.service';
-import { Observable, of, map } from 'rxjs';
+import { Observable, of, map, AsyncSubject, Subject } from 'rxjs';
 import { MessageService } from '../shared/services/message/message.service';
 import { HttpClient, HttpStatusCode } from '@angular/common/http';
 import { environment as e } from 'src/environments/environment';
@@ -14,7 +14,7 @@ const RELATED_PRODUCT_URL = `${e.api}/carts/cart-product-information/`;
 })
 export class CartService {
   cartItemList: CartItem[] = [];
-  count: number;
+  cartCount$: Subject<number> = new Subject<number>();
   state: CartState;
   constructor(
     public authService: AuthTokenService,
@@ -23,13 +23,15 @@ export class CartService {
   ) {
     this.updateCart();
   }
-  updateCart() {
-    this.setCartState();
-    this.countCartItems();
+  async updateCart() {
+    let result = await this.setCartState();
+    result.subscribe((_) => this.countCartItems());
   }
   countCartItems(): void {
     let observable$ = this.state.countCartItem$();
-    observable$.subscribe((count) => (this.count = count));
+    observable$.subscribe((count) => {
+      this.cartCount$.next(count);
+    });
   }
   getCartItems(): void {
     let observable$ = this.state.getCartItem$();
@@ -84,6 +86,7 @@ export class CartService {
         this.state = new CartOfflineState(this);
       }
     });
+    return of(true);
   }
 }
 // --------------------
