@@ -65,7 +65,6 @@ class ProfileView(APIView):
     def post(self, request, *args, **kwargs):
         phone_serializer = PhoneSerializer(request, data=request.data)
         address_serializer = UserAddressSerializer(request, data=request.data)
-        breakpoint()
         if phone_serializer.is_valid() & address_serializer.is_valid():
             phone_serializer.save()
             address_serializer.save()
