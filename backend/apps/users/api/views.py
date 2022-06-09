@@ -65,13 +65,13 @@ class ProfileView(APIView):
     def post(self, request, *args, **kwargs):
         phone_serializer = PhoneSerializer(request, data=request.data)
         address_serializer = UserAddressSerializer(request, data=request.data)
-        if phone_serializer.is_valid() and address_serializer.is_valid():
+        breakpoint()
+        if phone_serializer.is_valid() & address_serializer.is_valid():
             phone_serializer.save()
             address_serializer.save()
             return Response(status=HTTPStatus.OK)
-        errors = phone_serializer.errors.update(address_serializer.errors)
-        json_errors = json.dumps(errors)
-        return Response(data=json_errors, status=HTTPStatus.UNPROCESSABLE_ENTITY)
+        total_errors = {**phone_serializer.errors, **address_serializer.errors}
+        return Response(data=total_errors, status=HTTPStatus.UNPROCESSABLE_ENTITY)
 
 
 api_profile_view = ProfileView.as_view()

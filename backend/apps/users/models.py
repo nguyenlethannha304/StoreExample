@@ -30,9 +30,9 @@ class Address(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     street = models.CharField(max_length=255, blank=True)
     province = models.ForeignKey(
-        Province, on_delete=models.SET_NULL, null=True, default=None)
+        Province, on_delete=models.SET_NULL, null=True, default=None, blank=True)
     city = models.ForeignKey(
-        City, on_delete=models.SET_NULL, null=True, default=None)
+        City, on_delete=models.SET_NULL, null=True, default=None, blank=True)
 
     def __bool__(self):
         if self.street and self.province and self.city:
@@ -96,3 +96,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self.address.delete()
+        return super().delete(*args, **kwargs)

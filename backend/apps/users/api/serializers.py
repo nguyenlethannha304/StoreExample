@@ -4,7 +4,7 @@ from rest_framework.serializers import Serializer, ValidationError
 from django.contrib.auth import get_user_model
 from django.core.exceptions import FieldDoesNotExist
 from apps.utils.tools import validate_phonenumber
-from ..models import Address, City, Province
+from ..models import Address, City, CustomUser, Province
 UserModel = get_user_model()
 __all__ = ['UserCreationSerializer',
            'PasswordChangeSerializer', 'PhoneSerializer', 'UserAddressSerializer', 'CitySerializer', 'ProvinceSerializer', 'ProvinceCitiesSerializer']
@@ -87,15 +87,23 @@ class PhoneSerializer(serializers.Serializer):
         # Attach user to self for later usage
         assert request.user.is_authenticated, ("User must be login")
         self.user = request.user
-        super().__init__(*args, **kwargs)
+        super().__init__(request, *args, **kwargs)
 
     def validate_phone(self, phone):
         # Check if phone is correct format
-        if phone == '':
+        if phone == None:
             return None
         if not (validate_phonenumber(phone)):
             raise ValidationError("Số điện thoại không hợp lệ")
+        if self.phone_number_exist(phone):
+            raise ValidationError("Số điện thoại đã được đăng ký")
         return phone
+
+    def phone_number_exist(self, phone):
+        phone_exist = CustomUser.objects.filter(phone=phone).exists()
+        if phone_exist and (self.user.phone != phone):
+            return True
+        return False
 
     def save(self):
         self.user.phone = self.validated_data['phone']
@@ -111,7 +119,7 @@ class UserAddressSerializer(serializers.ModelSerializer):
 
     def validate_city(self, value):
         # City is foreign key if it is blank => it is None
-        if value == '':
+        if value == None:
             return None
         return value
 
@@ -129,8 +137,6 @@ class UserAddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ('street', 'province', 'city',)
-        extra_kwargs = {'province': {'allow_null': True},
-                        'city': {'allow_null': True}}
 
 
 class CitySerializer(serializers.ModelSerializer):
