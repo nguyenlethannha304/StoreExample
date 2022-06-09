@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.hashers import make_password
 from rest_framework.test import APIClient, APITestCase
 from apps.users.api.serializers import *
 from django.test import tag
@@ -7,24 +6,24 @@ from apps.users.models import Province, City, Address
 from test.utils import new_data_with_change
 from http import HTTPStatus
 import json
-from model_bakery import baker
 from rest_framework.renderers import JSONRenderer
 from .. import setUpTestUserApp, tearDownTestUserApp
 UserModel = get_user_model()
 # --------------URL-----------------
 USERS_APP_URL = '/api/users/'
-CHECK_EMAIL_EXIST = USERS_APP_URL + 'check_email_exists'
-REGISTER_URL = USERS_APP_URL + 'register'
-CHANGE_PASSWORD_URL = USERS_APP_URL + 'change_password'
+CHECK_EMAIL_EXIST = USERS_APP_URL + 'check_email_exists/'
+REGISTER_URL = USERS_APP_URL + 'register/'
+CHANGE_PASSWORD_URL = USERS_APP_URL + 'change_password/'
 
 
 def get_city_url(number):
     return USERS_APP_URL + 'get_city/' + str(number)
 
 
-GET_PROVINCE_URL = USERS_APP_URL + 'get_province'
-PROFILE_URL = USERS_APP_URL + 'profile'
-GET_PROVINCES_CITIES_URL = USERS_APP_URL + 'get_provinces_cities'
+GET_PROVINCE_URL = USERS_APP_URL + 'get_province/'
+PROFILE_URL = USERS_APP_URL + 'profile/'
+GET_PROVINCES_CITIES_URL = USERS_APP_URL + 'get_provinces_cities/'
+GET_EMAIL_ADDRESS_URL = USERS_APP_URL + 'get_email_address/'
 # ------------------------
 
 
@@ -141,11 +140,6 @@ class TestGetCityAndProvince(APITestCase):
         data = JSONRenderer().render(response.data)
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
-    def test_get_city(self):
-        response = self.client.get(get_city_url('1'))
-        data = JSONRenderer().render(response.data)
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-
 
 @tag('user', 'user_api_view')
 class TestProfile(APITestCase):
@@ -194,3 +188,15 @@ class TestGetProvincesCities(APITestCase):
         response = self.request.get(GET_PROVINCES_CITIES_URL)
         data = JSONRenderer().render(response.data)
         self.assertEqual(response.status_code, HTTPStatus.OK)
+
+
+@tag('user', 'user_api_view')
+class TestGetEmailAddress(APITestCase):
+    def setUp(self):
+        self.request = APIClient()
+        user = UserModel.objects.get(email='testing_user@gmail.com')
+        self.request.force_authenticate(user=user)
+
+    def test_get_email_address(self):
+        response = self.request.get(GET_EMAIL_ADDRESS_URL)
+        self.assertEqual(response.data, 'testing_user@gmail.com')

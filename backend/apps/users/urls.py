@@ -2,7 +2,7 @@ import profile
 from django.urls import path, include
 from .views import (login_view, user_create_view,
                     password_change_view, profile_change_view, logout_view, check_email_exists, user_panel_view)
-from .api.views import (api_user_creation_view,
+from .api.views import (api_get_email_address, api_user_creation_view,
                         api_user_password_change_view, api_get_province_view, api_get_city_view, api_profile_view, api_get_provinces_cities)
 app_name = 'users'
 urlpatterns = [
@@ -23,4 +23,5 @@ api_users_urlpatterns = [
     path('get_province/', view=api_get_province_view),
     path('profile/', view=api_profile_view),
     path('get_provinces_cities/', view=api_get_provinces_cities),
+    path('get_email_address/', view=api_get_email_address)
 ]

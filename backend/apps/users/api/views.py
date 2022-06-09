@@ -96,3 +96,10 @@ def api_get_provinces_cities(request):
     query = Province.objects.prefetch_related('cities').all()
     serializer = ProvinceCitiesSerializer(query, many=True)
     return Response(data=serializer.data)
+
+
+@api_view(['GET'])
+def api_get_email_address(request):
+    if request.user.is_authenticated:
+        return Response(data=request.user.email)
+    return Response(status=401)
