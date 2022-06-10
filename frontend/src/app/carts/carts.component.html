@@ -17,7 +17,7 @@
 <div *ngIf="cartItemList.length" >
     <!-- Item-list -->
     <div class="item-cart-list" style="min-height:50vh">
-        <app-item-cart *ngFor="let item of cartItemList; trackBy:itemTrackBy" [item]="item" (changeQuantityRequest)="changeQuantityCartItem($event)" (deleteCartItemRequest)="deleteCartItem($event)"></app-item-cart>
+        <app-item-cart *ngFor="let item of cartItemList; trackBy:itemTrackBy" [item]="item" (changeQuantityRequest)="changeQuantityCartItem($event)" (deleteCartItemRequest)="confirmDeleteCartItem($event)"></app-item-cart>
     </div>
     <!-- Summary -->
     <div class="d-flex align-items-center p-2 border">

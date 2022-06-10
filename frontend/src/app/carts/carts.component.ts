@@ -59,6 +59,13 @@ export class CartsComponent implements OnInit, OnChanges {
       return cartItem;
     });
   }
+  confirmDeleteCartItem(id: string) {
+    let bindDeleteCartItem = this.deleteCartItem.bind(this, id);
+    this.messageService.createConfirmMessage(
+      'Bạn có muốn xoá sản phẩm này',
+      bindDeleteCartItem
+    );
+  }
   deleteCartItem(id: string) {
     this.cartService.deleteCartItems(id).subscribe((boolean) => {
       if (boolean) {
