@@ -160,17 +160,21 @@ class CartOfflineState implements CartState {
     id: string,
     quantity: number
   ): Observable<boolean> {
-    let cartItemList = this.getItemCartFromLocalStorage();
-    let newCartItemList = this.saveItemCartToList(id, quantity, cartItemList);
+    let cartItemList: Pick<CartItem, 'id' | 'quantity'>[] =
+      this.getItemCartFromLocalStorage();
+    if (cartItemList == null) {
+      cartItemList = [];
+    }
+    let newCartItemList = this.saveCartItemToList(id, quantity, cartItemList);
     window.localStorage.setItem('itemCart', JSON.stringify(newCartItemList));
     return of(true);
   }
-  private saveItemCartToList(
+  private saveCartItemToList(
     id: string,
     quantity: number,
     cartItemList: Pick<CartItem, 'id' | 'quantity'>[]
   ): Pick<CartItem, 'id' | 'quantity'>[] {
-    let newCartItemList = Object.assign({}, cartItemList);
+    let newCartItemList = cartItemList.slice();
     // Update item cart (item exists in the cart)
     for (let item of cartItemList) {
       if (item['id'] == id) {

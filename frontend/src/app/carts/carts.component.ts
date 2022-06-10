@@ -24,7 +24,7 @@ export class CartsComponent implements OnInit, OnChanges {
     });
     this.cartService.getCartItems();
     this.changeQuantityCartItem$
-      .pipe(debounceTime(2000))
+      .pipe(debounceTime(1000))
       .subscribe((cartItem) => {
         this.cartService.changeCartItemQuantity(cartItem.id, cartItem.quantity);
         this.updateCartItemAfterChangeQuantity(cartItem.id, cartItem.quantity);
