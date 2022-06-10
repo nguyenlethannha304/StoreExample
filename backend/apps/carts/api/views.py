@@ -55,7 +55,7 @@ class CartView(views.APIView):
     def put(self, request, *args, **kwargs):
         # Change quantity of cart_item in the cart
         data = {'id': request.data['cartitem_id'],
-                'quantity': request.data['quantity'], 'cart_id': request.user.pk}
+                'quantity': request.data['quantity'], 'cart_id': request.user.pk.__str__()}
         serializer = CartItemClientSerializer(data=data)
         if serializer.is_valid():
             query_result = serializer.update_quantity_of_cart_item()

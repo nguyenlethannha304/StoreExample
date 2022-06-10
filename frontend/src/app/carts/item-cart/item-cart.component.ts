@@ -1,4 +1,4 @@
-import { NONE_TYPE } from '@angular/compiler';
+import { environment as e } from 'src/environments/environment';
 import {
   AfterViewInit,
   Component,
@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { CartItem } from '../cart';
 import { trashIcon } from 'src/app/shared/services/icons/icons';
-import { debounceTime, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 @Component({
   selector: 'app-item-cart',
   templateUrl: './item-cart.component.html',
@@ -20,6 +20,7 @@ import { debounceTime, Subject } from 'rxjs';
   host: { class: 'd-flex p-1 ps-3 pe-3 m-0' },
 })
 export class ItemCartComponent implements OnInit, AfterViewInit {
+  public env = e;
   @Input('item') cartItem: CartItem;
   @Output() deleteCartItemRequest = new EventEmitter<string>();
   @Output() changeQuantityRequest = new EventEmitter<Partial<CartItem>>();
@@ -28,9 +29,9 @@ export class ItemCartComponent implements OnInit, AfterViewInit {
   constructor(private render: Renderer2) {
     // Delay send value when change quantity
     this.changeQuantitySubject = new Subject<Partial<CartItem>>();
-    this.changeQuantitySubject
-      .pipe(debounceTime(2000))
-      .subscribe((value) => this.changeQuantityRequest.emit(value));
+    this.changeQuantitySubject.subscribe((value) =>
+      this.changeQuantityRequest.emit(value)
+    );
   }
   ngOnInit(): void {
     this.quantity = this.cartItem.quantity;
@@ -46,6 +47,9 @@ export class ItemCartComponent implements OnInit, AfterViewInit {
     return this.cartItem.quantity * this.cartItem.product.price;
   }
   changeQuantity(value: number) {
+    if (this.quantity + value < 1) {
+      return;
+    }
     this.quantity += value;
     this.changeQuantitySubject.next({
       id: this.cartItem.id,

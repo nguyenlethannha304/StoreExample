@@ -1,4 +1,6 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { debounceTime, of, Subject } from 'rxjs';
+import { MessageService } from '../shared/services/message/message.service';
 import { CartItem } from './cart';
 import { CartService } from './cart.service';
 
@@ -8,12 +10,26 @@ import { CartService } from './cart.service';
   styleUrls: ['./carts.component.css'],
 })
 export class CartsComponent implements OnInit, OnChanges {
-  constructor(public cartService: CartService) {}
-  cartItemList: CartItem[];
-  totalPrice: number;
+  constructor(
+    public cartService: CartService,
+    private messageService: MessageService
+  ) {}
+  cartItemList: CartItem[] = [];
+  totalPrice: number = 0;
+  changeQuantityCartItem$ = new Subject<Partial<CartItem>>();
   ngOnInit(): void {
+    this.cartService.cartItemList$.subscribe((cartItemList) => {
+      this.cartItemList = cartItemList;
+      this.setTotalPrice();
+    });
     this.cartService.getCartItems();
-    this.cartItemList = this.cartService.cartItemList;
+    this.changeQuantityCartItem$
+      .pipe(debounceTime(2000))
+      .subscribe((cartItem) => {
+        this.cartService.changeCartItemQuantity(cartItem.id, cartItem.quantity);
+        this.updateCartItemAfterChangeQuantity(cartItem.id, cartItem.quantity);
+        this.setTotalPrice();
+      });
   }
   ngOnChanges(changes: SimpleChanges): void {
     this.setTotalPrice();
@@ -29,9 +45,36 @@ export class CartsComponent implements OnInit, OnChanges {
   }
   // App item cart output handlers
   changeQuantityCartItem({ id, quantity }: Partial<CartItem>) {
-    this.cartService.changeCartItemQuantity(id, quantity);
+    this.changeQuantityCartItem$.next({ id, quantity });
+  }
+  updateCartItemAfterChangeQuantity(
+    id: CartItem['id'],
+    quantity: CartItem['quantity']
+  ) {
+    this.cartItemList = this.cartItemList.map((cartItem) => {
+      if (cartItem.id == id) {
+        let newCartItem = Object.assign({}, cartItem, { quantity });
+        return newCartItem;
+      }
+      return cartItem;
+    });
   }
   deleteCartItem(id: string) {
-    this.cartService.deleteCartItems(id);
+    this.cartService.deleteCartItems(id).subscribe((boolean) => {
+      if (boolean) {
+        this.messageService.createSucessMessage('Đã xoá sản phẩm');
+        this.cartService.countCartItems();
+        this.updateCartItemAfterDeleteSuccessfully(id);
+      } else {
+        this.messageService.createErrorMessage(
+          'Hệ thống gặp sự cố vui lòng thử lại'
+        );
+      }
+    });
+  }
+  updateCartItemAfterDeleteSuccessfully(id: string) {
+    this.cartItemList = this.cartItemList.filter(
+      (cartItem) => cartItem.id != id
+    );
   }
 }

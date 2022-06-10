@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
 import { CartItem } from './cart';
 import { AuthTokenService } from 'src/app/shared/auth/auth-token.service';
-import { Observable, of, map, AsyncSubject, Subject } from 'rxjs';
+import { Observable, of, map, AsyncSubject, Subject, debounceTime } from 'rxjs';
 import { MessageService } from '../shared/services/message/message.service';
 import { HttpClient, HttpStatusCode } from '@angular/common/http';
 import { environment as e } from 'src/environments/environment';
 const COUNT_URL = `${e.api}/carts/count/`;
 const AUTH_CART_URL = `${e.api}/carts/`;
-const DELETE_AUTH_CART_ITEM_URL = `${e.api}/item-delete/`;
+const DELETE_AUTH_CART_ITEM_URL = `${e.api}/carts/item-delete/`;
 const RELATED_PRODUCT_URL = `${e.api}/carts/cart-product-information/`;
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
-  cartItemList: CartItem[] = [];
-  cartCount$: Subject<number> = new Subject<number>();
+  cartItemList$ = new Subject<CartItem[]>();
+  cartCount$ = new Subject<number>();
   state: CartState;
   constructor(
     public authService: AuthTokenService,
@@ -25,7 +25,9 @@ export class CartService {
   }
   async updateCart() {
     let result = await this.setCartState();
-    result.subscribe((_) => this.countCartItems());
+    result.subscribe((_) => {
+      this.countCartItems();
+    });
   }
   countCartItems(): void {
     let observable$ = this.state.countCartItem$();
@@ -33,9 +35,10 @@ export class CartService {
       this.cartCount$.next(count);
     });
   }
-  getCartItems(): void {
-    let observable$ = this.state.getCartItem$();
-    observable$.subscribe((cartItemList) => (this.cartItemList = cartItemList));
+  getCartItems() {
+    return this.state
+      .getCartItem$()
+      .subscribe((cartItemList) => this.cartItemList$.next(cartItemList));
   }
   validateCartItem(cartItem: CartItem): boolean {
     return true;
@@ -53,25 +56,13 @@ export class CartService {
       }
     });
   }
-  deleteCartItems(id: string) {
-    let observable$ = this.state.deleteCartItem(id);
-    observable$.subscribe((success) => {
-      if (success) {
-        this.cartItemList = this.cartItemList.filter(
-          (cartItem) => cartItem.id != id
-        );
-        this.countCartItems();
-      } else {
-        this.messageService.createErrorMessage(
-          'Hệ thống gặp sự cố vui lòng thử lại'
-        );
-      }
-    });
+  deleteCartItems(id: string): Observable<boolean> {
+    return this.state.deleteCartItem(id);
   }
   changeCartItemQuantity(id: string, quantity: number) {
     let observable$ = this.state.changeCartItemQuantity(id, quantity);
-    observable$.subscribe((success) => {
-      if (!success) {
+    observable$.subscribe((boolean) => {
+      if (!boolean) {
         this.messageService.createErrorMessage(
           'Hệ thống gặp sự cố vui lòng thử lại'
         );
@@ -229,7 +220,7 @@ class CartOnlineState implements CartState {
   }
   deleteCartItem(id: string): Observable<boolean> {
     return this.http
-      .delete(`${DELETE_AUTH_CART_ITEM_URL}${id}`, {
+      .delete(`${DELETE_AUTH_CART_ITEM_URL}${id}/`, {
         headers: { Authorization: 'yes' },
         observe: 'response',
       })
@@ -246,7 +237,7 @@ class CartOnlineState implements CartState {
     return this.http
       .put(
         AUTH_CART_URL,
-        { id: id, quantity: quantity },
+        { cartitem_id: id, quantity: quantity },
         { headers: { Authorization: 'yes' }, observe: 'response' }
       )
       .pipe(
