@@ -2,7 +2,7 @@
 <div class="message-container position-absolute translate-middle rounded p-3 shadow-lg bg-body" style="top:50vh; left:50vw; width:80vw">
     <div #iconContainer [ngClass]="!icon? 'd-none':''" class="ms-auto me-auto" style="height:2rem; width:2rem"></div>
     <div #contentContainer>
-        <p class="text-center fs-5">{{content}}</p>
+        <p class="text-center fs-5" style="white-space:pre-line">{{content}}</p>
     </div>
     <div [ngClass]="(!actionFunction)? 'd-none':''" class="d-flex justify-content-center ms-auto me-auto" >
         <button (click)="actionFunction()" [ButtonElement]="'primary'">Có</button>
