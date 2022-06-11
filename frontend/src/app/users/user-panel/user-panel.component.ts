@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import {
   AfterViewInit,
   Component,
@@ -8,6 +9,8 @@ import {
 } from '@angular/core';
 import { userIcon } from 'src/app/shared/services/icons/icons';
 import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
+import { Email } from '../shared/interface/users';
+import { environment as e } from 'src/environments/environment';
 @Component({
   selector: 'app-user-panel',
   templateUrl: './user-panel.component.html',
@@ -15,10 +18,21 @@ import { NavigateService } from 'src/app/shared/services/navigate/navigate.servi
 })
 export class UserPanelComponent implements OnInit, AfterViewInit {
   userIcon = userIcon;
+  userEmail: Email;
   @ViewChild('avatarIcon') avatarIconContainer: ElementRef;
-  constructor(public navSer: NavigateService, private render: Renderer2) {}
+  constructor(
+    public navSer: NavigateService,
+    private render: Renderer2,
+    private http: HttpClient
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.http
+      .get<string>(`${e.api}/users/get_email_address/`, {
+        headers: { Authorization: 'yes' },
+      })
+      .subscribe((email) => (this.userEmail = email));
+  }
   ngAfterViewInit(): void {
     this.render.setProperty(
       this.avatarIconContainer.nativeElement,

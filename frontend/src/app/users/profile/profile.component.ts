@@ -86,7 +86,6 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
         return;
       }
     }
-    console.log(body);
     this.http
       .post<EmptyResponse>(
         `${e.api}/users/profile/`,
