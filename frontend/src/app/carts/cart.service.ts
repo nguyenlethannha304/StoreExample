@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
-import { CartItem } from './cart';
+import { Injectable, OnChanges, SimpleChanges } from '@angular/core';
+import { Cart, CartItem } from './cart';
 import { AuthTokenService } from 'src/app/shared/auth/auth-token.service';
 import { Observable, of, map, AsyncSubject, Subject, debounceTime } from 'rxjs';
 import { MessageService } from '../shared/services/message/message.service';
 import { HttpClient, HttpStatusCode } from '@angular/common/http';
 import { environment as e } from 'src/environments/environment';
+import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
 const COUNT_URL = `${e.api}/carts/count/`;
 const AUTH_CART_URL = `${e.api}/carts/`;
 const DELETE_AUTH_CART_ITEM_URL = `${e.api}/carts/item-delete/`;
@@ -13,16 +14,43 @@ const RELATED_PRODUCT_URL = `${e.api}/carts/cart-product-information/`;
   providedIn: 'root',
 })
 export class CartService {
+  // CART ITEM LIST
+  private _cartItemList: CartItem[] = [];
+  get cartItemList() {
+    return this._cartItemList;
+  }
+  set cartItemList(cartItemList: CartItem[]) {
+    this._cartItemList = cartItemList;
+    this.setCartItemPrice();
+  }
+  // CART ITEM PRICE
+  private _cartItemPrice: number = 0;
+  get cartItemPrice() {
+    return this._cartItemPrice;
+  }
+  private setCartItemPrice() {
+    this._cartItemPrice = 0;
+    for (let item of this.cartItemList) {
+      this._cartItemPrice += item.quantity * item.product.price;
+    }
+  }
+  // Subject
   cartItemList$ = new Subject<CartItem[]>();
   cartCount$ = new Subject<number>();
+  // Cart State
   state: CartState;
+  //CONSTRUCTOR
   constructor(
     public authService: AuthTokenService,
     public messageService: MessageService,
     public http: HttpClient
   ) {
+    this.cartItemList$.subscribe((cartItemList) => {
+      this.cartItemList = cartItemList;
+    });
     this.updateCart();
   }
+
   async updateCart() {
     let result = await this.setCartState();
     result.subscribe((_) => {
@@ -56,8 +84,23 @@ export class CartService {
       }
     });
   }
-  deleteCartItems(id: string): Observable<boolean> {
-    return this.state.deleteCartItem(id);
+  deleteCartItems(id: string): void {
+    this.state.deleteCartItem(id).subscribe((boolean) => {
+      if (boolean) {
+        this.messageService.createSucessMessage('Đã xoá sản phẩm');
+        this.countCartItems();
+        this.updateCartAfterDeleteItem(id);
+      } else {
+        this.messageService.createErrorMessage(
+          'Hệ thống gặp sự cố vui lòng thử lại'
+        );
+      }
+    });
+  }
+  private updateCartAfterDeleteItem(id: string) {
+    this.cartItemList = this.cartItemList.filter(
+      (cartItem) => cartItem.id != id
+    );
   }
   changeCartItemQuantity(id: string, quantity: number) {
     let observable$ = this.state.changeCartItemQuantity(id, quantity);
@@ -66,7 +109,21 @@ export class CartService {
         this.messageService.createErrorMessage(
           'Hệ thống gặp sự cố vui lòng thử lại'
         );
+      } else {
+        this.updateCartItemAfterChangeQuantity(id, quantity);
       }
+    });
+  }
+  private updateCartItemAfterChangeQuantity(
+    id: CartItem['id'],
+    quantity: CartItem['quantity']
+  ) {
+    this.cartItemList = this.cartItemList.map((cartItem) => {
+      if (cartItem.id == id) {
+        let newCartItem = Object.assign({}, cartItem, { quantity });
+        return newCartItem;
+      }
+      return cartItem;
     });
   }
   private setCartState() {

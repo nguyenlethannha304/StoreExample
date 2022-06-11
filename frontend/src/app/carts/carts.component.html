@@ -4,7 +4,7 @@
     </h2>
 </div>
 <!-- Empty cart -->
-<div *ngIf="!cartItemList.length" class="center-element-container d-flex flex-column align-items-center m-5">
+<div *ngIf="!cartService.cartItemList.length" class="center-element-container d-flex flex-column align-items-center m-5">
     <div class="mt-4" style="height:12rem;width:12rem">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g id="Empty_Cart" data-name="Empty Cart"><path d="M29.89,5.5l-20,0C9.76,4.3,9.59,3.14,9.43,2H1.9l.54,2.48H6.77l3,20.82H26.64l.54-2.48H12.42c-.1-.73-.23-1.6-.37-2.57H27.63Z" style="fill:#00aeef"/><circle cx="23.64" cy="27.64" r="1.78" style="fill:#00aeef"/><circle cx="13.54" cy="27.64" r="1.78" style="fill:#00aeef"/><circle cx="15.67" cy="10.92" r="1.21" style="fill:#fff"/><circle cx="21.44" cy="10.92" r="1.21" style="fill:#fff"/><path d="M15,16.63a4.44,4.44,0,0,1,3.92-2.21,4.37,4.37,0,0,1,3.73,2.26,9.79,9.79,0,0,0-2.75-1.08,6.62,6.62,0,0,0-2.69.1" style="fill:#fff"/></g></svg>
     </div>
@@ -14,16 +14,16 @@
     </div>
 </div>
 <!-- Cart with goods -->
-<div *ngIf="cartItemList.length" >
+<div *ngIf="cartService.cartItemList" >
     <!-- Item-list -->
     <div class="item-cart-list" style="min-height:50vh">
-        <app-item-cart *ngFor="let item of cartItemList; trackBy:itemTrackBy" [item]="item" (changeQuantityRequest)="changeQuantityCartItem($event)" (deleteCartItemRequest)="confirmDeleteCartItem($event)"></app-item-cart>
+        <app-item-cart *ngFor="let item of cartService.cartItemList; trackBy:itemTrackBy" [item]="item" (changeQuantityRequest)="changeQuantityCartItem($event)" (deleteCartItemRequest)="confirmDeleteCartItem($event)"></app-item-cart>
     </div>
     <!-- Summary -->
     <div class="d-flex align-items-center p-2 border">
         <div class="ms-3">
             <p class="m-0 opacity-50 fw-bold">Tổng tiền hàng:</p>
-            <p class="m-0 fw-bold">{{totalPrice | currency}}</p>
+            <p class="m-0 fw-bold">{{cartService.cartItemPrice | currency}}</p>
         </div>
         <div class="action-button-container ms-auto me-2">
             <button [ButtonElement]="'primary'" class="rounded-pill p-0" style="width:10rem; height:2rem" (click)="validateCartItemAndNavigateToOrder()">Thanh toán</button>

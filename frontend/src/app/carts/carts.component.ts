@@ -10,57 +10,29 @@ import { CartService } from './cart.service';
   templateUrl: './carts.component.html',
   styleUrls: ['./carts.component.css'],
 })
-export class CartsComponent implements OnInit, OnChanges {
+export class CartsComponent implements OnInit {
   constructor(
     public cartService: CartService,
     private messageService: MessageService,
     private router: Router
   ) {}
-  cartItemList: CartItem[] = [];
-  totalPrice: number = 0;
   changeQuantityCartItem$ = new Subject<Partial<CartItem>>();
   ngOnInit(): void {
-    this.cartService.cartItemList$.subscribe((cartItemList) => {
-      this.cartItemList = cartItemList;
-      this.setTotalPrice();
-    });
     this.cartService.getCartItems();
     this.changeQuantityCartItem$
       .pipe(debounceTime(1000))
       .subscribe((cartItem) => {
         this.cartService.changeCartItemQuantity(cartItem.id, cartItem.quantity);
-        this.updateCartItemAfterChangeQuantity(cartItem.id, cartItem.quantity);
-        this.setTotalPrice();
       });
-  }
-  ngOnChanges(changes: SimpleChanges): void {
-    this.setTotalPrice();
   }
   itemTrackBy(index: number, cartItem: CartItem) {
     return cartItem.id;
-  }
-  private setTotalPrice() {
-    this.totalPrice = 0;
-    for (let item of this.cartItemList) {
-      this.totalPrice += item.quantity * item.product.price;
-    }
   }
   // App item cart output handlers
   public changeQuantityCartItem({ id, quantity }: Partial<CartItem>) {
     this.changeQuantityCartItem$.next({ id, quantity });
   }
-  private updateCartItemAfterChangeQuantity(
-    id: CartItem['id'],
-    quantity: CartItem['quantity']
-  ) {
-    this.cartItemList = this.cartItemList.map((cartItem) => {
-      if (cartItem.id == id) {
-        let newCartItem = Object.assign({}, cartItem, { quantity });
-        return newCartItem;
-      }
-      return cartItem;
-    });
-  }
+
   public confirmDeleteCartItem(id: string) {
     let bindDeleteCartItem = this.deleteCartItem.bind(this, id);
     this.messageService.createConfirmMessage(
@@ -69,22 +41,7 @@ export class CartsComponent implements OnInit, OnChanges {
     );
   }
   private deleteCartItem(id: string) {
-    this.cartService.deleteCartItems(id).subscribe((boolean) => {
-      if (boolean) {
-        this.messageService.createSucessMessage('Đã xoá sản phẩm');
-        this.cartService.countCartItems();
-        this.updateCartItemAfterDeleteSuccessfully(id);
-      } else {
-        this.messageService.createErrorMessage(
-          'Hệ thống gặp sự cố vui lòng thử lại'
-        );
-      }
-    });
-  }
-  private updateCartItemAfterDeleteSuccessfully(id: string) {
-    this.cartItemList = this.cartItemList.filter(
-      (cartItem) => cartItem.id != id
-    );
+    this.cartService.deleteCartItems(id);
   }
   public validateCartItemAndNavigateToOrder() {
     let errors: String[] = this.validateCartItem();
@@ -97,7 +54,7 @@ export class CartsComponent implements OnInit, OnChanges {
   }
   private validateCartItem(): String[] {
     let errors: String[] = [];
-    for (let cartItem of this.cartItemList) {
+    for (let cartItem of this.cartService.cartItemList) {
       if (cartItem.quantity > cartItem.product.quantity) {
         errors.push(`${cartItem.product.name} vượt quá số lượng cho phép`);
       }
