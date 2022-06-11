@@ -1,4 +1,5 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { debounceTime, of, Subject } from 'rxjs';
 import { MessageService } from '../shared/services/message/message.service';
 import { CartItem } from './cart';
@@ -12,7 +13,8 @@ import { CartService } from './cart.service';
 export class CartsComponent implements OnInit, OnChanges {
   constructor(
     public cartService: CartService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private router: Router
   ) {}
   cartItemList: CartItem[] = [];
   totalPrice: number = 0;
@@ -37,17 +39,17 @@ export class CartsComponent implements OnInit, OnChanges {
   itemTrackBy(index: number, cartItem: CartItem) {
     return cartItem.id;
   }
-  setTotalPrice() {
+  private setTotalPrice() {
     this.totalPrice = 0;
     for (let item of this.cartItemList) {
       this.totalPrice += item.quantity * item.product.price;
     }
   }
   // App item cart output handlers
-  changeQuantityCartItem({ id, quantity }: Partial<CartItem>) {
+  public changeQuantityCartItem({ id, quantity }: Partial<CartItem>) {
     this.changeQuantityCartItem$.next({ id, quantity });
   }
-  updateCartItemAfterChangeQuantity(
+  private updateCartItemAfterChangeQuantity(
     id: CartItem['id'],
     quantity: CartItem['quantity']
   ) {
@@ -59,14 +61,14 @@ export class CartsComponent implements OnInit, OnChanges {
       return cartItem;
     });
   }
-  confirmDeleteCartItem(id: string) {
+  public confirmDeleteCartItem(id: string) {
     let bindDeleteCartItem = this.deleteCartItem.bind(this, id);
     this.messageService.createConfirmMessage(
       'Bạn có muốn xoá sản phẩm này',
       bindDeleteCartItem
     );
   }
-  deleteCartItem(id: string) {
+  private deleteCartItem(id: string) {
     this.cartService.deleteCartItems(id).subscribe((boolean) => {
       if (boolean) {
         this.messageService.createSucessMessage('Đã xoá sản phẩm');
@@ -79,9 +81,27 @@ export class CartsComponent implements OnInit, OnChanges {
       }
     });
   }
-  updateCartItemAfterDeleteSuccessfully(id: string) {
+  private updateCartItemAfterDeleteSuccessfully(id: string) {
     this.cartItemList = this.cartItemList.filter(
       (cartItem) => cartItem.id != id
     );
+  }
+  public validateCartItemAndNavigateToOrder() {
+    let errors: String[] = this.validateCartItem();
+    if (errors.length > 0) {
+      let textError = errors.join('\n');
+      this.messageService.createErrorMessage(textError, 5);
+      return;
+    }
+    this.router.navigate(['orders', 'place-order']);
+  }
+  private validateCartItem(): String[] {
+    let errors: String[] = [];
+    for (let cartItem of this.cartItemList) {
+      if (cartItem.quantity > cartItem.product.quantity) {
+        errors.push(`${cartItem.product.name} vượt quá số lượng cho phép`);
+      }
+    }
+    return errors;
   }
 }

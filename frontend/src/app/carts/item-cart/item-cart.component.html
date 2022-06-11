@@ -3,7 +3,11 @@
 </div>
 <div class="cart-item-information ps-3 me-2">
     <div class="name-and-delete-container d-flex align-content-center">
-        <h6 class="name m-0 text-capitalize" style="height:50%">{{cartItem.product.name}}</h6>
+        <h6 class="name m-0 text-capitalize" style="height:50%">
+            {{cartItem.product.name}}
+            <p *ngIf="cartItem.product.quantity == 0" class="text-danger">(Hết hàng)</p>
+            <p *ngIf="quantity > cartItem.product.quantity" class="text-danger">(Chỉ còn {{cartItem.product.quantity}} món)</p>
+        </h6>
         <div #deleteContainer class="delete move-down-when-click ms-auto" (click)="deleteCartItem()" style="height: 1.5rem;"></div>
     </div>
     <div class="p-1 ms-auto d-flex">

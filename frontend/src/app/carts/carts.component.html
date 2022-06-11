@@ -26,7 +26,7 @@
             <p class="m-0 fw-bold">{{totalPrice | currency}}</p>
         </div>
         <div class="action-button-container ms-auto me-2">
-            <button [ButtonElement]="'primary'" class="rounded-pill p-0" style="width:10rem; height:2rem">Thanh toán</button>
+            <button [ButtonElement]="'primary'" class="rounded-pill p-0" style="width:10rem; height:2rem" (click)="validateCartItemAndNavigateToOrder()">Thanh toán</button>
         </div>
     </div>
 </div>

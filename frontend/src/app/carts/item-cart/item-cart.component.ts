@@ -13,6 +13,7 @@ import {
 import { CartItem } from '../cart';
 import { trashIcon } from 'src/app/shared/services/icons/icons';
 import { Subject } from 'rxjs';
+import { MessageService } from 'src/app/shared/services/message/message.service';
 @Component({
   selector: 'app-item-cart',
   templateUrl: './item-cart.component.html',
@@ -26,7 +27,10 @@ export class ItemCartComponent implements OnInit, AfterViewInit {
   @Output() changeQuantityRequest = new EventEmitter<Partial<CartItem>>();
   quantity: CartItem['quantity'];
   changeQuantitySubject: Subject<Partial<CartItem>>;
-  constructor(private render: Renderer2) {
+  constructor(
+    private render: Renderer2,
+    private messageService: MessageService
+  ) {
     // Delay send value when change quantity
     this.changeQuantitySubject = new Subject<Partial<CartItem>>();
     this.changeQuantitySubject.subscribe((value) =>
@@ -48,6 +52,11 @@ export class ItemCartComponent implements OnInit, AfterViewInit {
   }
   changeQuantity(value: number) {
     if (this.quantity + value < 1) {
+      this.deleteCartItemRequest.emit(this.cartItem.id);
+      return;
+    }
+    if (this.quantity + value > this.cartItem.product.quantity && value > 0) {
+      this.messageService.createErrorMessage('Vượt quá số lượng cho phép');
       return;
     }
     this.quantity += value;
