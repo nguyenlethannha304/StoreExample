@@ -33,13 +33,15 @@ export interface CreateKeyValueFromFactory<T> {
   keyName: string;
   value: T;
   factory: FactoryInterface<T>;
+  arg: unknown;
 }
 export const createKeyValueForObject = (
   keyName: string,
   value: any,
-  factory: FactoryInterface<any> = null
+  factory: FactoryInterface<any> = null,
+  arg: unknown = null
 ): CreateKeyValueFromFactory<any> => {
-  return { keyName, value, factory };
+  return { keyName, value, factory, arg };
 };
 export const createObject = (
   ...fields: CreateKeyValueFromFactory<any>[]
@@ -48,7 +50,7 @@ export const createObject = (
   for (let field of fields) {
     if (field.factory != null) {
       object = Object.assign(object, {
-        [field.keyName]: field.factory.init(field.value),
+        [field.keyName]: field.factory.init(field.value, field.arg),
       });
     } else {
       object = Object.assign(object, { [field.keyName]: field.value });

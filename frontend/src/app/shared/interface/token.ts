@@ -9,3 +9,6 @@ export interface AuthError {
   detail: string;
 }
 export type UNIXTime = number;
+export type ObjectWrapAccessToken = {
+  access: AccessToken;
+};
