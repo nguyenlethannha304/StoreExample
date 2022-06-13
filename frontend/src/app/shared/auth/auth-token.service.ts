@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
-import { catchError, Observable, of, tap } from 'rxjs';
+import { catchError, Observable, of, tap, map } from 'rxjs';
 import { environment as e } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import {
   AccessToken,
   TokenPair,
   RefreshToken,
   UNIXTime,
+  ObjectWrapAccessToken,
 } from '../interface/token';
 import { FormErrors } from '../interface/errors';
 const TOKEN_PAIR_URL = `${e.api}/token/token_pair/`; // Post username and password to get token pair
@@ -29,15 +30,15 @@ export class AuthTokenService {
 
   private redirect: string;
   constructor(private http: HttpClient, private router: Router) {
-    [this._accessToken, this._accessTokenSetTime] =
-      this.getAccessTokenFromLocalStorage();
     [this._refreshToken, this._refreshTokenSetTime] =
       this.getRefreshTokenFromLocalStorage();
+    [this._accessToken, this._accessTokenSetTime] =
+      this.getAccessTokenFromLocalStorage();
   }
   login = (
     username: string,
     password: string,
-    errorShownFunc: (body: FormErrors) => void,
+    errorShownFunc: (body: HttpErrorResponse) => void,
     redirect: string
   ) => {
     // submit username and password to server to get 2 tokens
@@ -70,6 +71,7 @@ export class AuthTokenService {
     // Clear token and navigate to homepage
     this.accessToken = '';
     this.refreshToken = '';
+    window.localStorage.setItem(this._accessTokenName, '');
     window.localStorage.setItem(this._refreshTokenName, '');
   };
   get accessToken$(): Observable<AccessToken> {
@@ -159,12 +161,12 @@ export class AuthTokenService {
   };
   private sendRefreshToServerToGetAccessToken() {
     return this.http
-      .post<AccessToken>(REFRESH_TOKEN_URL, {
+      .post<ObjectWrapAccessToken>(REFRESH_TOKEN_URL, {
         refresh: this.refreshToken,
       })
       .pipe(
+        map((objectWrapAccessToken) => objectWrapAccessToken.access),
         tap((accessToken) => {
-          // Save token after getting from server
           this.accessToken = accessToken;
         }),
         catchError((err, caught) => of(''))
