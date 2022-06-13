@@ -4,22 +4,13 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  OnDestroy,
-  OnInit,
   Renderer2,
   ViewChild,
 } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { isPhoneNumberValid } from '../shared/validate/validate';
 import { environment as e } from 'src/environments/environment';
-import {
-  City,
-  Province,
-  ProvinceWithCities,
-  Profile,
-  Phone,
-  AddressForSubmit,
-} from '../shared/interface/users';
+import { Profile, Phone, AddressForSubmit } from '../shared/interface/users';
 import { EmptyResponse } from 'src/app/shared/interface/empty-response';
 import { MessageService } from 'src/app/shared/services/message/message.service';
 import { renderErrorsFromBackend } from 'src/app/shared/common-function';
@@ -31,17 +22,15 @@ import {
 import { tap, zip } from 'rxjs';
 import { FormErrors } from 'src/app/shared/interface/errors';
 import { formErrorAdapter } from 'src/app/shared/utils/form-errors-adapter';
-import { Router } from '@angular/router';
 import { AddressService } from 'src/app/shared/services/addresss/address.service';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })
-export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ProfileComponent implements AfterViewInit {
   constructor(
     private navSer: NavigateService,
-    private router: Router,
     public addressService: AddressService,
     public location: Location,
     private http: HttpClient,
@@ -49,9 +38,6 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
     private messageSer: MessageService
   ) {}
 
-  ngOnInit(): void {
-    this.addressService.getProvinceCityData$();
-  }
   ngAfterViewInit(): void {
     zip(
       this.getProfile(),
@@ -61,7 +47,6 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
       this.renderProfile();
     });
   }
-  ngOnDestroy(): void {}
   updateCityInformation() {
     this.addressService.getCityData(this.province.value);
     this.city.setValue('');
@@ -89,12 +74,9 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
         this.city.setValue(this.profile.city.id);
       }
     }
-    // this.renderCities(); // re-render city values
   }
   // FORM SECTION
   @ViewChild('formErrorContainer') formErrorContainer: ElementRef;
-  @ViewChild('provinceSelect') provinceSelect: ElementRef;
-  @ViewChild('citySelect') citySelect: ElementRef;
   profileForm = new FormGroup({
     phone: new FormControl('', isPhoneNumberValid()),
     street: new FormControl(''),
