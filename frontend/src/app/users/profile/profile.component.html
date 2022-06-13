@@ -20,12 +20,16 @@
     <div style="width:65%" class="d-flex">
         <div InputContainer class="half-input-container">
             <label for="province-input">Tỉnh</label>
-            <select (change)="updateCityInformation()" #provinceSelect InputElement id="province-input" formControlName="province">
+            <select  #provinceSelect InputElement id="province-input" formControlName="province" (change)="updateCityInformation()">
+                <option value="" >Chọn tỉnh</option>
+                <option *ngFor="let province of addressService.provinceCityData" value="{{province.id}}">{{province.name}}</option>
             </select>
         </div>
         <div InputContainer class="half-input-container">
             <label for="city-input">Thành Phố</label>
-            <select #citySelect InputElement id="city-input" formControlName="city">
+            <select #citySelect InputElement id="city-input" formControlName="city" >
+                <option value="" >Chọn thành phố</option>
+                <option *ngFor="let city of addressService.cityData" value="{{city.id}}">{{city.name}}</option>
             </select>
         </div>
     </div>

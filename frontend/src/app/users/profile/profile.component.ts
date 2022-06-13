@@ -32,6 +32,7 @@ import { tap, zip } from 'rxjs';
 import { FormErrors } from 'src/app/shared/interface/errors';
 import { formErrorAdapter } from 'src/app/shared/utils/form-errors-adapter';
 import { Router } from '@angular/router';
+import { AddressService } from 'src/app/shared/services/addresss/address.service';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -41,20 +42,55 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private navSer: NavigateService,
     private router: Router,
+    public addressService: AddressService,
     public location: Location,
     private http: HttpClient,
     private render: Renderer2,
     private messageSer: MessageService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.addressService.getProvinceCityData$();
+  }
   ngAfterViewInit(): void {
-    zip(this.getProvinesCitiesData(), this.getProfile()).subscribe((_) => {
-      this.renderProvinces();
+    zip(
+      this.getProfile(),
+      this.addressService.getProvinceCityData$()
+    ).subscribe((_) => {
+      // this.renderProvinces();
       this.renderProfile();
     });
   }
   ngOnDestroy(): void {}
+  updateCityInformation() {
+    this.addressService.getCityData(this.province.value);
+    this.city.setValue('');
+  }
+  // GET PROFILE
+  profile: Profile;
+  getProfile() {
+    return this.http
+      .get<Profile>(`${e.api}/users/profile/`, {
+        headers: { Authorization: 'yes' },
+      })
+      .pipe(
+        tap((profile) => {
+          this.profile = profile;
+        })
+      );
+  }
+  private renderProfile() {
+    this.phone.setValue(this.profile.phone);
+    this.street.setValue(this.profile.street);
+    if (this.profile.province.id.toString() != '') {
+      this.province.setValue(this.profile.province.id);
+      this.updateCityInformation();
+      if (this.profile.city.id.toString() != '') {
+        this.city.setValue(this.profile.city.id);
+      }
+    }
+    // this.renderCities(); // re-render city values
+  }
   // FORM SECTION
   @ViewChild('formErrorContainer') formErrorContainer: ElementRef;
   @ViewChild('provinceSelect') provinceSelect: ElementRef;
@@ -124,92 +160,5 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
       })
     ) as { phone: Phone; address: AddressForSubmit };
     return body;
-  }
-  updateCityInformation() {
-    this.profile.province = this.province.value;
-    this.renderCities();
-    this.city.setValue(0);
-  }
-  // GET PROFILE
-  profile: Profile;
-  getProfile() {
-    return this.http
-      .get<Profile>(`${e.api}/users/profile/`, {
-        headers: { Authorization: 'yes' },
-      })
-      .pipe(
-        tap((profile) => {
-          this.profile = profile;
-        })
-      );
-  }
-  renderProfile() {
-    this.phone.setValue(this.profile.phone);
-    this.street.setValue(this.profile.street);
-    this.province.setValue(this.profile.province['id']);
-    this.renderCities(); // re-render city values
-    this.city.setValue(this.profile.city['id']);
-  }
-  // GET PROVINCES AND CITIES => SAVE to this.provincesCitiesData$
-  provincesCitiesData: ProvinceWithCities[];
-  getProvinesCitiesData() {
-    return this.http
-      .get<ProvinceWithCities[]>(`${e.api}/users/get_provinces_cities/`)
-      .pipe(tap((data) => (this.provincesCitiesData = data)));
-    // .subscribe((data) => {
-    //   this.provincesCitiesData = data;
-    // });
-  }
-  renderProvinces() {
-    Array.from(this.provincesCitiesData).forEach(
-      (province: ProvinceWithCities) => {
-        this.renderProvince(province);
-      }
-    );
-  }
-  // RENDER new CITIES IF PROVINCE is CHANGED
-  renderCities() {
-    let current_province_id: number = this.province.value
-      ? this.province.value
-      : this.profile.province;
-    if (current_province_id == null) {
-      return;
-    }
-    // Remove all options of City Select before Render new Cities
-    let childrenElements =
-      this.citySelect.nativeElement.querySelectorAll('option');
-    Array.from(childrenElements).forEach((child) =>
-      this.render.removeChild(this.citySelect.nativeElement, child)
-    );
-    // Render new Cities corresponding to new Province
-    Array.from(this.provincesCitiesData).forEach(
-      (province: ProvinceWithCities) => {
-        if (province.id == current_province_id) {
-          Array.from(province.cities).forEach((city: City) => {
-            this.renderCity(city);
-          });
-        }
-      }
-    );
-  }
-  // SUPPORTED FUNCTIONS
-  renderProvince(
-    provinceData: Province | ProvinceWithCities,
-    setValueToForm: boolean = false
-  ) {
-    let provinceSelect = this.provinceSelect.nativeElement;
-    let optionElement = this.render.createElement('option');
-    let optionText = this.render.createText(provinceData['name']);
-    this.render.setProperty(optionElement, 'value', provinceData['id']);
-    this.render.appendChild(optionElement, optionText);
-    this.render.appendChild(provinceSelect, optionElement);
-  }
-  renderCity(cityData: City, setValueToForm: boolean = false) {
-    let citySelect = this.citySelect.nativeElement;
-    let optionElement = this.render.createElement('option');
-    let optionText = this.render.createText(cityData['name']);
-    this.render.setProperty(optionElement, 'value', cityData['id']);
-    this.render.appendChild(optionElement, optionText);
-    this.render.appendChild(citySelect, optionElement);
   }
 }

@@ -93,4 +93,9 @@ export type City = {
   province: number;
 };
 // PROFILE INFORMATION
-export type Profile = { phone: Phone } & Address;
+export type Profile = {
+  phone: Phone;
+  street: string;
+  province: Province;
+  city: City;
+};
