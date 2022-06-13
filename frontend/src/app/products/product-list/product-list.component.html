@@ -1,2 +1,2 @@
 <app-product-list-render [products]="products"></app-product-list-render>
-<app-pagination [count]="count" [offset]="offset" (changePage)="changeToPage($event)"></app-pagination>
+<app-pagination *ngIf="count > offset" [count]="count" [offset]="offset" (changePage)="changeToPage($event)"></app-pagination>

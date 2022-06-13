@@ -12,6 +12,8 @@ import {
   starIcon,
   starLinearGradient,
 } from 'src/app/shared/services/icons/icons';
+import { environment as e } from 'src/environments/environment';
+import { CartService } from 'src/app/carts/cart.service';
 @Component({
   selector: 'app-product-detail-render',
   templateUrl: './product-detail-render.component.html',
@@ -19,14 +21,25 @@ import {
 })
 export class ProductDetailComponentRender implements OnInit, AfterViewInit {
   @Input() product: ProductDetail;
-
-  constructor(private render: Renderer2, private hostElementRef: ElementRef) {}
+  public environment = e;
+  constructor(
+    private render: Renderer2,
+    private hostElementRef: ElementRef,
+    private cartService: CartService
+  ) {}
   @ViewChild('stars') stars: ElementRef;
   ngOnInit(): void {}
   ngAfterViewInit(): void {
     this.renderStars();
-    this.preProcessDescription();
+    if (this.product.description) {
+      this.preProcessDescription();
+    }
   }
+  // CART SERVICE
+  addToCart() {
+    this.cartService.addCartItems(this.product.id, 1);
+  }
+  // RENDER RATING
   renderStars() {
     this.renderGradientForStars();
     let totalStar: string = '';

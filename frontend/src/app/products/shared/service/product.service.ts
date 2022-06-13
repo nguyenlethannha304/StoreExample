@@ -18,11 +18,11 @@ export class ProductService {
     // slug of type or category
     // kind = 't' => get products based on type; kind = 'c' => get products based on category
     return this.httpClient.get<ProductCardList>(
-      `${e.api}/products/${kind}/${slug}?page=${page}&offset=${offset}`
+      `${e.api}/products/${kind}/${slug}/?page=${page}&offset=${offset}`
     );
   }
   getProductDetail(uuid: UUID) {
     // Get a specific products
-    return this.httpClient.get<ProductDetail>(`${e.api}/products/${uuid}`);
+    return this.httpClient.get<ProductDetail>(`${e.api}/products/${uuid}/`);
   }
 }

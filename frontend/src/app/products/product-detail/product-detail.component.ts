@@ -1,27 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { map, tap } from 'rxjs';
 import { ProductCard, ProductDetail } from '../shared/interface/products';
 import { ProductService } from '../shared/service/product.service';
-
+import { environment as e } from 'src/environments/environment';
 @Component({
   selector: 'app-product-detail',
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.css'],
 })
 export class ProductDetailComponent implements OnInit {
-  constructor(private productService: ProductService) {}
-  product: ProductDetail = {
-    id: '85dcddf6-7de2-41fc-8564-f11be363b9dc',
-    name: 'plastic table',
-    rating: 3.8,
-    rating_count: 20,
-    price: 620765289,
-    old_price: 1323584914,
-    quantity: 963476691,
-    image: null,
-    description:
-      'ipERmngwytfcgMAtwGGncTPVlkwMuzBfIkNWsqYmMyUXmaBXvsfYzYUuAUrKravzyaUFwXIrXLohfTpYAqWbwdGnmPRVFHvqxJgwhpXrZzBQztgBnenWGLkCJPFiHBVWCmwyCYVExzYYyUTmXLxFqDGeKFhcYsOhkTCyvmGZOQsEypZAYHFuWwAeFaZgktTpeuCLfiyBEoKxqueAUUysNcbQTOQDwSYtmVtZFnWrcjVOiyljGWSjRsaqwjqJelwElXWcStvwaKqRMKjFOQLgbHNOnIjGtyQlsGuRYwoBFSMs',
-    type: 2,
-  };
+  constructor(
+    private productService: ProductService,
+    private route: ActivatedRoute
+  ) {}
+  uuid: ProductDetail['id'];
+  product: ProductDetail;
   similarProducts: ProductCard[] = [
     {
       id: 'bfaab8db-d97b-4582-8f18-c8afd5417513',
@@ -54,5 +48,14 @@ export class ProductDetailComponent implements OnInit {
       thumbnail: null,
     },
   ];
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.route.params.subscribe((value) =>
+      this.getProductDetail(value['uuid'])
+    );
+  }
+  getProductDetail(uuid: ProductDetail['id']) {
+    this.productService.getProductDetail(uuid).subscribe((responseBody) => {
+      this.product = responseBody;
+    });
+  }
 }

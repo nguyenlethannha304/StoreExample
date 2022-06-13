@@ -29,6 +29,7 @@ export type Product = {
   thumbnail: string;
   description: string;
   type: Type['id'];
+  sub_images: string[];
 };
 
 type Rating = number;
@@ -61,4 +62,5 @@ export type ProductDetail = Pick<
   | 'image'
   | 'description'
   | 'type'
+  | 'sub_images'
 >;

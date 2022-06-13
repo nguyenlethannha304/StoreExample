@@ -2,12 +2,10 @@
     <!-- Image -->
     <div id="image-container" class="d-flex p-0 m-0">
         <!-- Contain images -->
-        <ng-template *ngIf="product.image; else elseBlock">
-            <img src="{{image}}" alt="" *ngFor="let image of product.image" >
-        </ng-template>
+        <img src="{{environment.django}}{{product.image}}" alt="" *ngIf="product.image">
         <!-- Not images -->
-        <ng-template #elseBlock>
-            <img src="" alt="">
+        <ng-template>
+            
         </ng-template>
     </div>
     <!-- Product infor -->
@@ -26,7 +24,7 @@
         </div>
         <!-- Action -->
         <div class="action-buttons">
-            <button [ButtonElement]="'primary'" style="width:8rem">Thêm Vào Giỏ</button>
+            <button [ButtonElement]="'primary'" style="width:8rem" (click)="addToCart()">Thêm Vào Giỏ</button>
             <button [ButtonElement]="'secondary'">Yêu Thích</button>
         </div>
     </div>
