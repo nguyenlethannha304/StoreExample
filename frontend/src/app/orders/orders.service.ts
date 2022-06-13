@@ -11,12 +11,13 @@ import { OrderItem, Order } from './orders';
 import { environment as e } from 'src/environments/environment';
 import { AuthTokenService } from '../shared/auth/auth-token.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CartItem } from '../carts/cart';
 const PLACE_ORDER_URL = `${e.api}/orders/place-order/`;
 @Injectable({
   providedIn: 'root',
 })
 export class OrdersService {
-  orderItems: OrderItem[] = [];
+  public orderItems: OrderItem[] = [];
   private totalItemPrice: Order['item_price'];
   private shippingPrice: Order['shipping_fee'];
   constructor(
@@ -27,33 +28,29 @@ export class OrdersService {
     private router: Router,
     private route: ActivatedRoute
   ) {}
-  setUp() {
-    this.setOrderItems();
-  }
-  getOrderItems(): OrderItem[] {
-    return this.orderItems;
-  }
-  private setOrderItems(): void {
-    let result: OrderItem[] = [];
+  public getCartItemForDisplay(): CartItem[] {
+    let result: CartItem[] = [];
     for (let cartItem of this.cartService.cartItemList) {
-      if (this.cartService.validateCartItem(cartItem)) {
-        result.push(OrderItem.convert(cartItem));
+      if (this.validateCartItem(cartItem)) {
+        result.push(cartItem);
       }
     }
-    this.orderItems = result;
+    return result;
   }
-  submitOrder(
-    email: Email,
-    phone_number: Phone,
-    address: Address,
-    use_profile_contact: boolean
-  ) {
-    let body = this.createBodyData(
-      email,
-      phone_number,
-      address,
-      use_profile_contact
-    );
+  public setOrderItems(): void {
+    this.clearOrderItem();
+    this.cartService.cartItemList$.subscribe((cartItemList) => {
+      for (let cartItem of cartItemList) {
+        if (this.validateCartItem(cartItem)) {
+          this.orderItems.push(OrderItem.convert(cartItem));
+        }
+      }
+    });
+  }
+  private validateCartItem(cartItem: CartItem) {
+    return true;
+  }
+  submitOrder(body: Order) {
     let isLogin = this.authService.isLogin(true) ? 'yes' : null;
     this.http
       .post(PLACE_ORDER_URL, body, {
@@ -72,30 +69,7 @@ export class OrdersService {
         }
       });
   }
-  private createBodyData(
-    email: Email,
-    phone_number: Phone,
-    address: Address,
-    use_profile_contact: boolean
-  ) {
-    try {
-      let body = createObject(
-        createKeyValueForObject('products', this.orderItems),
-        createKeyValueForObject('item_price', this.calcTotalItemPrice()),
-        createKeyValueForObject('shipping_fee', this.calcShippingFee()),
-        createKeyValueForObject('total_price', this.calcTotalPrice()),
-        createKeyValueForObject('email', email, Email),
-        createKeyValueForObject('phone_number', phone_number, Phone),
-        createKeyValueForObject('address', address),
-        createKeyValueForObject('use_profile_contact', use_profile_contact)
-      ) as Order;
-    } catch (e) {
-      if (e instanceof Error) {
-        this.messageService.createErrorMessage(e.message);
-      }
-    }
-  }
-  clear(): void {
+  clearOrderItem(): void {
     this.orderItems = [];
   }
   calcTotalItemPrice(cache: boolean = false): Order['item_price'] {

@@ -10,6 +10,7 @@
     </div>
     <hr class="mt-2 mb-3" *ngIf="isOrderDetailOpen">
     <div class="cart-information-list" *ngIf="isOrderDetailOpen">
+        a
     </div>
 </div>
 <div class="address-information">
@@ -21,19 +22,18 @@
         <div InputContainer class="phone-input-container">
             <input InputElement placeholder="Điện thoại" type="text" name="phone" formControlName="phone">
         </div>
-        <div InputContainer class="street-input-container">
-            <input InputElement placeholder="Địa chỉ" type="text" name="street" formControlName="street">
-        </div>
-        <div InputContainer class="province-input-container">
-            <select selectElement name="Province" id="province" formControlName="province">
-                <option value="null" disabled selected>Chọn Tỉnh thành</option>
-                <option value="some">Quy Nhon</option>
-            </select>
-        </div>
-        <div class="city-input-container">
-            <select selectElement name="City" id="city" formControlName="city">
-                <option value="null" disabled selected>Chọn Thành phố</option>
-            </select>
+        <div formGroupName="address">
+            <div InputContainer class="street-input-container">
+                <input InputElement placeholder="Địa chỉ" type="text" name="street" formControlName="street">
+            </div>
+            <div InputContainer class="province-input-container">
+                <select selectElement name="Province" id="province" formControlName="province">
+                </select>
+            </div>
+            <div class="city-input-container">
+                <select selectElement name="City" id="city" formControlName="city">
+                </select>
+            </div>
         </div>
     </form>
 </div>

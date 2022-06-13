@@ -7,9 +7,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./order-complete.component.css'],
 })
 export class OrderCompleteComponent implements OnInit {
-  constructor(private router: Router) {
-    console.log(this.router.getCurrentNavigation().extras);
-  }
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
 }

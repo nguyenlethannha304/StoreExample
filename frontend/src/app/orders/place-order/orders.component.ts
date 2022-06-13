@@ -23,13 +23,7 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
     public navService: NavigateService
   ) {}
   ngOnInit(): void {
-    this.emptyOrderHandler();
-  }
-  emptyOrderHandler() {
-    // Navigate back to home if the order is empty
-    if (this.orderService.orderItems == []) {
-      this.navService.navigateTo('home');
-    }
+    // this.orderService.setOrderItems();
   }
   ngAfterViewInit(): void {
     let icon = this.getCartIcon('#62B0FF');
@@ -40,7 +34,7 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
   ngOnDestroy(): void {
-    this.orderService.clear();
+    this.orderService.clearOrderItem();
   }
   // CART-INFORMATION
   // cart icon
@@ -56,7 +50,7 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   // ADDRESS-FORM
   shippingInformationForm = this.fb.group({
-    email: this.fb.control('', [], []),
+    email: this.fb.control(''),
     phone: this.fb.control(''),
     address: this.fb.group({
       street: this.fb.control(''),
