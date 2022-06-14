@@ -213,3 +213,10 @@ button + button {
   width: 2rem;
   height: 0.25rem;
 }
+/* Form validation */
+.ng-valid:not(form, .form, .not-outline-green).ng-dirty {
+  border: 1.5px solid #42A948; /* green */
+}
+.ng-invalid:not(form).ng-dirty  {
+  border: 1.5px solid red!important; /* red */
+}
