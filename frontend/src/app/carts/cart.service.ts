@@ -23,6 +23,9 @@ export class CartService {
     this._cartItemList = cartItemList;
     this.setCartItemPrice();
   }
+  clear() {
+    this.cartItemList = [];
+  }
   // CART ITEM PRICE
   private _cartItemPrice: number = 0;
   get cartItemPrice() {
