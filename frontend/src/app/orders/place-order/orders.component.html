@@ -65,6 +65,6 @@
         <p class="fw-bold ms-auto">{{orderService.calcTotalPrice(true) | currency}}</p>
     </div>
     <div class="order-action d-flex pb-2">
-        <button (click)="submitOrder()" class="ms-auto" [ButtonElement]="'primary'" style="width: 8rem; border-radius: 1rem;">Đặt hàng</button>
+        <button (click)="submitOrder()" class="ms-auto" [ButtonElement]="'primary'" style="width: 8rem; border-radius: 1rem;" [disabled]="(!shippingInformationForm.valid) || (!address.valid)">Đặt hàng</button>
     </div>
 </div>

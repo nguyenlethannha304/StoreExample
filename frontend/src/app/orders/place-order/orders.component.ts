@@ -7,7 +7,7 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CartItem } from 'src/app/carts/cart';
 import { CartService } from 'src/app/carts/cart.service';
 import { AddressService } from 'src/app/shared/services/addresss/address.service';
@@ -68,9 +68,9 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
     email: this.fb.control('', [isEmailValid()]),
     phone: this.fb.control('', [isPhoneNumberValid()]),
     address: this.fb.group({
-      street: this.fb.control(''),
-      province: this.fb.control(''),
-      city: this.fb.control(''),
+      street: this.fb.control('', [Validators.required]),
+      province: this.fb.control('', [Validators.required]),
+      city: this.fb.control('', [Validators.required]),
     }),
   });
   get email() {
@@ -79,13 +79,14 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
   get phone() {
     return this.shippingInformationForm.get('phone');
   }
+  get address() {
+    return this.shippingInformationForm.get('address') as FormGroup;
+  }
   get province() {
-    let addressForm = this.shippingInformationForm.get('address') as FormGroup;
-    return addressForm.get('province');
+    return this.address.get('province');
   }
   get city() {
-    let addressForm = this.shippingInformationForm.get('address') as FormGroup;
-    return addressForm.get('city');
+    return this.address.get('city');
   }
   updateCityInformation() {
     this.addressService.getCityData(this.province.value);
