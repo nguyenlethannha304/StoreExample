@@ -217,6 +217,9 @@ button + button {
 .ng-valid:not(form, .form, .not-outline-green).ng-dirty {
   border: 1.5px solid #42A948; /* green */
 }
-.ng-invalid:not(form).ng-dirty  {
+.ng-invalid:not(form, .form).ng-dirty  {
   border: 1.5px solid red!important; /* red */
+}
+button:disabled {
+  background-color: grey!important;
 }
