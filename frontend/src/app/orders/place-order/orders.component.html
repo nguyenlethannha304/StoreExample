@@ -1,5 +1,4 @@
 <div class="heading d-flex">
-    <i class="shaft-arrow-symbol mt-1"></i>
     <h5 class="text-center flex-grow-1">Thông Tin Thanh Toán</h5>
 </div>
 <div class="cart-information">
@@ -10,28 +9,42 @@
     </div>
     <hr class="mt-2 mb-3" *ngIf="isOrderDetailOpen">
     <div class="cart-information-list" *ngIf="isOrderDetailOpen">
-        a
+        <app-order-item *ngFor="let item of this.orderService.cartItemList" [orderItem]="item"></app-order-item>
     </div>
 </div>
 <div class="address-information">
     <h6>Thông tin giao hàng</h6>
     <form action="" [formGroup]="shippingInformationForm">
         <div InputContainer class="email-input-container">
+            <div *ngIf="email.invalid && email.dirty && email.touched" class="error">
+                <p *ngFor="let errorKey of (email.errors | objectToKeys)">
+                    {{email.errors[errorKey]}}
+                </p>
+            </div>
             <input InputElement placeholder="Email" type="email" name="email" formControlName="email">
         </div>
         <div InputContainer class="phone-input-container">
+            <div *ngIf="phone.invalid && phone.dirty && phone.touched" class="error">
+                <p *ngFor="let errorKey of (phone.errors | objectToKeys)">
+                    {{phone.errors[errorKey]}}
+                </p>
+            </div>
             <input InputElement placeholder="Điện thoại" type="text" name="phone" formControlName="phone">
         </div>
-        <div formGroupName="address">
+        <div formGroupName="address" class="form">
             <div InputContainer class="street-input-container">
                 <input InputElement placeholder="Địa chỉ" type="text" name="street" formControlName="street">
             </div>
             <div InputContainer class="province-input-container">
-                <select selectElement name="Province" id="province" formControlName="province">
+                <select selectElement name="Province" id="province" formControlName="province" (change)="updateCityInformation()">
+                    <option value="" >Chọn tỉnh</option>
+                    <option *ngFor="let province of addressService.provinceCityData" value="{{province.id}}">{{province.name}}</option>
                 </select>
             </div>
             <div class="city-input-container">
                 <select selectElement name="City" id="city" formControlName="city">
+                    <option value="" >Chọn thành phố</option>
+                    <option *ngFor="let city of addressService.cityData" value="{{city.id}}">{{city.name}}</option>
                 </select>
             </div>
         </div>

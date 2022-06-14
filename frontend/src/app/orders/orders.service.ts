@@ -17,6 +17,7 @@ const PLACE_ORDER_URL = `${e.api}/orders/place-order/`;
   providedIn: 'root',
 })
 export class OrdersService {
+  public cartItemList: CartItem[] = [];
   public orderItems: OrderItem[] = [];
   private totalItemPrice: Order['item_price'];
   private shippingPrice: Order['shipping_fee'];
@@ -27,15 +28,10 @@ export class OrdersService {
     private authService: AuthTokenService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
-  public getCartItemForDisplay(): CartItem[] {
-    let result: CartItem[] = [];
-    for (let cartItem of this.cartService.cartItemList) {
-      if (this.validateCartItem(cartItem)) {
-        result.push(cartItem);
-      }
-    }
-    return result;
+  ) {
+    this.cartService.cartItemList$.subscribe(
+      (cartItemList) => (this.cartItemList = cartItemList)
+    );
   }
   public setOrderItems(): void {
     this.clearOrderItem();
@@ -48,6 +44,9 @@ export class OrdersService {
     });
   }
   private validateCartItem(cartItem: CartItem) {
+    if (cartItem.quantity > cartItem.product.quantity) {
+      return false;
+    }
     return true;
   }
   submitOrder(body: Order) {
@@ -77,8 +76,8 @@ export class OrdersService {
       return this.totalItemPrice;
     }
     let result: Order['item_price'] = 0;
-    for (let item of this.orderItems) {
-      result += item.price;
+    for (let cartItem of this.cartItemList) {
+      result += cartItem.quantity * cartItem.product.price;
     }
     this.totalItemPrice = result;
     return result;

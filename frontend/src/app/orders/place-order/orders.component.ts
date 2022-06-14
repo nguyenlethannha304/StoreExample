@@ -7,7 +7,14 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { CartItem } from 'src/app/carts/cart';
+import { CartService } from 'src/app/carts/cart.service';
+import { AddressService } from 'src/app/shared/services/addresss/address.service';
+import {
+  isEmailValid,
+  isPhoneNumberValid,
+} from 'src/app/users/shared/validate/validate';
 import { NavigateService } from '../../shared/services/navigate/navigate.service';
 import { OrdersService } from '../orders.service';
 @Component({
@@ -16,14 +23,21 @@ import { OrdersService } from '../orders.service';
   styleUrls: ['./orders.component.css'],
 })
 export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
+  public cartItemList: CartItem[] = [];
   constructor(
     private render: Renderer2,
     private fb: FormBuilder,
+    public addressService: AddressService,
     public orderService: OrdersService,
+    public cartService: CartService,
     public navService: NavigateService
   ) {}
   ngOnInit(): void {
-    // this.orderService.setOrderItems();
+    this.cartService.cartItemList$.subscribe(
+      (cartItemList) => (this.cartItemList = cartItemList)
+    );
+    this.cartService.getCartItems();
+    this.addressService.getProvinceCityData$().subscribe((_) => _);
   }
   ngAfterViewInit(): void {
     let icon = this.getCartIcon('#62B0FF');
@@ -33,6 +47,7 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
       icon
     );
   }
+
   ngOnDestroy(): void {
     this.orderService.clearOrderItem();
   }
@@ -50,13 +65,31 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   // ADDRESS-FORM
   shippingInformationForm = this.fb.group({
-    email: this.fb.control(''),
-    phone: this.fb.control(''),
+    email: this.fb.control('', [isEmailValid()]),
+    phone: this.fb.control('', [isPhoneNumberValid()]),
     address: this.fb.group({
       street: this.fb.control(''),
       province: this.fb.control(''),
       city: this.fb.control(''),
     }),
   });
+  get email() {
+    return this.shippingInformationForm.get('email');
+  }
+  get phone() {
+    return this.shippingInformationForm.get('phone');
+  }
+  get province() {
+    let addressForm = this.shippingInformationForm.get('address') as FormGroup;
+    return addressForm.get('province');
+  }
+  get city() {
+    let addressForm = this.shippingInformationForm.get('address') as FormGroup;
+    return addressForm.get('city');
+  }
+  updateCityInformation() {
+    this.addressService.getCityData(this.province.value);
+    this.city.setValue('');
+  }
   submitOrder() {}
 }

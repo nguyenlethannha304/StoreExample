@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CartItem } from 'src/app/carts/cart';
-
+import { environment as e } from 'src/environments/environment';
 @Component({
   selector: 'app-order-item',
   templateUrl: './order-item.component.html',
@@ -8,6 +8,7 @@ import { CartItem } from 'src/app/carts/cart';
   host: { class: 'd-flex mt-2' },
 })
 export class OrderItemComponent implements OnInit {
+  public env = e;
   @Input() orderItem: CartItem;
   constructor() {}
 
