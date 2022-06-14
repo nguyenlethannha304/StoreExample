@@ -16,6 +16,7 @@ import {
   isPhoneNumberValid,
 } from 'src/app/users/shared/validate/validate';
 import { NavigateService } from '../../shared/services/navigate/navigate.service';
+import { ShippingInformation } from '../orders';
 import { OrdersService } from '../orders.service';
 @Component({
   selector: 'app-orders',
@@ -92,5 +93,20 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
     this.addressService.getCityData(this.province.value);
     this.city.setValue('');
   }
-  submitOrder() {}
+  submitOrder() {
+    if (this.shippingInformationForm.valid) {
+      let shippingInformation = this.getShippingInformation();
+      this.orderService.submitOrder(shippingInformation);
+    }
+  }
+  private getShippingInformation(): ShippingInformation {
+    let email = this.email.value;
+    let phone_number = this.phone.value;
+    let address = {
+      street: this.address.get('street').value,
+      province: this.province.value,
+      city: this.city.value,
+    };
+    return { email, phone_number, address, use_profile_contact: false };
+  }
 }

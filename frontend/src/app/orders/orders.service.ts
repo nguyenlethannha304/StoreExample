@@ -7,7 +7,7 @@ import {
 } from '../shared/interface/share';
 import { MessageService } from '../shared/services/message/message.service';
 import { Address, Email, Phone } from '../users/shared/interface/users';
-import { OrderItem, Order } from './orders';
+import { OrderItem, Order, ShippingInformation } from './orders';
 import { environment as e } from 'src/environments/environment';
 import { AuthTokenService } from '../shared/auth/auth-token.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -49,8 +49,9 @@ export class OrdersService {
     }
     return true;
   }
-  submitOrder(body: Order) {
+  submitOrder(shippingInfor: ShippingInformation) {
     let isLogin = this.authService.isLogin(true) ? 'yes' : null;
+    let body = this.getBodyForSubmitOrder(shippingInfor);
     this.http
       .post(PLACE_ORDER_URL, body, {
         headers: { Authorization: isLogin },
@@ -58,6 +59,7 @@ export class OrdersService {
       })
       .subscribe((response) => {
         if (response.status == HttpStatusCode.Created) {
+          this.cartService.clear();
           this.router.navigate(['../order-complete'], {
             relativeTo: this.route,
             state: { body: response.body },
@@ -67,6 +69,23 @@ export class OrdersService {
           this.messageService.createErrorMessage('Lỗi vui lòng thử lại');
         }
       });
+  }
+  private getBodyForSubmitOrder(shippingInfor: ShippingInformation): Order {
+    let products = this.getOrderItems();
+    let productInfor = {
+      products,
+      item_price: this.calcTotalItemPrice(true),
+      shipping_fee: this.calcShippingFee(true),
+      total_price: this.calcTotalPrice(true),
+    };
+    return Object.assign(productInfor, shippingInfor);
+  }
+  private getOrderItems() {
+    let result: OrderItem[] = [];
+    for (let cartItem of this.cartItemList) {
+      result.push(OrderItem.convert(cartItem));
+    }
+    return result;
   }
   clearOrderItem(): void {
     this.orderItems = [];
@@ -84,11 +103,13 @@ export class OrdersService {
   }
   calcShippingFee(cache: boolean = false): Order['shipping_fee'] {
     if (cache == true && this.shippingPrice != 0) {
-      return this.totalItemPrice;
+      return this.shippingPrice;
     }
-    let result = 0;
-    this.shippingPrice = result;
-    return result;
+    this.shippingPrice = this.getShippingFee();
+    return this.shippingPrice;
+  }
+  private getShippingFee(): Order['shipping_fee'] {
+    return 0;
   }
   calcTotalPrice(use_cache: boolean = true): Order['total_price'] {
     return this.calcTotalItemPrice(use_cache) + this.calcShippingFee(use_cache);

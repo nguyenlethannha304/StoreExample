@@ -13,6 +13,10 @@ export type Order = {
   address: Address;
   use_profile_contact: boolean; //
 };
+export type ShippingInformation = Pick<
+  Order,
+  'email' | 'phone_number' | 'address' | 'use_profile_contact'
+>;
 export type OrderItem = {
   id: Product['id']; //Product id
   price: PositiveInteger;
