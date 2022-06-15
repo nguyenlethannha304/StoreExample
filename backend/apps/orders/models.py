@@ -85,7 +85,7 @@ class OrderItem(models.Model):
     price = models.PositiveBigIntegerField(default=0)
 
     def calculate_price(self):
-        return self.product.price*self.quantity
+        self.price = self.product.price*self.quantity
 
     class Meta:
         unique_together = ['order', 'product']

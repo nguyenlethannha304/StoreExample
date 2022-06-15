@@ -149,8 +149,8 @@ class CreateOrderSerializer(serializers.Serializer):
         address = self.get_address()
         phone_number = self.get_phone_number()
         email = self.get_email()
-        order = Order.objects.create(
-            item_price=item_price, shipping_fee=shipping_fee, total_price=total_price, phone_number=phone_number, address=address)
+        order = Order.objects.create(email=email,
+                                     item_price=item_price, shipping_fee=shipping_fee, total_price=total_price, phone_number=phone_number, address=address)
         return order
 
     def create_order_items(self, order):
