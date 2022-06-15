@@ -1,6 +1,6 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { debounceTime, of, Subject } from 'rxjs';
+import { debounceTime, Subject } from 'rxjs';
 import { MessageService } from '../shared/services/message/message.service';
 import { CartItem } from './cart';
 import { CartService } from './cart.service';
