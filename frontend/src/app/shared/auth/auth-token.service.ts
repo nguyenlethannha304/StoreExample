@@ -10,13 +10,13 @@ import {
   UNIXTime,
   ObjectWrapAccessToken,
 } from '../interface/token';
-import { FormErrors } from '../interface/errors';
+import { AuthPublisher, AuthSubscriber } from './auth';
 const TOKEN_PAIR_URL = `${e.api}/token/token_pair/`; // Post username and password to get token pair
 const REFRESH_TOKEN_URL = `${e.api}/token/refresh_token/`; // Post refresh token to get access token
 @Injectable({
   providedIn: 'root',
 })
-export class AuthTokenService {
+export class AuthTokenService implements AuthPublisher {
   // TOKEN
   private _accessToken: AccessToken = '';
   private _accessTokenSetTime: UNIXTime = 0;
@@ -28,7 +28,19 @@ export class AuthTokenService {
   private _refreshTokenName = 'refresh-token';
   private _refreshTokenSetTimeName = 'refresh-token-set-time';
 
-  private redirect: string;
+  private redirectURL: string;
+  // OBSERVERS
+  public subscribers: AuthSubscriber[] = [];
+  logInNotify(): void {
+    for (let sub of this.subscribers) {
+      sub.logInUpdate();
+    }
+  }
+  logOutNotify(): void {
+    for (let sub of this.subscribers) {
+      sub.logOutUpdate();
+    }
+  }
   constructor(private http: HttpClient, private router: Router) {
     [this._refreshToken, this._refreshTokenSetTime] =
       this.getRefreshTokenFromLocalStorage();
@@ -51,13 +63,14 @@ export class AuthTokenService {
         next: (body) => {
           this.accessToken = body.access;
           this.refreshToken = body.refresh;
-          this.redirect = redirect;
+          this.logInNotify();
+          this.redirectURL = redirect;
         },
         error: (errors) => {
           errorShownFunc(errors);
         },
         complete: () => {
-          this.router.navigateByUrl(this.redirect);
+          this.router.navigateByUrl(this.redirectURL);
         },
       });
   };
@@ -73,6 +86,7 @@ export class AuthTokenService {
     this.refreshToken = '';
     window.localStorage.setItem(this._accessTokenName, '');
     window.localStorage.setItem(this._refreshTokenName, '');
+    this.logOutNotify();
   };
   get accessToken$(): Observable<AccessToken> {
     if (this.accessToken != '' && !this.isTokenExpire('access')) {

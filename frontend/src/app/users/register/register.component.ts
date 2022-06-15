@@ -45,9 +45,9 @@ export class RegisterComponent implements OnInit {
   @ViewChild('formErrorContainer') formErrorContainer: ElementRef;
   registerForm = new FormGroup(
     {
-      email: new FormControl('', isEmailValid()),
-      pass: new FormControl('', isPasswordValid()),
-      confirmPass: new FormControl('', isPasswordValid()),
+      email: new FormControl('', [isEmailValid()]),
+      pass: new FormControl('', [isPasswordValid()]),
+      confirmPass: new FormControl('', [isPasswordValid()]),
     },
     isTwoPasswordSame('pass', 'confirmPass')
   );
@@ -78,7 +78,8 @@ export class RegisterComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.messageSer.createSucessMessage(
-            `Bạn đã đăng ký thành công. Email đăng ký của bạn là ${body.email}`
+            `Bạn đã đăng ký thành công. Email đăng ký của bạn là ${body.email}`,
+            5
           );
         },
         error: (errors) => {

@@ -6,6 +6,7 @@ import { MessageService } from '../shared/services/message/message.service';
 import { HttpClient, HttpStatusCode } from '@angular/common/http';
 import { environment as e } from 'src/environments/environment';
 import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
+import { AuthSubscriber } from '../shared/auth/auth';
 const COUNT_URL = `${e.api}/carts/count/`;
 const AUTH_CART_URL = `${e.api}/carts/`;
 const DELETE_AUTH_CART_ITEM_URL = `${e.api}/carts/item-delete/`;
@@ -13,7 +14,7 @@ const RELATED_PRODUCT_URL = `${e.api}/carts/cart-product-information/`;
 @Injectable({
   providedIn: 'root',
 })
-export class CartService {
+export class CartService implements AuthSubscriber {
   // CART ITEM LIST
   private _cartItemList: CartItem[] = [];
   get cartItemList() {
@@ -25,6 +26,9 @@ export class CartService {
   }
   clear() {
     this.cartItemList = [];
+    if (this.state instanceof CartOfflineState) {
+      window.localStorage.setItem('itemCart', null);
+    }
   }
   // CART ITEM PRICE
   private _cartItemPrice: number = 0;
@@ -52,6 +56,8 @@ export class CartService {
       this.cartItemList = cartItemList;
     });
     this.updateCart();
+    // Subscribe to authService
+    this.authService.subscribers.push(this);
   }
 
   async updateCart() {
@@ -132,12 +138,19 @@ export class CartService {
   private setCartState() {
     this.authService.accessToken$.subscribe((accessToken) => {
       if (accessToken != '') {
+        this.clear();
         this.state = new CartOnlineState(this);
       } else {
         this.state = new CartOfflineState(this);
       }
     });
     return of(true);
+  }
+  logInUpdate(): void {
+    this.updateCart();
+  }
+  logOutUpdate(): void {
+    this.updateCart();
   }
 }
 // --------------------
