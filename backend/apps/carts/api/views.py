@@ -1,3 +1,4 @@
+from os import stat
 from rest_framework import views
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
@@ -71,6 +72,11 @@ class CartView(views.APIView):
         serializer = CartItemForCartViewSerializer(queryset, many=True)
         return Response(data=serializer.data)
 
+    def delete(self, request, *args, **kwargs):
+        # Clear the cart
+        CartItem.objects.filter(cart_id=request.user.pk).delete()
+        return Response(status=HTTPStatus.OK)
+
     def get_cart_item_queryset(self, request, *args, **kwargs):
         # Get cart items and its related product
         queryset = CartItem.objects.filter(
@@ -98,7 +104,7 @@ def is_cart_item_exist(id, cart_id):
 
 
 class UnauthorizedCartView(views.APIView):
-    '''CartView for anonymous user'''
+    '''Get information related to products in local cart (anonymous user)'''
     authentication_classes = []
     permission_classes = []
 

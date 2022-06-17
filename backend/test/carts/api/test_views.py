@@ -86,6 +86,14 @@ class TestCartView(APITestCase):
         response = self.client.get(CART_URL)
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
+    def test_delete_request(self):
+        user_with_1_item = UserModel.objects.all()[0]
+        self.client.force_authenticate(user=user_with_1_item)
+        response = self.client.delete(CART_URL)
+        cart_item_count = CartItem.objects.filter(
+            cart_id=user_with_1_item.pk).count()
+        self.assertEqual(cart_item_count, 0)
+
 
 @tag('carts', 'carts_api_view')
 class TestCartItemDeleteView(APITestCase):
