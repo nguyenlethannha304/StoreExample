@@ -50,7 +50,7 @@ export class OrdersService {
     return true;
   }
   submitOrder(shippingInfor: ShippingInformation) {
-    let isLogin = this.authService.isLogin(true) ? 'yes' : null;
+    let isLogin = this.authService.isLogin(true) ? 'yes' : 'no';
     let body = this.getBodyForSubmitOrder(shippingInfor);
     this.http
       .post(PLACE_ORDER_URL, body, {

@@ -1,7 +1,8 @@
 <div class="heading d-flex">
     <h5 class="text-center flex-grow-1">Thông Tin Thanh Toán</h5>
 </div>
-<div class="cart-information">
+<!-- CART INFORMATION -->
+<div id="cart-information">
     <div class="cart-information-summary d-flex align-items-center">
         <div #cartIconContainer class="cart-icon me-2" style="width:2rem; height:2rem"></div>
         <p (click)="toggleOrderDetail()" class="order-information m-0">Thông tin đơn hàng <i class="arrow-symbol" [ngClass]="isOrderDetailOpen? 'up': 'down'"></i></p>
@@ -12,9 +13,25 @@
         <app-order-item *ngFor="let item of this.orderService.cartItemList" [orderItem]="item"></app-order-item>
     </div>
 </div>
-<div class="address-information">
-    <h6>Thông tin giao hàng</h6>
-    <form action="" [formGroup]="shippingInformationForm">
+<!-- ADDRESS INFORMATION -->
+<!-- Use User Address -->
+<div id="address-information" class="pt-3 pb-3">
+<h6>Thông tin giao hàng</h6>
+    <div id="user-address-information">
+        <label *ngIf="canUseUserAddress" for="use-other-address" value="true" (change)="useUserAddressChange($event)">
+            <input type="checkbox" id="use-other-address" class="m-2">
+            <label for="use-other-address">Sử dụng địa chỉ khác</label>
+        </label>
+        <div *ngIf="useUserAddress" class="address-information mt-2 p-2 lh-1 border border-1 border-dark bg-light">
+            <p>Email: {{userInformation.email}}</p>
+            <p>Điện thoại: {{userInformation.phone}}</p>
+            <p>Địa chỉ: {{userInformation.street}}</p>
+            <p>Thành phố: {{userInformation.city.name}}</p>
+            <p>Tỉnh: {{userInformation.province.name}}</p>
+        </div>
+    </div>
+<!-- Input Address -->
+    <form *ngIf="!useUserAddress" action="" [formGroup]="shippingInformationForm">
         <div InputContainer class="email-input-container">
             <div *ngIf="email.invalid && email.dirty && email.touched" class="error">
                 <p *ngFor="let errorKey of (email.errors | objectToKeys)">
@@ -50,7 +67,8 @@
         </div>
     </form>
 </div>
-<div class="order-summary">
+<!-- ORDER SUMMARY -->
+<div id="order-summary">
     <div class="order-price d-flex">
         <p>Tiền hàng</p>
         <p class="ms-auto">{{orderService.calcTotalItemPrice(true) | currency}}</p>
@@ -65,6 +83,6 @@
         <p class="fw-bold ms-auto">{{orderService.calcTotalPrice(true) | currency}}</p>
     </div>
     <div class="order-action d-flex pb-2">
-        <button (click)="submitOrder()" class="ms-auto" [ButtonElement]="'primary'" style="width: 8rem; border-radius: 1rem;" [disabled]="(!shippingInformationForm.valid) || (!address.valid)">Đặt hàng</button>
+        <button (click)="submitOrder()" class="ms-auto" [ButtonElement]="'primary'" style="width: 8rem; border-radius: 1rem;" [disabled]="((!shippingInformationForm.valid) || (!address.valid)) && (!useUserAddress)">Đặt hàng</button>
     </div>
 </div>

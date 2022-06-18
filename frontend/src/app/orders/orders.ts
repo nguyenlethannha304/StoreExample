@@ -1,7 +1,12 @@
 import { CartItem } from '../carts/cart';
 import { Product } from '../products/shared/interface/products';
 import { AdapterInterface, PositiveInteger } from '../shared/interface/share';
-import { Address, Email, Phone } from '../users/shared/interface/users';
+import {
+  Address,
+  Email,
+  Phone,
+  Profile,
+} from '../users/shared/interface/users';
 
 export type Order = {
   products: OrderItem[];
@@ -37,4 +42,7 @@ export const OrderItem: AdapterInterface<CartItem, OrderItem> &
   calcPrice: (cartItem: CartItem): PositiveInteger => {
     return cartItem.quantity * cartItem.product.price;
   },
+};
+export type LogInUserAddress = Profile & {
+  email: string;
 };

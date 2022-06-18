@@ -8,15 +8,18 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ConnectableObservable, forkJoin, zip } from 'rxjs';
 import { CartItem } from 'src/app/carts/cart';
 import { CartService } from 'src/app/carts/cart.service';
 import { AddressService } from 'src/app/shared/services/addresss/address.service';
+import { Profile } from 'src/app/users/shared/interface/users';
+import { UserService } from 'src/app/users/shared/user.service';
 import {
   isEmailValid,
   isPhoneNumberValid,
 } from 'src/app/users/shared/validate/validate';
 import { NavigateService } from '../../shared/services/navigate/navigate.service';
-import { ShippingInformation } from '../orders';
+import { LogInUserAddress, ShippingInformation } from '../orders';
 import { OrdersService } from '../orders.service';
 @Component({
   selector: 'app-orders',
@@ -25,13 +28,17 @@ import { OrdersService } from '../orders.service';
 })
 export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
   public cartItemList: CartItem[] = [];
+  public canUseUserAddress = false;
+  public useUserAddress = false;
+  public userInformation: LogInUserAddress;
   constructor(
     private render: Renderer2,
     private fb: FormBuilder,
     public addressService: AddressService,
     public orderService: OrdersService,
     public cartService: CartService,
-    public navService: NavigateService
+    public navService: NavigateService,
+    public userService: UserService
   ) {}
   ngOnInit(): void {
     this.cartService.cartItemList$.subscribe(
@@ -39,6 +46,7 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
     );
     this.cartService.getCartItems();
     this.addressService.getProvinceCityData$().subscribe((_) => _);
+    this.setUpUserAddress();
   }
   ngAfterViewInit(): void {
     let icon = this.getCartIcon('#62B0FF');
@@ -51,6 +59,34 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.orderService.clearOrderItem();
+  }
+  // SET UP DEFAULT ADDRESS FOR USER
+  useUserAddressChange(event: any) {
+    this.useUserAddress = !event.target.checked;
+  }
+  setUpUserAddress(): void {
+    zip(
+      this.userService.getProfileInformation$(),
+      this.userService.getUserEmail()
+    ).subscribe(([profile, email]) => {
+      if (
+        profile != null &&
+        profile.phone &&
+        profile.street &&
+        profile.city &&
+        profile.province
+      ) {
+        this.canUseUserAddress = true;
+        this.useUserAddress = true;
+        this.userInformation = {
+          email,
+          phone: profile.phone,
+          street: profile.street,
+          city: profile.city,
+          province: profile.province,
+        };
+      }
+    });
   }
   // CART-INFORMATION
   // cart icon
@@ -94,7 +130,7 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
     this.city.setValue('');
   }
   submitOrder() {
-    if (this.shippingInformationForm.valid) {
+    if (this.shippingInformationForm.valid || this.useUserAddress) {
       let shippingInformation = this.getShippingInformation();
       this.orderService.submitOrder(shippingInformation);
     }
@@ -107,6 +143,7 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
       province: this.province.value,
       city: this.city.value,
     };
-    return { email, phone_number, address, use_profile_contact: false };
+    let use_profile_contact = this.useUserAddress;
+    return { email, phone_number, address, use_profile_contact };
   }
 }

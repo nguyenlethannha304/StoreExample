@@ -13,7 +13,7 @@
 form > * {
     margin: 1rem 0;
 }
-input {
+form input {
     width: 80vw;
     border-color: gray;
     color: black;
