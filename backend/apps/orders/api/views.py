@@ -1,14 +1,15 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from http import HTTPStatus
-from django.db.models import Prefetch
-from django.db import DatabaseError, transaction, connection
+from django.db import DatabaseError, transaction
+
 from .serializers import CreateOrderSerializer, OrderInformationSerializer, StateSerializer
 from ..models import Order, OrderState
 import json
-from django.conf import settings
-import uuid
 import copy
+from django.apps import apps
+
+CartItem = apps.get_model('carts', 'CartItem')
 
 
 class CheckOrderInformationView(APIView):
@@ -65,11 +66,16 @@ class PlaceOrderView(APIView):
             with transaction.atomic():
                 if serializer.is_valid():
                     order = serializer.save()
+                    self.clear_online_cart(request)
                     order_serializer = OrderInformationSerializer(order)
                     return Response(data=order_serializer.data, status=HTTPStatus.CREATED)
         except DatabaseError:
             return Response(status=HTTPStatus.INTERNAL_SERVER_ERROR)
         return Response(data=serializer.errors, status=HTTPStatus.BAD_REQUEST)
+
+    def clear_online_cart(self, request):
+        if(request.user.is_authenticated):
+            CartItem.objects.filter(cart_id=request.user.pk).delete()
 
 
 api_place_order_view = PlaceOrderView.as_view()

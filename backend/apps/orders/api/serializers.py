@@ -33,10 +33,11 @@ class AddressForCreateOrderSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         # check city belongs to province
-        city_exists_boolean = City.objects.filter(
-            pk=data['city'].pk, province=data['province'].pk).exists()
-        if not city_exists_boolean:
-            raise ValidationError('Địa chỉ không hợp lệ')
+        if(data['street'] != '' and data['city'] != None and data['province'] != None):
+            city_exists_boolean = City.objects.filter(
+                pk=data['city'].pk, province=data['province'].pk).exists()
+            if not city_exists_boolean:
+                raise ValidationError('Địa chỉ không hợp lệ')
         return data
 
 
@@ -58,10 +59,11 @@ class CreateOrderSerializer(serializers.Serializer):
         min_value=0, required=False, default=0)
     total_price = serializers.IntegerField(min_value=0)
     # Contact
-    email = serializers.EmailField()
+    email = serializers.EmailField(required=False, allow_blank=True)
     address = AddressForCreateOrderSerializer(required=False)
-    phone_number = serializers.CharField(required=False)
-    use_profile_contact = serializers.BooleanField(default=False)
+    phone_number = serializers.CharField(required=False,  allow_blank=True)
+    use_profile_contact = serializers.BooleanField(
+        default=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -82,7 +84,7 @@ class CreateOrderSerializer(serializers.Serializer):
         return True
 
     def validate_phone_number(self, value):
-        if not validate_phonenumber(value):
+        if value and not validate_phonenumber(value):
             raise serializers.ValidationError("Số điện thoại không hợp lệ")
         return value
 
