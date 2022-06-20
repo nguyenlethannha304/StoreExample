@@ -60,7 +60,7 @@ export class OrdersService {
       .subscribe((response) => {
         if (response.status == HttpStatusCode.Created) {
           this.cartService.clear();
-          this.router.navigate(['../order-complete'], {
+          this.router.navigate(['order-complete'], {
             relativeTo: this.route,
             state: { body: response.body },
           });

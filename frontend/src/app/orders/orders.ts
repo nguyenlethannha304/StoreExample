@@ -46,3 +46,17 @@ export const OrderItem: AdapterInterface<CartItem, OrderItem> &
 export type LogInUserAddress = Profile & {
   email: string;
 };
+export type OrderState = {
+  state: string;
+  description: string;
+  created_time: string;
+};
+export type OrderTrackingInformation = {
+  id: string;
+  item_price: number;
+  shipping_fee: number;
+  total_price: number;
+  address: Address;
+  created_time: string;
+  states: OrderState[];
+};
