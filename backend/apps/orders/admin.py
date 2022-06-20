@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Order, OrderItem, UserOrder
+from .models import Order, OrderItem, OrderState, UserOrder
 # Register your models here.
 
 
@@ -15,4 +15,9 @@ class OrderItemAdmin(admin.ModelAdmin):
 
 @admin.register(UserOrder)
 class UserOrderAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(OrderState)
+class OrderStateAdmin(admin.ModelAdmin):
     pass
