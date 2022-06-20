@@ -2,6 +2,8 @@ from math import prod
 from operator import itemgetter
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+
+from apps.users.api.serializers import AddressSerializer
 from ..models import OrderItem, Order, OrderState, item_order_factory_method
 from apps.utils.tools import validate_phonenumber
 from django.apps import apps
@@ -42,7 +44,7 @@ class AddressForCreateOrderSerializer(serializers.ModelSerializer):
 
 
 class OrderInformationSerializer(serializers.ModelSerializer):
-    address = AddressForCreateOrderSerializer()
+    address = AddressSerializer()
 
     class Meta:
         model = Order

@@ -2,14 +2,15 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from http import HTTPStatus
 from django.db import DatabaseError, transaction
-
+from django.db.models import Prefetch
 from .serializers import CreateOrderSerializer, OrderInformationSerializer, StateSerializer
 from ..models import Order, OrderState
-import json
 import copy
 from django.apps import apps
 
+
 CartItem = apps.get_model('carts', 'CartItem')
+Address = apps.get_model('users', 'Address')
 
 
 class CheckOrderInformationView(APIView):
@@ -17,7 +18,7 @@ class CheckOrderInformationView(APIView):
     permission_classes = []
 
     def get(self, request, *args, **kwargs):
-        order_id, phone_number = self.get_order_id_and_phone_number_from_queryparams(
+        order_id, phone_number = self.get_queryparams(
             request)
         if self.is_order_exist(order_id, phone_number):
             order_states = self.get_order_states(order_id)
@@ -25,7 +26,7 @@ class CheckOrderInformationView(APIView):
                 self.order_instance, order_states)
             data = copy.deepcopy(order_serializer.data)
             data.update({'states': order_state_serializer.data})
-            return Response(data=json.dumps(data), status=HTTPStatus.OK)
+            return Response(data=data, status=HTTPStatus.OK)
         return Response(status=HTTPStatus.BAD_REQUEST)
 
     def is_order_exist(self, order_id, phone_number):
@@ -34,15 +35,16 @@ class CheckOrderInformationView(APIView):
 
     def get_order_instance(self, order_id, phone_number):
         query = Order.objects.only('id', 'item_price', 'shipping_fee',
-                                   'total_price', 'phone_number', 'created_time', 'address__street', 'address__province', 'address__city')
-        query = query.select_related('address')
+                                   'total_price', 'created_time', 'address')
+        query = query.prefetch_related(Prefetch(
+            'address', Address.objects.select_related('city', 'province')))
         return query.get(pk=order_id, phone_number=phone_number)
 
     def get_order_states(self, order_id):
         query = OrderState.objects.filter(order_id=order_id)
         return query.only('state', 'description', 'created_time')
 
-    def get_order_id_and_phone_number_from_queryparams(self, request):
+    def get_queryparams(self, request):
         order_id = request.query_params.get('order_id', None)
         phone_number = request.query_params.get('phone_number', None)
         return order_id, phone_number
