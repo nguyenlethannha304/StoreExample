@@ -1,1 +1,28 @@
-<p>order-tracking works!</p>
+<h4 class="ms-auto me-auto">Tra cứu Đơn hàng</h4>
+<form action="" class="d-flex flex-column" [formGroup]="orderTrackingForm" (ngSubmit)="getOrderTracking()">
+    <input InputElement type="text" placeholder="Mã đơn hàng" formControlName="order_id">
+    <input InputElement type="text" placeholder="Số điện thoại" formControlName="phone_number">
+    <button id="search-order-button" [ButtonElement]="'primary'" [Type]="'submit'">Tra cứu</button>
+</form>
+<hr class="mt-2 mb-2">
+<div id="order-information" *ngIf="orderTrackingInformation">
+    <h5 class="text-center">Mã đơn hàng: {{orderTrackingInformation.id}}</h5>
+    <a href="" class="text-center">
+        <p class="fs-5">Thông tin chi tiết đơn hàng</p>
+    </a>
+    <div id="order-status-information" class="ms-3 ps-4">
+        <div *ngFor="let state of orderTrackingInformation.states" class="order-status-detail-container d-flex align-items-center position-relative p-2 border-start border-dark">
+            <p class="status-detail ms-3">{{state.description}}</p>
+        </div>
+    </div>
+    <div class="shipping-address">
+        <div class="toggle-address">
+            <p class="text-center text-decoration-underline text-primary" (click)="changeAddressToggle()"><span *ngIf="!addressShow">Xem thêm</span><span *ngIf="addressShow">Đóng lại</span></p>
+            <div *ngIf="addressShow" class="address-container p-3 border">
+                <p class="fw-bold">Thông tin giao hàng</p>
+                <p>{{orderTrackingInformation.address.street}}, {{orderTrackingInformation.address.city.name}}, {{orderTrackingInformation.address.province.name}}</p>
+                <p><span class="fw-bold">Số điện thoại:</span> {{phone_number}}</p>
+            </div>
+        </div>
+    </div>
+</div>
