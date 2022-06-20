@@ -37,11 +37,20 @@ class ProductListView(APIView):
         return Response(data=data)
 
     def get_queryset_and_count(self, request, *args, **kwargs):
-        type_slug = kwargs['type']
-        queryset = Product.objects.filter(type__slug=type_slug)
+        queryset = self.get_queryset(request, *args, **kwargs)
         count = queryset.count()
         bottom, top = self.get_range_queryset(count, *args, **kwargs)
         return queryset[bottom:top], count
+
+    def get_queryset(self, request, *args, **kwargs):
+        if kwargs.get('type'):
+            type_slug = kwargs['type']
+            queryset = Product.objects.filter(type__slug=type_slug)
+        if kwargs.get('category'):
+            category_slug = kwargs['category']
+            queryset = Product.objects.filter(
+                type__categories__slug=category_slug)
+        return queryset
 
     def get_range_queryset(self, count, *args, **kwargs):
         page = self.get_page(*args, **kwargs)
