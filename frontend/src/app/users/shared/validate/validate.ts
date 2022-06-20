@@ -69,7 +69,7 @@ export const isPassword = (password: string): boolean => {
   return true;
 };
 export const isPhoneNumber = (phone: string): boolean => {
-  const PHONE_PATTERN: RegExp = /(\+84|0)\d{9}/;
+  const PHONE_PATTERN: RegExp = /^(\+84|0)\d{9}$/;
   return PHONE_PATTERN.test(phone);
 };
 export const isEmail = (email: string): boolean => {
