@@ -114,8 +114,9 @@ class SimilarProductView(APIView):
     def get_queryset(self, request, *args, **kwargs):
         offset = kwargs.get('offset', 6)
         type_id = kwargs.get('type_id')
+        exclude_product_id = kwargs.get('exclude_id')
         if type_id:
-            return Product.objects.filter(type=type_id)[:offset]
+            return Product.objects.filter(type=type_id).exclude(id=exclude_product_id)[:offset]
         return None
 
 

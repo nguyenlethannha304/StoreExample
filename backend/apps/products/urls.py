@@ -8,5 +8,6 @@ api_products_urlpatterns = [
     path('menuBar/', view=menu_bar_view),
     path('t/<slug:type>/', view=api_product_list_view),
     path('<uuid:product_id>/', view=api_product_detail_view),
-    path('similar_product/<int:type_id>/', view=api_similar_product_view),
+    path('similar_product/<int:type_id>/<exclude_id>/',
+         view=api_similar_product_view),
 ]
