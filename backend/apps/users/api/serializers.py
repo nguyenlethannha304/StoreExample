@@ -151,6 +151,15 @@ class ProvinceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class AddressSerializer(serializers.ModelSerializer):
+    city = CitySerializer()
+    province = ProvinceSerializer()
+
+    class Meta:
+        model = Address
+        fields = '__all__'
+
+
 class ProvinceCitiesSerializer(serializers.ModelSerializer):
     cities = CitySerializer(many=True)
 
