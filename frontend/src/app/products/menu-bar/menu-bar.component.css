@@ -4,10 +4,17 @@
     padding-left: 4rem;
     font-size: 1.5rem;
 }
+.category-name {
+    border-top: 0;
+}
+.category:first-of-type{
+    border-top:0.5px gray solid;
+}
 .type-container {
     display: none;
     background-color: #f4f4f4;
     height: 0;
+    border-bottom: 0.5px gray solid;
 }
 .show > .type-container {
     display: block;
