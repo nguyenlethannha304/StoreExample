@@ -40,7 +40,7 @@ class TestCheckOrderInformationView(APITestCase):
         data = response.data
 
 
-@ tag('orders', 'order_api_view')
+@ tag('orders', 'order_api_view', 'cr')
 class TestCreateOrderView(APITestCase):
     def setUp(self):
         self.fake_data = setFakeData()

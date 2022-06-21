@@ -5,7 +5,7 @@ from django.test import tag
 from rest_framework.renderers import JSONRenderer
 from http import HTTPStatus
 
-from apps.products.api.serializers import Product
+from apps.products.api.serializers import Product, Category
 from .. import setUpTestProductApp, tearDownTestProductApp
 from test import pick_random_object_from_queryset
 from django.apps import apps
@@ -16,7 +16,10 @@ Product = apps.get_model('products', 'Product')
 # Url of products app
 PRODUCT_APP_URL = '/api/products/'
 MENU_BAR_URL = PRODUCT_APP_URL + 'menuBar/'
-PRODUCT_LIST_URL = PRODUCT_APP_URL + 't/'  # Add slug of a type to complete url
+PRODUCT_TYPE_LIST_URL = PRODUCT_APP_URL + \
+    't/'  # Add slug of a type to complete url
+PRODUCT_CATEGORY_LIST_URL = PRODUCT_APP_URL + \
+    'c/'  # Add slug of a type to complete url
 PRODUCT_DETAIL = PRODUCT_APP_URL + ''  # Add uuid of a product to complete url
 SIMILAR_PRODUCT = PRODUCT_APP_URL + 'similar_product/'  # Add id type to complete
 
@@ -45,10 +48,18 @@ class TestProductListView(APITestCase):
     def setUp(self):
         self.client = APIClient()
         types = Type.objects.all()
+        categories = Category.objects.all()
         self.type = types[randint(0, len(types) - 1)]
+        self.category = categories[randint(0, len(categories) - 1)]
 
-    def test_get_request(self):
-        url = PRODUCT_LIST_URL + f'{self.type.slug}/'
+    def test_get_products_type_list_request(self):
+        url = PRODUCT_TYPE_LIST_URL + f'{self.type.slug}/'
+        response = self.client.get(url)
+        data = JSONRenderer().render(response.data)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    def test_get_product_category_list_request(self):
+        url = PRODUCT_CATEGORY_LIST_URL + f'{self.category.slug}/'
         response = self.client.get(url)
         data = JSONRenderer().render(response.data)
         self.assertEqual(response.status_code, HTTPStatus.OK)
