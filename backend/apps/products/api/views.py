@@ -23,7 +23,7 @@ class MenuBarView(APIView):
 menu_bar_view = MenuBarView.as_view()
 
 
-class ProductListView(APIView):
+class AbstractProductListView(APIView):
     # Get a list of products according to Type
     authentication_classes = []
     permission_classes = []
@@ -41,16 +41,6 @@ class ProductListView(APIView):
         count = queryset.count()
         bottom, top = self.get_range_queryset(count, *args, **kwargs)
         return queryset[bottom:top], count
-
-    def get_queryset(self, request, *args, **kwargs):
-        if kwargs.get('type'):
-            type_slug = kwargs['type']
-            queryset = Product.objects.filter(type__slug=type_slug)
-        if kwargs.get('category'):
-            category_slug = kwargs['category']
-            queryset = Product.objects.filter(
-                type__categories__slug=category_slug)
-        return queryset
 
     def get_range_queryset(self, count, *args, **kwargs):
         page = self.get_page(*args, **kwargs)
@@ -84,7 +74,29 @@ class ProductListView(APIView):
             return 1
 
 
+class ProductListView(AbstractProductListView):
+    def get_queryset(self, request, *args, **kwargs):
+        if kwargs.get('type'):
+            type_slug = kwargs['type']
+            queryset = Product.objects.filter(type__slug=type_slug)
+        if kwargs.get('category'):
+            category_slug = kwargs['category']
+            queryset = Product.objects.filter(
+                type__categories__slug=category_slug)
+        return queryset
+
+
 api_product_list_view = ProductListView.as_view()
+
+
+class ProductSearchListView(AbstractProductListView):
+    def get_queryset(self, request, *args, **kwargs):
+        search_string = kwargs.get('q')
+        queryset = Product.objects.filter(slug__icontains=search_string)
+        return queryset
+
+
+api_search_product_list_view = ProductSearchListView.as_view
 
 
 class ProductDetailView(APIView):
