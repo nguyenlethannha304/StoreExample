@@ -39,13 +39,13 @@ class AbstractProductListView(APIView):
     def get_queryset_and_count(self, request, *args, **kwargs):
         queryset = self.get_queryset(request, *args, **kwargs)
         count = queryset.count()
-        bottom, top = self.get_range_queryset(count, *args, **kwargs)
+        bottom, top = self.get_range_queryset(count, request, *args, **kwargs)
         return queryset[bottom:top], count
 
-    def get_range_queryset(self, count, *args, **kwargs):
-        page = self.get_page(*args, **kwargs)
-        offset = self.get_offset(
-            *args, **kwargs) if self.get_offset(*args, **kwargs) else self.page_size
+    def get_range_queryset(self, count, request, *args, **kwargs):
+        page = self.get_page(request, *args, **kwargs)
+        offset = self.get_offset(request,
+                                 *args, **kwargs) if self.get_offset(request, *args, **kwargs) else self.page_size
         page_num = math.ceil(count / offset)
         if page > page_num and page_num != 0:
             page = page_num
@@ -57,12 +57,12 @@ class AbstractProductListView(APIView):
             bottom = top - self.page_size
         return bottom, top
 
-    def get_page(self, *args, **kwargs):
-        page_kwargs = kwargs.get("page", 1)
+    def get_page(self, request, *args, **kwargs):
+        page_kwargs = request.GET.get('page')
         return self.integer_or_zero(page_kwargs)
 
-    def get_offset(self, *args, **kwargs):
-        offset_kwargs = kwargs.get("offset", 0)
+    def get_offset(self, request, *args, **kwargs):
+        offset_kwargs = request.GET.get("offset", 0)
         return self.integer_or_zero(offset_kwargs)
 
     def integer_or_zero(self, number):
@@ -91,12 +91,12 @@ api_product_list_view = ProductListView.as_view()
 
 class ProductSearchListView(AbstractProductListView):
     def get_queryset(self, request, *args, **kwargs):
-        search_string = kwargs.get('q')
-        queryset = Product.objects.filter(slug__icontains=search_string)
+        search_string = request.GET.get('q')
+        queryset = Product.objects.filter(name__icontains=search_string)
         return queryset
 
 
-api_search_product_list_view = ProductSearchListView.as_view
+api_search_product_list_view = ProductSearchListView.as_view()
 
 
 class ProductDetailView(APIView):
