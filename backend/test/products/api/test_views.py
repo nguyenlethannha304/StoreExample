@@ -85,15 +85,19 @@ class TestSimilarProductView(APITestCase):
     def setUp(self):
         self.client = APIClient()
         self.random_type = pick_random_object_from_queryset(Type.objects.all())
+        self.random_product_of_the_type = Product.objects.filter(
+            type=self.random_type).order_by('?')[0]
 
     def test_get_request(self):
-        url = SIMILAR_PRODUCT + f'{self.random_type.id}/'
+        url = SIMILAR_PRODUCT + \
+            f'{self.random_type.id}/{self.random_product_of_the_type.id}/'
         response = self.client.get(url)
         data = JSONRenderer().render(response.data)
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_get_request_fail(self):
-        url = SIMILAR_PRODUCT + '15/'  # NonExist type_id
+        url = SIMILAR_PRODUCT + \
+            f'15/{self.random_product_of_the_type.id}/'  # NonExist type_id
         response = self.client.get(url)
         data = JSONRenderer().render(response.data)
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)

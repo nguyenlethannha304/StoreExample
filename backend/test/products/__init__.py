@@ -16,10 +16,23 @@ def setUpTestProductApp():
         type.categories.add(furniture_category)
         type.save()
     # Slugify products
+    slugify_product_model()
+
+
+def slugify_product_model():
+    # Creating from model_bakery don't include slugify
     products = Product.objects.all()
     for product in products:
         product.slug = slugify(product.name)
         product.save()
+    types = Type.objects.all()
+    for type in types:
+        type.slug = slugify(type.name)
+        type.save()
+    categories = Category.objects.all()
+    for category in categories:
+        category.slug = slugify(category.name)
+        category.save()
 
 
 def tearDownTestProductApp():
