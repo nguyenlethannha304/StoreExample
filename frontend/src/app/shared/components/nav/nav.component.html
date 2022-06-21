@@ -3,9 +3,9 @@
         <h4 style="text-align: center; color: white;">StoreExample</h4>
     </div>
     <div id="search-form-container" class="d-flex align-items-center">
-        <form id="search-form" style="position: relative;">
-            <div #iconContainer class="icon-container" style="position: absolute;"></div>
-            <input type="text" placeholder="Tìm kiếm">
+        <form [formGroup]="searchForm" id="search-form" style="position: relative;" (ngSubmit)="submitSearchProduct()">
+            <div #searchIconContainer class="icon-container" style="position: absolute;" (click)="submitSearchProduct()"></div>
+            <input type="text" placeholder="Tìm kiếm" formControlName="searchInput">
         </form>
     </div>
 </div>

@@ -6,6 +6,8 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 import { searchIcon } from '../../services/icons/icons';
 
 @Component({
@@ -14,8 +16,12 @@ import { searchIcon } from '../../services/icons/icons';
   styleUrls: ['./nav.component.css'],
 })
 export class NavComponent implements AfterViewInit {
-  @ViewChild('iconContainer') searchIconContainer!: ElementRef;
-  constructor(private render: Renderer2) {}
+  @ViewChild('searchIconContainer') searchIconContainer!: ElementRef;
+  constructor(
+    private render: Renderer2,
+    private fb: FormBuilder,
+    private router: Router
+  ) {}
 
   ngAfterViewInit(): void {
     this.render.setProperty(
@@ -23,5 +29,12 @@ export class NavComponent implements AfterViewInit {
       'innerHTML',
       searchIcon
     );
+  }
+  searchForm = this.fb.group({
+    searchInput: this.fb.control(''),
+  });
+  submitSearchProduct() {
+    let searchValue = this.searchForm.get('searchInput').value;
+    this.router.navigate(['products', 'search', searchValue]);
   }
 }

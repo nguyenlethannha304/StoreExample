@@ -6,6 +6,7 @@ import { ProductListComponent } from './product-list/product-list.component';
 
 const routes: Routes = [
   { path: 'menu-bar', component: MenuBarComponent },
+  { path: 'search/:q', component: ProductListComponent },
   { path: ':kind/:slug', component: ProductListComponent },
   { path: ':uuid', component: ProductDetailComponent },
 ];

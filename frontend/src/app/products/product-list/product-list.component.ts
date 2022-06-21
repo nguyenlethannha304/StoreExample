@@ -24,27 +24,33 @@ export class ProductListComponent implements OnInit {
 
   ngOnInit(): void {
     // Get products
+    this.productService.products.subscribe((value) => {
+      this.products = value.results;
+      this.count = value.count;
+    });
     this.route.queryParamMap.subscribe((queryParam) => {
       if (queryParam.get('page')) {
         this.page = parseInt(queryParam.get('page'));
       }
-      this.getProducts();
+      this.route.url.subscribe((urlSegments) => {
+        let url = urlSegments.join('/');
+        if (url.includes('search')) {
+          this.getSearchProducts();
+        } else {
+          this.getProducts();
+        }
+        1234;
+      });
     });
-    // Get Pagination class
-    if (this.isPagination) {
-    }
+  }
+  getSearchProducts() {
+    let searchWords = this.route.snapshot.params['q'];
+    this.productService.getSearchProducts(searchWords, this.page, this.offset);
   }
   getProducts() {
     let slug = this.route.snapshot.params['slug'];
     let kind = this.route.snapshot.params['kind'];
-    let page = this.page;
-    let offset = this.offset;
-    this.productService
-      .getProductList(slug, kind, page, offset)
-      .subscribe((responseBody) => {
-        this.products = responseBody.results;
-        this.count = responseBody.count;
-      });
+    this.productService.getProductList(slug, kind, this.page, this.offset);
   }
   get offset(): number {
     // Default offset
@@ -54,9 +60,13 @@ export class ProductListComponent implements OnInit {
     return 16;
   }
   changeToPage(number: number) {
+    this.page = number;
+    this.reRoute();
+  }
+  private reRoute() {
     this.router.navigate(['./'], {
       relativeTo: this.route,
-      queryParams: { page: number },
+      queryParams: { page: this.page },
     });
   }
 }

@@ -15,6 +15,7 @@ import { CloseButtonDirective } from './directive/close-button.directive';
 import { SelectDirective } from './directive/form/select.directive';
 // import './extensions';
 import { CurrencyPipe } from './pipe/currency.pipe';
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     MessageComponent,
@@ -45,6 +46,6 @@ import { CurrencyPipe } from './pipe/currency.pipe';
     SelectDirective,
   ],
   providers: [httpInterceptorProviders],
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule, HttpClientModule, ReactiveFormsModule],
 })
 export class ShareModule {}

@@ -12,6 +12,7 @@ import { ShareModule } from './shared/share.module';
 import 'src/app/users/shared/validate/validate';
 import { httpInterceptorProviders } from './shared/interceptors';
 import { OrdersModule } from './orders/orders.module';
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,7 +20,13 @@ import { OrdersModule } from './orders/orders.module';
     HomeComponent,
     AboutComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, ShareModule, OrdersModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    ShareModule,
+    OrdersModule,
+    ReactiveFormsModule,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

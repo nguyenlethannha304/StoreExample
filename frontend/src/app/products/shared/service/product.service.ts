@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import {
   ProductDetail,
   ProductCard,
@@ -12,18 +12,23 @@ import { UUID } from 'src/app/shared/interface/share';
   providedIn: 'root',
 })
 export class ProductService {
+  products: Subject<ProductCardList> = new Subject<ProductCardList>();
   constructor(private httpClient: HttpClient) {}
-  getProductList(
-    slug: string,
-    kind: 't' | 'c',
-    page: number,
-    offset: number
-  ): Observable<ProductCardList> {
+  getProductList(slug: string, kind: 't' | 'c', page: number, offset: number) {
     // slug of type or category
     // kind = 't' => get products based on type; kind = 'c' => get products based on category
-    return this.httpClient.get<ProductCardList>(
-      `${e.api}/products/${kind}/${slug}/?page=${page}&offset=${offset}`
-    );
+    this.httpClient
+      .get<ProductCardList>(
+        `${e.api}/products/${kind}/${slug}/?page=${page}&offset=${offset}`
+      )
+      .subscribe((products) => this.products.next(products));
+  }
+  getSearchProducts(searchWord: string, page: number, offset: number) {
+    this.httpClient
+      .get<ProductCardList>(
+        `${e.api}/products/search/?q=${searchWord}&offset=${offset}&page=${page}`
+      )
+      .subscribe((products) => this.products.next(products));
   }
   getProductDetail(uuid: UUID) {
     // Get a specific products
