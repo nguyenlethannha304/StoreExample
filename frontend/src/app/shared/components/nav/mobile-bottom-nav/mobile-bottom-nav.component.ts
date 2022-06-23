@@ -7,6 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CartService } from 'src/app/carts/cart.service';
+import { renderIconToView } from 'src/app/shared/services/icons/icon-functions';
 import {
   homeIcon,
   menubarIcon,
@@ -42,25 +43,12 @@ export class MobileBottomNavComponent implements OnInit, AfterViewInit {
     );
   }
   ngAfterViewInit(): void {
-    this.render.setProperty(
-      this.homeContainer.nativeElement,
-      'innerHTML',
-      homeIcon
-    );
-    this.render.setProperty(
-      this.menuBarContainer.nativeElement,
-      'innerHTML',
-      menubarIcon
-    );
-    this.render.setProperty(
-      this.cartContainer.nativeElement,
-      'innerHTML',
-      cartIcon
-    );
-    this.render.setProperty(
-      this.userContainer.nativeElement,
-      'innerHTML',
-      userIcon
+    renderIconToView(
+      this.render,
+      { icon: homeIcon, iconContainer: this.homeContainer },
+      { icon: menubarIcon, iconContainer: this.menuBarContainer },
+      { icon: cartIcon, iconContainer: this.cartContainer },
+      { icon: userIcon, iconContainer: this.userContainer }
     );
     this.calculate_left_attribute_cartCount();
   }

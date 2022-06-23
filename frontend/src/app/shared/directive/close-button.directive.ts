@@ -5,6 +5,7 @@ import {
   HostBinding,
   Renderer2,
 } from '@angular/core';
+import { renderIconToView } from '../services/icons/icon-functions';
 import { closeIcon } from '../services/icons/icons';
 @Directive({
   selector: '[CloseButton]',
@@ -12,7 +13,7 @@ import { closeIcon } from '../services/icons/icons';
 export class CloseButtonDirective implements AfterViewInit {
   constructor(private el: ElementRef, private render: Renderer2) {}
   ngAfterViewInit(): void {
-    this.render.setProperty(this.el.nativeElement, 'innerHTML', closeIcon);
+    renderIconToView(this.render, { icon: closeIcon, iconContainer: this.el });
   }
   @HostBinding('class') get class() {
     return 'close-button d-flex align-items-center justify-content-center';

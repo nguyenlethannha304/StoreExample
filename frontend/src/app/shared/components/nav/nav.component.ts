@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { renderIconToView } from '../../services/icons/icon-functions';
 import { searchIcon } from '../../services/icons/icons';
 
 @Component({
@@ -24,11 +25,10 @@ export class NavComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    this.render.setProperty(
-      this.searchIconContainer.nativeElement,
-      'innerHTML',
-      searchIcon
-    );
+    renderIconToView(this.render, {
+      icon: searchIcon,
+      iconContainer: this.searchIconContainer,
+    });
   }
   searchForm = this.fb.group({
     searchInput: this.fb.control(''),

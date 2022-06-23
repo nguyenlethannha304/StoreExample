@@ -14,6 +14,7 @@ import { CartItem } from '../cart';
 import { trashIcon } from 'src/app/shared/services/icons/icons';
 import { Subject } from 'rxjs';
 import { MessageService } from 'src/app/shared/services/message/message.service';
+import { renderIconToView } from 'src/app/shared/services/icons/icon-functions';
 @Component({
   selector: 'app-item-cart',
   templateUrl: './item-cart.component.html',
@@ -41,11 +42,10 @@ export class ItemCartComponent implements OnInit, AfterViewInit {
     this.quantity = this.cartItem.quantity;
   }
   ngAfterViewInit(): void {
-    this.render.setProperty(
-      this.deleteContainer.nativeElement,
-      'innerHTML',
-      trashIcon
-    );
+    renderIconToView(this.render, {
+      icon: trashIcon,
+      iconContainer: this.deleteContainer,
+    });
   }
   getPrice() {
     return this.cartItem.quantity * this.cartItem.product.price;

@@ -8,6 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Message, MessageOptions } from '../../interface/message';
+import { renderIconToView } from '../../services/icons/icon-functions';
 import { errorIcon, successIcon } from '../../services/icons/icons';
 import { MessageService } from '../../services/message/message.service';
 @Component({
@@ -98,11 +99,10 @@ export class MessageComponent implements OnInit {
   setIcon(icon: string) {
     // set icon to html
     this.icon = icon;
-    this.render.setProperty(
-      this.iconContainer.nativeElement,
-      'innerHTML',
-      this.icon
-    );
+    renderIconToView(this.render, {
+      icon: this.icon,
+      iconContainer: this.iconContainer,
+    });
   }
   setContent(content: string) {
     this.content = content;

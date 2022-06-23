@@ -8,18 +8,20 @@ import {
   Renderer2,
 } from '@angular/core';
 import { hideInputIcon, showInputIcon } from '../../services/icons/icons';
-import { positionIconIntoElement } from '../../services/icons/icon-functions';
+import {
+  positionIconIntoElement,
+  renderIconToView,
+} from '../../services/icons/icon-functions';
 @Directive({
   selector: 'div[HideShowInput]',
 })
 export class HideShowInputDirective implements AfterViewInit {
   // toggle input type between password and text
   constructor(private el: ElementRef, private render: Renderer2) {
-    this.render.setProperty(
-      this.el.nativeElement,
-      'innerHTML',
-      showInputIcon + hideInputIcon
-    );
+    renderIconToView(this.render, {
+      icon: showInputIcon + hideInputIcon,
+      iconContainer: this.el,
+    });
   }
   @Input() TargetElement: HTMLInputElement;
   ngAfterViewInit(): void {

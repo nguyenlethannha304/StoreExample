@@ -12,6 +12,7 @@ import { ConnectableObservable, forkJoin, zip } from 'rxjs';
 import { CartItem } from 'src/app/carts/cart';
 import { CartService } from 'src/app/carts/cart.service';
 import { AddressService } from 'src/app/shared/services/addresss/address.service';
+import { renderIconToView } from 'src/app/shared/services/icons/icon-functions';
 import { Profile } from 'src/app/users/shared/interface/users';
 import { UserService } from 'src/app/users/shared/user.service';
 import {
@@ -50,11 +51,10 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   ngAfterViewInit(): void {
     let icon = this.getCartIcon('#62B0FF');
-    this.render.setProperty(
-      this.cartIconContainer.nativeElement,
-      'innerHTML',
-      icon
-    );
+    renderIconToView(this.render, {
+      icon: icon,
+      iconContainer: this.cartIconContainer,
+    });
   }
 
   ngOnDestroy(): void {
