@@ -1,2 +1,8 @@
-<app-product-list-render [products]="products"></app-product-list-render>
-<app-pagination *ngIf="count > offset" [count]="count" [offset]="offset" (changePage)="changeToPage($event)"></app-pagination>
+<div *ngIf="count == null; else elseBlock" class="w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+    <div id="sadFaceIcon" class="w-75 opacity-50"></div>
+    <h5 class="opacity-50">Không còn sản phẩm ở hạng mục này</h5>
+</div>
+<ng-template #elseBlock>
+    <app-product-list-render [products]="products"></app-product-list-render>
+    <app-pagination *ngIf="count > offset" [count]="count" [offset]="offset" (changePage)="changeToPage($event)"></app-pagination>
+</ng-template>

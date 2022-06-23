@@ -1,8 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { renderIconToView } from 'src/app/shared/services/icons/icon-functions';
 import { ProductCard } from '../shared/interface/products';
 import { ProductService } from '../shared/service/product.service';
-
+import { sadFaceIcon } from 'src/app/shared/services/icons/icons';
+import { delay, of } from 'rxjs';
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
@@ -13,20 +22,35 @@ export class ProductListComponent implements OnInit {
   // get offset();
   page: number = 1;
   // Data
-  products: ProductCard[];
-  count: number;
+  products: ProductCard[] = [];
+  count: number = 0;
   isPagination: boolean = true;
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private render: Renderer2,
+    private hostElement: ElementRef
   ) {}
-
   ngOnInit(): void {
     // Get products
     this.productService.products.subscribe((value) => {
       this.products = value.results;
       this.count = value.count;
+      if (this.count == 0) {
+        this.count = null;
+        // Render SadFaceIcon
+        of(this.count)
+          .pipe(delay(10))
+          .subscribe((_) => {
+            renderIconToView(this.render, {
+              icon: sadFaceIcon,
+              iconContainer:
+                this.hostElement.nativeElement.querySelector('#sadFaceIcon'),
+            });
+          });
+        // --- Render End ----
+      }
     });
     this.route.queryParamMap.subscribe((queryParam) => {
       if (queryParam.get('page')) {
@@ -39,7 +63,6 @@ export class ProductListComponent implements OnInit {
         } else {
           this.getProducts();
         }
-        1234;
       });
     });
   }
