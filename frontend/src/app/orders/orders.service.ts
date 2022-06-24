@@ -1,13 +1,13 @@
 import { HttpClient, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CartService } from '../carts/cart.service';
-import {
-  createObject,
-  createKeyValueForObject,
-} from '../shared/interface/share';
 import { MessageService } from '../shared/services/message/message.service';
-import { Address, Email, Phone } from '../users/shared/interface/users';
-import { OrderItem, Order, ShippingInformation } from './orders';
+import {
+  OrderItem,
+  Order,
+  ShippingInformation,
+  OrderTrackingInformation,
+} from './orders';
 import { environment as e } from 'src/environments/environment';
 import { AuthTokenService } from '../shared/auth/auth-token.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -53,16 +53,18 @@ export class OrdersService {
     let isLogin = this.authService.isLogin(true) ? 'yes' : 'no';
     let body = this.getBodyForSubmitOrder(shippingInfor);
     this.http
-      .post(PLACE_ORDER_URL, body, {
+      .post<OrderTrackingInformation>(PLACE_ORDER_URL, body, {
         headers: { Authorization: isLogin },
         observe: 'response',
       })
       .subscribe((response) => {
         if (response.status == HttpStatusCode.Created) {
           this.cartService.clear();
-          this.router.navigate(['order-complete'], {
-            relativeTo: this.route,
-            state: { body: response.body },
+          this.router.navigate(['orders', 'order-tracking'], {
+            queryParams: {
+              id: response.body['id'],
+              phone: response.body['phone_number'],
+            },
           });
         } else if (response.status == HttpStatusCode.BadRequest) {
           this.router.navigate(['carts']);

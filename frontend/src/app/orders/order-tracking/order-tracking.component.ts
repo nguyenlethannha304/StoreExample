@@ -4,8 +4,7 @@ import { isPhoneNumberValid } from 'src/app/users/shared/validate/validate';
 import { OrderTrackingInformation } from '../orders';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs';
-import { Address } from 'src/app/users/shared/interface/users';
+import { ActivatedRoute } from '@angular/router';
 const ORDER_TRACKING_URL = `${environment.api}/orders/check-order`;
 const CITY_PROVINCE_INFOR_URL = `${environment.api}/users/city-province-data`;
 @Component({
@@ -21,9 +20,22 @@ export class OrderTrackingComponent implements OnInit {
   orderTrackingInformation: OrderTrackingInformation = null;
   addressShow: boolean = false;
   phone_number: string = null;
-  constructor(private fb: FormBuilder, private http: HttpClient) {}
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private route: ActivatedRoute
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.assignQueryParamsToForm();
+  }
+  private assignQueryParamsToForm() {
+    let queryParam = this.route.snapshot.queryParams;
+    if (Object.keys(queryParam).length != 0) {
+      this.orderTrackingForm.get('order_id').setValue(queryParam['id']);
+      this.orderTrackingForm.get('phone_number').setValue(queryParam['phone']);
+    }
+  }
   getOrderTracking() {
     let order_id = this.orderTrackingForm.get('order_id').value;
     let phone_number = this.orderTrackingForm.get('phone_number').value;
@@ -35,8 +47,8 @@ export class OrderTrackingComponent implements OnInit {
     });
   }
   orderTrackingForm = this.fb.group({
-    order_id: this.fb.control('220618uev49r', Validators.required),
-    phone_number: this.fb.control('0979311358', [isPhoneNumberValid()]),
+    order_id: this.fb.control('', Validators.required),
+    phone_number: this.fb.control('', [isPhoneNumberValid()]),
   });
   changeAddressToggle() {
     this.addressShow = !this.addressShow;

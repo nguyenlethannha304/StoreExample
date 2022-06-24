@@ -8,12 +8,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ConnectableObservable, forkJoin, zip } from 'rxjs';
+import { zip } from 'rxjs';
 import { CartItem } from 'src/app/carts/cart';
 import { CartService } from 'src/app/carts/cart.service';
 import { AddressService } from 'src/app/shared/services/addresss/address.service';
 import { renderIconToView } from 'src/app/shared/services/icons/icon-functions';
-import { Profile } from 'src/app/users/shared/interface/users';
 import { UserService } from 'src/app/users/shared/user.service';
 import {
   isEmailValid,

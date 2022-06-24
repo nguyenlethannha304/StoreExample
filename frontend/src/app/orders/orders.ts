@@ -56,6 +56,7 @@ export type OrderTrackingInformation = {
   item_price: number;
   shipping_fee: number;
   total_price: number;
+  phone_number: Phone;
   address: Address;
   created_time: string;
   states: OrderState[];
