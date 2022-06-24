@@ -28,6 +28,5 @@ div {
   text-align: center;
 }
 #logout {
-  height: 4rem;
   background-color: hsl(var(--cl-blue-light), 0.4);
 }

@@ -7,9 +7,6 @@
 <hr class="mt-2 mb-2">
 <div id="order-information" *ngIf="orderTrackingInformation">
     <h5 class="text-center">Mã đơn hàng: {{orderTrackingInformation.id}}</h5>
-    <a href="" class="text-center">
-        <p class="fs-5">Thông tin chi tiết đơn hàng</p>
-    </a>
     <div id="order-status-information" class="ms-3 ps-4">
         <div *ngFor="let state of orderTrackingInformation.states" class="order-status-detail-container d-flex align-items-center position-relative p-2 border-start border-dark">
             <p class="status-detail ms-3">{{state.description}}</p>
