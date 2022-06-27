@@ -50,7 +50,7 @@ export class CartsComponent implements OnInit {
       this.messageService.createErrorMessage(textError, 5);
       return;
     }
-    this.router.navigate(['orders', 'place-order']);
+    this.router.navigate(['orders', 'dat-hang']);
   }
   private validateCartItem(): String[] {
     let errors: String[] = [];

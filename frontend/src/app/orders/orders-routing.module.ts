@@ -3,8 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { OrdersComponent } from './place-order/orders.component';
 import { OrderTrackingComponent } from './order-tracking/order-tracking.component';
 const routes: Routes = [
-  { path: 'place-order', component: OrdersComponent },
-  { path: 'order-tracking', component: OrderTrackingComponent },
+  { path: 'dat-hang', component: OrdersComponent },
+  { path: 'tra-cuu-don-hang', component: OrderTrackingComponent },
 ];
 
 @NgModule({

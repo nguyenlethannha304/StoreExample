@@ -14,6 +14,7 @@ import {
   cartIcon,
   userIcon,
   successIcon,
+  orderTrackingIcon,
 } from 'src/app/shared/services/icons/icons';
 import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
 @Component({
@@ -35,6 +36,7 @@ export class MobileBottomNavComponent implements OnInit, AfterViewInit {
   ) {}
   @ViewChild('homeContainer') homeContainer: ElementRef;
   @ViewChild('menuBarContainer') menuBarContainer: ElementRef;
+  @ViewChild('orderTrackingContainer') orderTrackingContainer: ElementRef;
   @ViewChild('cartContainer') cartContainer: ElementRef;
   @ViewChild('userContainer') userContainer: ElementRef;
   ngOnInit(): void {
@@ -47,6 +49,7 @@ export class MobileBottomNavComponent implements OnInit, AfterViewInit {
       this.render,
       { icon: homeIcon, iconContainer: this.homeContainer },
       { icon: menubarIcon, iconContainer: this.menuBarContainer },
+      { icon: orderTrackingIcon, iconContainer: this.orderTrackingContainer },
       { icon: cartIcon, iconContainer: this.cartContainer },
       { icon: userIcon, iconContainer: this.userContainer }
     );

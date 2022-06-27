@@ -15,4 +15,9 @@ export const viewNameObject = {
     logout: 'dang-xuat',
     register: 'dang-ky',
   },
+  orders: {
+    name: 'orders',
+    orderTracking: 'tra-cuu-don-hang',
+    placeOrder: 'dat-hang',
+  },
 };
