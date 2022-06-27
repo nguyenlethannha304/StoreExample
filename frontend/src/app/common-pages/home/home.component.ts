@@ -12,7 +12,12 @@ import { MessageService } from 'src/app/shared/services/message/message.service'
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-  constructor(private messageSer: MessageService, private render: Renderer2) {}
-  @ViewChild('debugContainer') debugContainer: ElementRef;
+  categoryData = [
+    { slug: 'Ten-muc-hang-hoa', name: 'Tên mục hàng hoá', icon: 'Icon' },
+    { slug: 'Ten-muc-hang-hoa', name: 'Tên mục hàng hoá', icon: 'Icon' },
+    { slug: 'Ten-muc-hang-hoa', name: 'Tên mục hàng hoá', icon: 'Icon' },
+    { slug: 'Ten-muc-hang-hoa', name: 'Tên mục hàng hoá', icon: 'Icon' },
+  ];
+  constructor() {}
   ngOnInit(): void {}
 }

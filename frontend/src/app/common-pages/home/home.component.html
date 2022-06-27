@@ -1,0 +1,46 @@
+<div class="content-section">
+    <div class="image-container">
+        <img src="" alt="">
+    </div>
+    <div class="content">
+        <h5>Lorem, ipsum dolor sit amet</h5>
+        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Pariatur doloremque iusto eum mollitia, nobis nemo voluptas debitis velit explicabo repellat a, inventore ex praesentium exercitationem. Voluptatum laborum culpa a aspernatur soluta quasi alias aut. Veritatis provident odit nemo harum ullam, veniam dolorem ad. Eos, nulla! Rerum est iure repellat laborum.</p>
+    </div>
+</div>
+<div class="category-section">
+    <h5>Danh Mục Hàng Hoá</h5>
+    <div *ngFor="let category of categoryData" class="category-container d-flex">
+        <div class="icon-container">
+        {{category.icon}}
+        </div>
+        <div class="category-name">
+            {{category.name}}
+        </div>
+    </div>
+    <div id="navi-menu-bar">
+        <a  [routerLink]="['products', 'menu-bar']">Xem Tất Cả</a>
+    </div>
+
+</div>
+<div class="content-section">
+    <div class="image-container">
+        <img src="" alt="">
+    </div>
+    <div class="content">
+        <h5>Lorem, ipsum dolor sit amet</h5>
+        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Pariatur doloremque iusto eum mollitia, nobis nemo voluptas debitis velit explicabo repellat a, inventore ex praesentium exercitationem. Voluptatum laborum culpa a aspernatur soluta quasi alias aut. Veritatis provident odit nemo harum ullam, veniam dolorem ad. Eos, nulla! Rerum est iure repellat laborum.</p>
+    </div>
+</div>
+<div class="service-section">
+    <h4>Dịch vụ khách hàng</h4>
+    <div class="faq-section">
+        <h5>Câu hỏi thường gặp</h5>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore cum neque enim excepturi, ea rem vero similique reprehenderit earum, a officia, aut numquam optio ab dicta voluptatem voluptatibus provident illo magni minima sapiente placeat explicabo est delectus. Impedit sit assumenda qui ab, reiciendis porro vel nesciunt debitis illum ratione iure.</p>
+        <a href="">Xem thêm</a>
+    </div>
+    <div class="delievery-section">
+        <h5>Vận chuyển</h5>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore cum neque enim excepturi, ea rem vero similique reprehenderit earum, a officia, aut numquam optio ab dicta voluptatem voluptatibus provident illo magni minima sapiente placeat explicabo est delectus. Impedit sit assumenda qui ab, reiciendis porro vel nesciunt debitis illum ratione iure.</p>
+        <a href="">Xem thêm</a>
+    </div>
+</div>
