@@ -21,6 +21,8 @@ class CheckOrderInformationView(APIView):
         order_id, phone_number = self.get_queryparams(
             request)
         if self.is_order_exist(order_id, phone_number):
+            self.order_instance = self.get_order_instance(
+                order_id, phone_number)
             order_states = self.get_order_states(order_id)
             order_serializer, order_state_serializer = self.serializer_order_and_states(
                 self.order_instance, order_states)
@@ -30,8 +32,9 @@ class CheckOrderInformationView(APIView):
         return Response(status=HTTPStatus.BAD_REQUEST)
 
     def is_order_exist(self, order_id, phone_number):
-        self.order_instance = self.get_order_instance(order_id, phone_number)
-        return self.order_instance
+        order_exist = Order.objects.filter(
+            id=order_id, phone_number=phone_number).exists()
+        return order_exist
 
     def get_order_instance(self, order_id, phone_number):
         query = Order.objects.only('id', 'item_price', 'shipping_fee',

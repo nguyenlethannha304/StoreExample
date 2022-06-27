@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { isPhoneNumberValid } from 'src/app/users/shared/validate/validate';
 import { OrderTrackingInformation } from '../orders';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 const ORDER_TRACKING_URL = `${environment.api}/orders/check-order`;
 const CITY_PROVINCE_INFOR_URL = `${environment.api}/users/city-province-data`;
@@ -18,6 +18,7 @@ const CITY_PROVINCE_INFOR_URL = `${environment.api}/users/city-province-data`;
 })
 export class OrderTrackingComponent implements OnInit {
   orderTrackingInformation: OrderTrackingInformation = null;
+  correctOrderInforBoolean: Boolean = true;
   addressShow: boolean = false;
   phone_number: string = null;
   constructor(
@@ -41,9 +42,17 @@ export class OrderTrackingComponent implements OnInit {
     let phone_number = this.orderTrackingForm.get('phone_number').value;
     let URL =
       ORDER_TRACKING_URL + `?order_id=${order_id}&phone_number=${phone_number}`;
-    this.http.get<OrderTrackingInformation>(URL).subscribe((body) => {
-      this.orderTrackingInformation = body;
-      this.phone_number = this.orderTrackingForm.get('phone_number').value;
+    this.http.get<OrderTrackingInformation>(URL).subscribe({
+      next: (body) => {
+        this.correctOrderInforBoolean = true;
+        this.orderTrackingInformation = body;
+        this.phone_number = this.orderTrackingForm.get('phone_number').value;
+      },
+      error: (errorResponse: HttpErrorResponse) => {
+        if (errorResponse.status == 400) {
+          this.correctOrderInforBoolean = false;
+        }
+      },
     });
   }
   orderTrackingForm = this.fb.group({

@@ -1,8 +1,11 @@
 <h4 class="ms-auto me-auto">Tra cứu Đơn hàng</h4>
 <form action="" class="d-flex flex-column" [formGroup]="orderTrackingForm" (ngSubmit)="getOrderTracking()">
+    <div *ngIf="!correctOrderInforBoolean" class="error">
+        Sai số điện thoại hoặc Mã đơn hàng
+    </div>
     <input InputElement type="text" placeholder="Mã đơn hàng" formControlName="order_id">
     <input InputElement type="text" placeholder="Số điện thoại" formControlName="phone_number">
-    <button id="search-order-button" [ButtonElement]="'primary'" [Type]="'submit'">Tra cứu</button>
+    <button id="search-order-button" [ButtonElement]="'primary'" [Type]="'submit'" [disabled]="!orderTrackingForm.valid">Tra cứu</button>
 </form>
 <hr class="mt-2 mb-2">
 <div id="order-information" *ngIf="orderTrackingInformation">
