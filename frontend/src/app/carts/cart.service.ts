@@ -43,6 +43,7 @@ export class CartService implements AuthSubscriber {
   // Subject
   cartItemList$ = new Subject<CartItem[]>();
   cartCount$ = new Subject<number>();
+  count: number = null;
   // Cart State
   state: CartState;
   //CONSTRUCTOR
@@ -68,10 +69,14 @@ export class CartService implements AuthSubscriber {
   countCartItems(): void {
     let observable$ = this.state.countCartItem$();
     observable$.subscribe((count) => {
+      this.count = count;
       this.cartCount$.next(count);
     });
   }
   getCartItems() {
+    if (this.count == 0) {
+      return null;
+    }
     return this.state
       .getCartItem$()
       .subscribe((cartItemList) => this.cartItemList$.next(cartItemList));
