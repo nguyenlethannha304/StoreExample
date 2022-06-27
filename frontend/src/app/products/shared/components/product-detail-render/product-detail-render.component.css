@@ -27,3 +27,14 @@
 .action-button {
     height: 1rem;
 }
+.quantity {
+    border:1px solid hsl(var(--cl-blue-light));
+    width: 5rem;
+    height: 2rem;
+    margin-right: 0.5rem;
+    text-align: center;
+}
+
+.valid {
+    border:1px solid hsl(var(--cl-blue-light));
+}

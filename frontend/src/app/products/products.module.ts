@@ -11,6 +11,7 @@ import { SimilarProductsComponent } from './shared/components/similar-products/s
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { MenuBarComponent } from './menu-bar/menu-bar.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,6 @@ import { MenuBarComponent } from './menu-bar/menu-bar.component';
     ProductDetailComponent,
     MenuBarComponent,
   ],
-  imports: [CommonModule, ProductsRoutingModule, ShareModule],
+  imports: [CommonModule, ProductsRoutingModule, ShareModule, FormsModule],
 })
 export class ProductsModule {}

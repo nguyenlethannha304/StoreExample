@@ -22,6 +22,7 @@ import { CartService } from 'src/app/carts/cart.service';
 export class ProductDetailComponentRender implements OnInit, AfterViewInit {
   @Input() product: ProductDetail;
   public environment = e;
+  purchaseQuantity: number = 1;
   constructor(
     private render: Renderer2,
     private hostElementRef: ElementRef,
@@ -37,7 +38,7 @@ export class ProductDetailComponentRender implements OnInit, AfterViewInit {
   }
   // CART SERVICE
   addToCart() {
-    this.cartService.addCartItems(this.product.id, 1);
+    this.cartService.addCartItems(this.product.id, this.purchaseQuantity);
   }
   // RENDER RATING
   renderStars() {
