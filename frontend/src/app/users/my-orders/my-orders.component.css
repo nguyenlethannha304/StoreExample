@@ -1,0 +1,24 @@
+#title {
+    color: hsl(var(--cl-blue));
+}
+.order-information {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.order-detail-container {
+    display: flex;
+    width: calc(100% - 2rem);
+    padding: 0.5rem;
+    margin: 0.5rem 1rem;
+    border: 1px solid gray;
+    border-radius: 1rem;
+}
+.total-price {
+    display: flex;
+    align-items: center;
+}
+.created-time {
+    opacity: 50%;
+    font-size: 0.875rem;
+}

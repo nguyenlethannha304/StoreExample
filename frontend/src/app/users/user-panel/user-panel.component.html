@@ -4,7 +4,7 @@
     <p>Email: {{userEmail}}</p></div>
 </div>
 <div PanelRow id="profile"  (click)="navSer.navigateTo('users:profile')"><p>Thông Tin Cá Nhân</p></div>
-<div PanelRow id="cart" ><p>Giỏ hàng</p></div>
+<div PanelRow id="orders" (click)="navSer.navigateTo('users:orders')"><p>Đơn hàng</p></div>
 <div PanelRow id="change-password"  (click)="navSer.navigateTo('users:changePassword')"><p>Đổi Mật Khẩu</p></div>
-<div PanelRow id="item-liked" ><p>Yêu Thích</p></div>
+<div PanelRow id="cart" (click)="navSer.navigateTo('carts')"><p>Giỏ hàng</p></div>
 <div PanelRow id="logout" (click)="navSer.navigateTo('users:logout')"><p>Đăng Xuất</p></div>

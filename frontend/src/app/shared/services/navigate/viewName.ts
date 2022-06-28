@@ -14,6 +14,7 @@ export const viewNameObject = {
     changePassword: 'doi-mat-khau',
     logout: 'dang-xuat',
     register: 'dang-ky',
+    orders: 'don-hang',
   },
   orders: {
     name: 'orders',

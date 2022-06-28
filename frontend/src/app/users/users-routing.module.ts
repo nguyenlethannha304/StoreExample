@@ -4,6 +4,7 @@ import { AuthGuard } from '../shared/auth/auth.guard';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
+import { MyOrdersComponent } from './my-orders/my-orders.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RegisterComponent } from './register/register.component';
 import { UserPanelComponent } from './user-panel/user-panel.component';
@@ -29,6 +30,11 @@ const routes: Routes = [
   {
     path: 'doi-mat-khau',
     component: ChangePasswordComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'don-hang',
+    component: MyOrdersComponent,
     canActivate: [AuthGuard],
   },
   {

@@ -10,6 +10,7 @@ import { UserPanelComponent } from './user-panel/user-panel.component';
 import { ShareModule } from '../shared/share.module';
 import { PanelRowDirective } from './shared/directive/panel-row.directive';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MyOrdersComponent } from './my-orders/my-orders.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     ChangePasswordComponent,
     UserPanelComponent,
     PanelRowDirective,
+    MyOrdersComponent,
   ],
   imports: [CommonModule, UserRoutingModule, ShareModule, ReactiveFormsModule],
   exports: [PanelRowDirective],
