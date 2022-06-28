@@ -41,13 +41,13 @@ class UserCreationForm(forms.ModelForm):
 
 
 @admin.register(City)
-class City(admin.ModelAdmin):
+class CityAdmin(admin.ModelAdmin):
     list_display = ('name', 'province')
     list_filter = ('province',)
 
 
 @admin.register(Province)
-class Province(admin.ModelAdmin):
+class ProvinceAdmin(admin.ModelAdmin):
     pass
 
 
