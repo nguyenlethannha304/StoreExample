@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MenuBar } from '../shared/interface/products';
+import { ProductService } from '../shared/service/product.service';
 
 @Component({
   selector: 'app-menu-bar',
@@ -8,40 +9,20 @@ import { MenuBar } from '../shared/interface/products';
   styleUrls: ['./menu-bar.component.css'],
 })
 export class MenuBarComponent implements OnInit, AfterViewInit {
-  menuBarData: MenuBar[] = [
-    {
-      name: 'Ghế',
-      slug: 'ghe',
-      types: [
-        {
-          name: 'Ghế nhựa',
-          slug: 'ghe-nhua',
-        },
-        {
-          name: 'Ghế gỗ',
-          slug: 'ghe-go',
-        },
-      ],
-    },
-    {
-      name: 'Bàn',
-      slug: 'ban',
-      types: [
-        {
-          name: 'Bàn nhựa',
-          slug: 'ban-nhua',
-        },
-        {
-          name: 'Bàn gỗ',
-          slug: 'ban-go',
-        },
-      ],
-    },
-  ];
-  constructor(private elementRef: ElementRef, private router: Router) {}
+  menuBarData: MenuBar[] = [];
+  constructor(
+    private elementRef: ElementRef,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.activatedRoute.data.subscribe(({ menuBar }) => {
+      this.menuBarData = menuBar;
+    });
+  }
   ngAfterViewInit(): void {
+    // Toggle categories
     let categoryDivs = <HTMLDivElement[]>(
       this.elementRef.nativeElement.querySelectorAll('.category-name')
     );

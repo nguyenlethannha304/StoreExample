@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { map, Observable, of, Subject } from 'rxjs';
 import {
   ProductDetail,
   ProductCard,
   ProductCardList,
+  MenuBar,
 } from '../interface/products';
 import { environment as e } from 'src/environments/environment';
 import { UUID } from 'src/app/shared/interface/share';
@@ -13,7 +14,21 @@ import { UUID } from 'src/app/shared/interface/share';
 })
 export class ProductService {
   products: Subject<ProductCardList> = new Subject<ProductCardList>();
+  menuBarData: MenuBar[] = null;
   constructor(private httpClient: HttpClient) {}
+  getMenuBar(): Observable<MenuBar[]> {
+    // Cache menuBarData
+    if (this.menuBarData != null) {
+      return of(this.menuBarData);
+    }
+    // Get data from servers
+    return this.httpClient.get<MenuBar[]>(`${e.api}/products/menuBar/`).pipe(
+      map((body) => {
+        this.menuBarData = body;
+        return body;
+      })
+    );
+  }
   getProductList(slug: string, kind: 't' | 'c', page: number, offset: number) {
     // slug of type or category
     // kind = 't' => get products based on type; kind = 'c' => get products based on category
