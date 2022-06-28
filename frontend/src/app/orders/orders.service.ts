@@ -60,7 +60,7 @@ export class OrdersService {
       .subscribe((response) => {
         if (response.status == HttpStatusCode.Created) {
           this.cartService.clear();
-          this.router.navigate(['orders', 'order-tracking'], {
+          this.router.navigate(['orders', 'tra-cuu-don-hang'], {
             queryParams: {
               id: response.body['id'],
               phone: response.body['phone_number'],
