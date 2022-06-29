@@ -50,7 +50,7 @@ export class OrdersService {
     return true;
   }
   submitOrder(shippingInfor: ShippingInformation) {
-    let isLogin = this.authService.isLogin(true) ? 'yes' : 'no';
+    let isLogin = this.authService.isLogin() ? 'yes' : 'no';
     let body = this.getBodyForSubmitOrder(shippingInfor);
     this.http
       .post<OrderTrackingInformation>(PLACE_ORDER_URL, body, {

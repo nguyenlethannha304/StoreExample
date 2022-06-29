@@ -74,8 +74,8 @@ export class AuthTokenService implements AuthPublisher {
         },
       });
   };
-  isLogin(isFullTimeExpire: boolean = false) {
-    if (this._accessToken && !this.isTokenExpire('access', isFullTimeExpire)) {
+  isLogin() {
+    if (this._accessToken && !this.isTokenExpire('access')) {
       return true;
     }
     return false;
@@ -127,10 +127,7 @@ export class AuthTokenService implements AuthPublisher {
       );
     }
   }
-  private isTokenExpire = (
-    type: 'access' | 'refresh',
-    isFullTimeExpire: boolean = false
-  ): boolean => {
+  private isTokenExpire = (type: 'access' | 'refresh'): boolean => {
     let duration = 0;
     let tokenSetTime = 0;
     if (type == 'access') {
@@ -139,9 +136,6 @@ export class AuthTokenService implements AuthPublisher {
     } else if (type == 'refresh') {
       duration = e.refreshTokenExpireIn;
       tokenSetTime = this._refreshTokenSetTime;
-    }
-    if (isFullTimeExpire == true) {
-      duration += e.fullTimeExtend;
     }
     return tokenSetTime + duration + 10000 <= new Date().getTime(); // Add 10000 or 10 seconds
   };

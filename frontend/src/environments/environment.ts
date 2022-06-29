@@ -3,13 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: true,
+  production: false,
   django: 'http://127.0.0.1:8000',
   api: 'http://127.0.0.1:8000/api',
-  accessTokenExpireIn: 5 * 60 * 1000, // 5 mins
-  refreshTokenExpireIn: 1 * 24 * 60 * 60 * 1000, // 1 days
-  //tokenTimeExpire will be set one hour lesser than backEnd unless use fullTime
-  fullTimeExtend: 3600 * 1000,
+  accessTokenExpireIn: 60 * 60 * 1000, // 60 mins
+  refreshTokenExpireIn: 30 * 24 * 60 * 60 * 1000, // 1 days
 };
 
 /*
