@@ -1,7 +1,15 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Route, RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './common-pages/home/home.component';
 import { NotFoundComponent } from './common-pages/not-found/not-found.component';
+import { PreloadingStrategy } from '@angular/router';
+import { Observable, of } from 'rxjs';
+class CustomPreloadingStrategy implements PreloadingStrategy {
+  // Preload specific module
+  preload(route: Route, load: () => Observable<any>): Observable<any> {
+    return route.data && route.data['preload'] ? load() : of(null);
+  }
+}
 const routes: Routes = [
   { path: '', component: HomeComponent },
   // Product Module
@@ -9,6 +17,7 @@ const routes: Routes = [
     path: 'products',
     loadChildren: () =>
       import('./products/products.module').then((m) => m.ProductsModule),
+    data: { preload: true },
   },
   // User Module
   {
@@ -21,6 +30,7 @@ const routes: Routes = [
     path: 'carts',
     loadChildren: () =>
       import('./carts/carts.module').then((m) => m.CartsModule),
+    data: { preload: true },
   },
   {
     path: 'orders',
@@ -32,7 +42,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, {
+      preloadingStrategy: CustomPreloadingStrategy,
+    }),
+  ],
   exports: [RouterModule],
+  providers: [CustomPreloadingStrategy],
 })
 export class AppRoutingModule {}
