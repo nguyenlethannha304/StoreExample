@@ -7,4 +7,4 @@ class UsersConfig(AppConfig):
     app_label = 'users'
 
     def ready(self):
-        from .signals import create_adress_for_new_user, create_cart_for_new_user
+        from .signals import create_adress_for_new_user, create_cart_for_new_user, create_order_list_for_new_user
