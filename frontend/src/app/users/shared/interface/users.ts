@@ -1,5 +1,6 @@
 import { isPhoneNumber, isEmail, isPassword } from '../validate/validate';
 import { FactoryInterface } from 'src/app/shared/interface/share';
+import { OrderTrackingInformation } from 'src/app/orders/orders';
 // USER INFORMATION
 export type Phone = string;
 export const Phone: FactoryInterface<Phone> = {
@@ -98,4 +99,11 @@ export type Profile = {
   street: string;
   province: Province;
   city: City;
+};
+export type UserOrder = {
+  phone: Phone;
+  orders: Pick<
+    OrderTrackingInformation,
+    'id' | 'total_price' | 'created_time'
+  >[];
 };

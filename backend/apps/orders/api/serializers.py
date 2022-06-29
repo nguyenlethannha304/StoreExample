@@ -53,6 +53,13 @@ class OrderInformationSerializer(serializers.ModelSerializer):
             'total_price', 'phone_number', 'created_time', 'address']
 
 
+class ListOrderSerializer(serializers.ModelSerializer):
+    # Used for AllUserOrderView
+    class Meta:
+        model = Order
+        fields = ['id', 'total_price', 'created_time']
+
+
 class CreateOrderSerializer(serializers.Serializer):
     # Products
     products = ProductForCreateOrderSerializer(many=True)

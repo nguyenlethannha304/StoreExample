@@ -52,7 +52,7 @@ class Order(models.Model):
 
 class UserOrder(models.Model):
     user = models.OneToOneField(
-        UserModel, on_delete=models.CASCADE, related_name='orders')
+        UserModel, on_delete=models.CASCADE, primary_key=True)
     orders = models.ManyToManyField(Order, related_name='+')
 
 

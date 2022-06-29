@@ -1,12 +1,12 @@
 <h3 id="title" class="text-center m-2">Đơn hàng của tôi</h3>
 <div class="order-information">
-    <div class="order-detail-container">
+    <div *ngFor="let order of userOrder" class="order-detail-container" (click)="navigateToOrderTracking(order.id)">
         <div class="order-id-and-created-time ms-2">
-            <p class="order-id">20220620aws60a</p>
-            <span class="created-time">Thời gian: 20-06-2022</span>
+            <p class="order-id">{{order.id}}</p>
+            <span class="created-time">Thời điểm tạo đơn: {{order.created_time | date:'dd-LL-yyyy'}}</span>
         </div>
         <div class="total-price ms-auto me-3">
-            332.000đ
+            {{order.total_price | currency}}
         </div>
     </div>
 </div>

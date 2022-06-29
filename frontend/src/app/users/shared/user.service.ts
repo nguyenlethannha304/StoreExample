@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AuthTokenService } from 'src/app/shared/auth/auth-token.service';
-import { Profile } from './interface/users';
+import { Profile, UserOrder } from './interface/users';
 import { of } from 'rxjs';
 import { AuthSubscriber } from 'src/app/shared/auth/auth';
 import { HttpClient } from '@angular/common/http';
@@ -23,6 +23,12 @@ export class UserService implements AuthSubscriber {
       }
     });
   }
+  getUserOrders(): Observable<UserOrder> {
+    return this.http.get<UserOrder>(`${e.api}/orders/user-order-tracking/`, {
+      headers: { Authorization: 'yes' },
+    });
+  }
+
   getProfileInformation$(): Observable<Profile> | Observable<null> {
     if (this.userLogIn) {
       return this.http.get<Profile>(`${e.api}/users/profile/`, {

@@ -1,10 +1,13 @@
+from os import stat
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from http import HTTPStatus
 from django.db import DatabaseError, transaction
 from django.db.models import Prefetch
-from .serializers import CreateOrderSerializer, OrderInformationSerializer, StateSerializer
-from ..models import Order, OrderState
+
+from .serializers import CreateOrderSerializer, ListOrderSerializer, OrderInformationSerializer, StateSerializer
+from ..models import Order, OrderState, UserOrder
 import copy
 from django.apps import apps
 
@@ -71,16 +74,37 @@ class PlaceOrderView(APIView):
             with transaction.atomic():
                 if serializer.is_valid():
                     order = serializer.save()
-                    self.clear_online_cart(request)
+                    self.post_order_process(request, order)
                     order_serializer = OrderInformationSerializer(order)
                     return Response(data=order_serializer.data, status=HTTPStatus.CREATED)
         except DatabaseError:
             return Response(status=HTTPStatus.INTERNAL_SERVER_ERROR)
         return Response(data=serializer.errors, status=HTTPStatus.BAD_REQUEST)
 
-    def clear_online_cart(self, request):
+    def post_order_process(self, request, order):
         if(request.user.is_authenticated):
             CartItem.objects.filter(cart_id=request.user.pk).delete()
+            request.user.userorder.add(order)
 
 
 api_place_order_view = PlaceOrderView.as_view()
+
+
+class UserOrderTrackingView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        orders = self.get_queryset(request)
+        order_serializer = ListOrderSerializer(
+            orders[0].orders.all(), many=True)
+        data = {'orders': order_serializer.data, 'phone': request.user.phone}
+        return Response(data=data, status=HTTPStatus.OK)
+
+    def get_queryset(self, request):
+        qs = UserOrder.objects.filter(pk=request.user)
+        qs = qs.prefetch_related(
+            Prefetch('orders', Order.objects.all().only('id', 'total_price', 'created_time')))
+        return qs
+
+
+api_user_order_tracking_view = UserOrderTrackingView.as_view()
