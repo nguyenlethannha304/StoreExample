@@ -1,15 +1,16 @@
-from apps.orders.api.serializers import AddressForCreateOrderSerializer
 from test.orders import setUpTestOrderApp, tearDownTestOrderApp
-from apps.orders.api.serializers import CreateOrderSerializer
-from rest_framework.test import APITestCase
-from django.test import tag
+
 from django.apps import apps
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
-import random
-from test import pick_random_object_from_queryset
-import copy
+from django.test import tag
+from rest_framework.test import APITestCase
+
+from apps.orders.api.serializers import (AddressForCreateOrderSerializer,
+                                         CreateOrderSerializer)
+
 from . import setFakeData
+
 # Product model
 Product = apps.get_model('products', 'Product')
 # user app models

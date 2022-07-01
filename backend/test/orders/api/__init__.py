@@ -1,8 +1,10 @@
 import copy
 import random
 from sys import breakpointhook
-from django.apps import apps
 from test import pick_random_object_from_queryset
+
+from django.apps import apps
+
 # Product model
 Product = apps.get_model('products', 'Product')
 # user app models

@@ -1,11 +1,10 @@
 from operator import itemgetter
-from urllib import request
-from django.db import IntegrityError
+
 from django.apps import apps
-from pkg_resources import require
 from rest_framework import serializers
-from django.db.models import F, Q
+
 from ..models import Cart, CartItem
+
 #
 Product = apps.get_model('products', 'Product')
 

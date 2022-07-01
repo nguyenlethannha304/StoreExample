@@ -1,7 +1,8 @@
 from uuid import uuid4
-from django.apps import apps
-from django.test import TestCase, tag
+
 from django.contrib.auth import get_user_model
+from django.test import TestCase, tag
+
 UserModel = get_user_model()
 
 

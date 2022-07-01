@@ -1,8 +1,11 @@
 from random import random
-from django.apps import apps
-from ..users import setUpTestUserApp, tearDownTestUserApp
-from ..products import setUpTestProductApp, tearDownTestProductApp
 from test import pick_random_object_from_queryset
+
+from django.apps import apps
+
+from ..products import setUpTestProductApp, tearDownTestProductApp
+from ..users import setUpTestUserApp, tearDownTestUserApp
+
 # order app models
 Order = apps.get_model('orders', 'Order')
 OrderItem = apps.get_model('orders', 'OrderItem')

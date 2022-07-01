@@ -1,9 +1,12 @@
-from django.test import TestCase, tag
-from django.contrib.auth import get_user_model
-from django.apps import apps
-from model_bakery import baker
 from test import pick_random_object_from_queryset
+
+from django.apps import apps
+from django.contrib.auth import get_user_model
+from django.test import TestCase, tag
+from model_bakery import baker
+
 from . import setUpTestCartApp, tearDownTestCartApp
+
 # Get models
 UserModel = get_user_model()
 # Models of orders app

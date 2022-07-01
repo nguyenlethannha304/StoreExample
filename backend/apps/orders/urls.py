@@ -1,5 +1,8 @@
-from django.urls import path, include
-from .api.views import api_check_order_information_view, api_place_order_view, api_user_order_tracking_view
+from django.urls import path
+
+from .api.views import (api_check_order_information_view, api_place_order_view,
+                        api_user_order_tracking_view)
+
 app_name = 'orders'
 api_order_urlpatterns = [
     # /api/orders/

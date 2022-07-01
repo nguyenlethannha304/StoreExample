@@ -1,5 +1,7 @@
-from django.urls import path, include
+from django.urls import path
+
 from .views import token_obtain_pair, token_refresh
+
 api_token_urlpatterns = [
     # /api/token/
     path('token_pair/', view=token_obtain_pair),

@@ -1,10 +1,10 @@
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from django import forms
-from django.core.files.images import ImageFile
-from .models import Product, SubImage
-from PIL import Image
 import io
+
+from django import forms
 from django.utils.text import slugify
+from PIL import Image
+
+from .models import Product, SubImage
 
 
 def create_thumbnail_from_image(image_field, field_name='thumbnail'):

@@ -1,14 +1,11 @@
 from django import forms
-from django.contrib.auth import (
-    authenticate, get_user_model, password_validation,
-)
-from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
+from django.contrib.auth import (authenticate, get_user_model,
+                                 password_validation)
+from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from django.forms.fields import CharField
 
-from django.forms.models import construct_instance, model_to_dict
-
-from ..utils.tools import validate_phonenumber, validate_email
-from .models import Address, Province, City
+from ..utils.tools import validate_email, validate_phonenumber
+from .models import Address
 
 __all__ = ['UserCreationForm', 'AuthenticationForm',
            'PasswordChangeForm']

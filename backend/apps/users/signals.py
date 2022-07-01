@@ -1,9 +1,10 @@
+from django.apps import apps
+from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from .models import Address
-from django.contrib.auth import get_user_model
-from django.apps import apps
+
 UserModel = get_user_model()
 Cart = apps.get_model('carts', 'Cart')
 UserOrder = apps.get_model('orders', 'UserOrder')

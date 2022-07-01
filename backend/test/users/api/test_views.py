@@ -1,13 +1,17 @@
-from django.contrib.auth import get_user_model
-from rest_framework.test import APIClient, APITestCase
-from apps.users.api.serializers import *
-from django.test import tag
-from apps.users.models import Province, City, Address
-from test.utils import new_data_with_change
-from http import HTTPStatus
 import json
+from http import HTTPStatus
+from test.utils import new_data_with_change
+
+from django.contrib.auth import get_user_model
+from django.test import tag
 from rest_framework.renderers import JSONRenderer
+from rest_framework.test import APIClient, APITestCase
+
+from apps.users.api.serializers import *
+from apps.users.models import Address, City, Province
+
 from .. import setUpTestUserApp, tearDownTestUserApp
+
 UserModel = get_user_model()
 # --------------URL-----------------
 USERS_APP_URL = '/api/users/'

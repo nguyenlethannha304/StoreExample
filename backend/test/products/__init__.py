@@ -1,6 +1,7 @@
 from django.apps import apps
-from model_bakery import baker
 from django.utils.text import slugify
+from model_bakery import baker
+
 Category = apps.get_model('products', 'Category')
 Type = apps.get_model('products', 'Type')
 Product = apps.get_model('products', 'Product')

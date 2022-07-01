@@ -1,10 +1,11 @@
-from apps.users.forms import uniform_phone_field
-from rest_framework import serializers
-from rest_framework.serializers import Serializer, ValidationError
 from django.contrib.auth import get_user_model
-from django.core.exceptions import FieldDoesNotExist
+from rest_framework import serializers
+from rest_framework.serializers import ValidationError
+
 from apps.utils.tools import validate_phonenumber
+
 from ..models import Address, City, CustomUser, Province
+
 UserModel = get_user_model()
 __all__ = ['UserCreationSerializer',
            'PasswordChangeSerializer', 'PhoneSerializer', 'UserAddressSerializer', 'CitySerializer', 'ProvinceSerializer', 'ProvinceCitiesSerializer']

@@ -2,6 +2,7 @@ from django.apps import apps
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from model_bakery import baker
+
 UserModel = get_user_model()
 Province = apps.get_model('users', 'Province')
 City = apps.get_model('users', 'City')

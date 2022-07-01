@@ -1,18 +1,18 @@
-from itertools import product
-from urllib import response
-from rest_framework.test import APIClient, APITestCase
+from http import HTTPStatus
+from random import randint
+from test import pick_random_object_from_queryset
+
+from django.apps import apps
 from django.test import tag
 from rest_framework.renderers import JSONRenderer
-from http import HTTPStatus
+from rest_framework.test import APIClient, APITestCase
 
-from apps.products.api.serializers import Product, Category
 from .. import setUpTestProductApp, tearDownTestProductApp
-from test import pick_random_object_from_queryset
-from django.apps import apps
-from random import randint
+
 # Get Model of products app
 Type = apps.get_model('products', 'Type')
 Product = apps.get_model('products', 'Product')
+Category = apps.get_model('products', 'Category')
 # Url of products app
 PRODUCT_APP_URL = '/api/products/'
 MENU_BAR_URL = PRODUCT_APP_URL + 'menuBar/'

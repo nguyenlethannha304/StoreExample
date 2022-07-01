@@ -1,7 +1,9 @@
-from itertools import cycle
-from model_bakery.recipe import Recipe, foreign_key, related
-from .models import Category, Type, Product
 import random
+from itertools import cycle
+
+from model_bakery.recipe import Recipe, foreign_key
+
+from .models import Category, Product, Type
 
 
 def return_random_rating():

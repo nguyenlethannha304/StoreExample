@@ -1,11 +1,11 @@
 from django.apps import apps
-from rest_framework.test import APITestCase
-from rest_framework.renderers import JSONRenderer
 from django.test import tag
-from django.utils.text import slugify
-from model_bakery import baker
+from rest_framework.test import APITestCase
+
 from apps.products.api.serializers import *
+
 from .. import setUpTestProductApp, tearDownTestProductApp
+
 Category = apps.get_model('products', 'Category')
 Type = apps.get_model('products', 'Type')
 Product = apps.get_model('products', 'Product')

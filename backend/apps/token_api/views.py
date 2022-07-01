@@ -1,4 +1,5 @@
-from rest_framework_simplejwt.views import TokenViewBase, TokenRefreshView
+from rest_framework_simplejwt.views import TokenRefreshView, TokenViewBase
+
 from .serializers import CustomTokenObtainPairSerializer
 
 

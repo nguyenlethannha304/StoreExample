@@ -1,10 +1,13 @@
-from this import d
+from test import pick_random_object_from_queryset
+
 from django.apps import apps
-from django.test import tag, TestCase
+from django.test import TestCase, tag
 from django.utils.text import slugify
 from model_bakery import baker
+from this import d
+
 from . import setUpTestProductApp, tearDownTestProductApp
-from test import pick_random_object_from_queryset
+
 Category = apps.get_model('products', 'Category')
 Type = apps.get_model('products', 'Type')
 Product = apps.get_model('products', 'Product')

@@ -1,5 +1,6 @@
-from rest_framework import serializers
 from django.apps import apps
+from rest_framework import serializers
+
 __all__ = ['TypeSerializer', 'CategoryNestingTypesSerializer',
            'ProductDetailSerializer', 'ProductListSerializer']
 Category = apps.get_model('products', 'Category')

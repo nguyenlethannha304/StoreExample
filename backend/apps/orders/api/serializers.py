@@ -1,14 +1,15 @@
-from math import prod
 from operator import itemgetter
+
+from django.apps import apps
+from django.db.models import F
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from apps.users.api.serializers import AddressSerializer
-from ..models import OrderItem, Order, OrderState, item_order_factory_method
 from apps.utils.tools import validate_phonenumber
-from django.apps import apps
-from django.db import transaction
-from django.db.models import F
+
+from ..models import Order, OrderState, item_order_factory_method
+
 # Product app models
 Product = apps.get_model('products', 'Product')
 Address = apps.get_model('users', 'Address')

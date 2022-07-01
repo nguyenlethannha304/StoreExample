@@ -1,8 +1,9 @@
-from traceback import format_stack
 from django.contrib import admin
-from .models import Category, SubImage, Type, Product
-from .forms import ProductModelForm
 from django.utils.html import format_html
+
+from .forms import ProductModelForm
+from .models import Category, Product, SubImage, Type
+
 # Register your models here.
 
 

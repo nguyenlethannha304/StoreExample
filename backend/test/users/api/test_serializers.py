@@ -1,16 +1,15 @@
-from django.conf import settings
-from apps.users.api.serializers import *
-from rest_framework import serializers
-from rest_framework.test import APITestCase, APIClient, APIRequestFactory
-from django.test import tag, RequestFactory
-from django.contrib.auth.hashers import make_password
-from django.contrib.auth import get_user_model
-from apps.users.models import Province, City, Address
 from test.utils import new_data_with_change
+
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
-from apps.users.forms import uniform_phone_field
-from model_bakery import baker
+from django.test import tag
+from rest_framework.test import APIRequestFactory, APITestCase
+
+from apps.users.api.serializers import *
+from apps.users.models import City, Province
+
 from .. import setUpTestUserApp, tearDownTestUserApp
+
 UserModel = get_user_model()
 
 

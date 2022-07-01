@@ -1,16 +1,16 @@
-from os import stat
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+import copy
 from http import HTTPStatus
+
+from django.apps import apps
 from django.db import DatabaseError, transaction
 from django.db.models import Prefetch
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .serializers import CreateOrderSerializer, ListOrderSerializer, OrderInformationSerializer, StateSerializer
 from ..models import Order, OrderState, UserOrder
-import copy
-from django.apps import apps
-
+from .serializers import (CreateOrderSerializer, ListOrderSerializer,
+                          OrderInformationSerializer, StateSerializer)
 
 CartItem = apps.get_model('carts', 'CartItem')
 Address = apps.get_model('users', 'Address')

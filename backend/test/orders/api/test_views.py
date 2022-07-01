@@ -1,10 +1,13 @@
 from http import HTTPStatus
-from rest_framework.test import APITestCase, APIClient
-from django.test import tag
+
 from django.apps import apps
 from django.contrib.auth import get_user_model
+from django.test import tag
+from rest_framework.test import APIClient, APITestCase
+
 from .. import setUpTestOrderApp, tearDownTestOrderApp
 from . import setFakeData
+
 # UserModel
 UserModel = get_user_model()
 Order = apps.get_model('orders', 'Order')

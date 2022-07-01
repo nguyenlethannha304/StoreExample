@@ -1,5 +1,9 @@
-from django.urls import path, include
-from .api.views import menu_bar_view, api_product_detail_view, api_product_list_view, api_similar_product_view, api_search_product_list_view
+from django.urls import path
+
+from .api.views import (api_product_detail_view, api_product_list_view,
+                        api_search_product_list_view, api_similar_product_view,
+                        menu_bar_view)
+
 app_name = 'products'
 urlpatterns = [
 ]

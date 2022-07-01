@@ -1,7 +1,8 @@
-from django.db import models
-from django.core.validators import MinLengthValidator, MaxLengthValidator
 import uuid
-from django.utils.text import slugify
+
+from django.core.validators import MaxLengthValidator, MinLengthValidator
+from django.db import models
+
 # Create your models here.
 
 

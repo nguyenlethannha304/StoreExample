@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate
 from rest_framework import exceptions
 from rest_framework_simplejwt.serializers import TokenObtainSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
+
 from apps.utils.tools import validate_email, validate_phonenumber
 
 

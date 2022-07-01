@@ -1,9 +1,10 @@
-from itertools import product
 import math
-from rest_framework.views import APIView
-from .serializers import *
+
 from rest_framework.response import Response
-from ..models import Category, Product, Type
+from rest_framework.views import APIView
+
+from ..models import Category, Product
+from .serializers import *
 
 
 class MenuBarView(APIView):
@@ -58,7 +59,7 @@ class AbstractProductListView(APIView):
         return bottom, top
 
     def get_page(self, request, *args, **kwargs):
-        page_kwargs = request.GET.get('page')
+        page_kwargs = request.GET.get('page', 1)
         return self.integer_or_zero(page_kwargs)
 
     def get_offset(self, request, *args, **kwargs):

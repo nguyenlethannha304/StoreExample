@@ -1,5 +1,7 @@
 import re
-from django.contrib.auth import load_backend, get_user_model, _clean_credentials
+
+from django.contrib.auth import (get_user_model,
+                                 )
 from django.contrib.auth.backends import ModelBackend
 
 UserModel = get_user_model()

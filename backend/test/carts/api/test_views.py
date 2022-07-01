@@ -1,12 +1,14 @@
 from http import HTTPStatus
-from django import views
-from django.test import tag
-from rest_framework.test import APITestCase, APIClient
 from test import pick_random_object_from_queryset
-from .. import setUpTestCartApp, tearDownTestCartApp
-from django.contrib.auth import get_user_model
+
 from django.apps import apps
-from apps.carts.api.serializers import ProductCartSerializer
+from django.contrib.auth import get_user_model
+from django.test import tag
+from rest_framework.test import APIClient, APITestCase
+
+
+from .. import setUpTestCartApp, tearDownTestCartApp
+
 UserModel = get_user_model()
 # Order models
 Cart = apps.get_model('carts', 'Cart')

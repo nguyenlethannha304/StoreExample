@@ -1,9 +1,10 @@
-from secrets import choice
+import uuid
+
+from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator
 from django.db import IntegrityError, models
 from django.db.models import F, Q
-from django.core.validators import MinValueValidator
-from django.contrib.auth import get_user_model
-import uuid
+
 UserModel = get_user_model()
 # Create your models here.
 

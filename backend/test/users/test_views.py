@@ -1,13 +1,14 @@
-from wsgiref.util import request_uri
-from django.contrib.auth.models import User
-from django.test import TestCase, tag
+from test.utils import test_redirect_to_login
+
 from django.contrib.auth import get_user_model
+from django.test import TestCase, tag
 from django.test.client import Client
 from django.urls import reverse
-from django.conf import settings
+
 from apps.users.forms import *
-from test.utils import test_redirect_to_login
+
 from . import setUpTestUserApp, tearDownTestUserApp
+
 UserModel = get_user_model()
 
 

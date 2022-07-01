@@ -1,6 +1,7 @@
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
-from django.db.models.signals import post_save, post_delete
-from .models import CartItem, Cart
+
+from .models import Cart, CartItem
 
 
 @receiver(post_save, sender=CartItem)

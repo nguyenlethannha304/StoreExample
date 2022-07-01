@@ -1,12 +1,15 @@
 import uuid
+
 from django.apps import apps
-from django.db import models
-from django.core.mail import send_mail
-from django.core.exceptions import ImproperlyConfigured
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import PermissionsMixin, UserManager
+from django.core.exceptions import ImproperlyConfigured
+from django.core.mail import send_mail
+from django.db import models
+
 from ..utils.tools import validate_phonenumber
+
 # Create your models here.
 
 

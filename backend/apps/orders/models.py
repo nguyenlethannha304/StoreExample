@@ -1,11 +1,11 @@
-from datetime import date
-from django.db import models
-from django.apps import apps
-from django.db.models import constraints, Q
-from django.contrib.auth import get_user_model
-from django.utils.functional import cached_property
-import uuid
 import random
+import uuid
+from datetime import date
+
+from django.contrib.auth import get_user_model
+from django.db import models
+from django.db.models import Q, constraints
+
 # Create your models here.
 UserModel = get_user_model()
 # Product model

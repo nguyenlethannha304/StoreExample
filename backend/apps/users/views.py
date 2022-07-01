@@ -1,20 +1,21 @@
-from django.contrib.auth import login, logout, get_user_model
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ImproperlyConfigured
-from django.http.response import HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.http.response import HttpResponseRedirect, JsonResponse
+from django.shortcuts import render
 from django.urls.base import reverse
 from django.utils.decorators import method_decorator
+from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
-from django.views import View
-from django.contrib import messages
-from django.conf import settings
+
 from apps.core.views import AbstractBaseContext
-from django.http.response import JsonResponse
-from .forms import *
+
 from ..utils.tools import validate_email
+from .forms import *
 
 UserModel = get_user_model()
 dispatch_decorators = [sensitive_post_parameters(), csrf_protect, never_cache]

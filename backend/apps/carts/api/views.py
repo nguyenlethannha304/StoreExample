@@ -1,17 +1,15 @@
-from os import stat
-from rest_framework import views
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import api_view, permission_classes
-from ..models import Cart, CartItem
-from .serializers import *
-from rest_framework.response import Response
-from django.db.models import F, Prefetch
-from django.db import IntegrityError
-from django.conf import settings
-from django.apps import apps
 import json
 from http import HTTPStatus
-from operator import itemgetter
+
+from django.apps import apps
+from rest_framework import views
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+from ..models import Cart, CartItem
+from .serializers import *
+
 # Product Model
 Product = apps.get_model('products', 'Product')
 

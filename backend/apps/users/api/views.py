@@ -1,11 +1,13 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from .serializers import *
 import json
-from rest_framework.permissions import IsAuthenticated
-from ..models import Address, Province, City
-from rest_framework.decorators import api_view
 from http import HTTPStatus
+
+from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from ..models import Address, City, Province
+from .serializers import *
 
 
 class UserCreationView(APIView):

@@ -1,9 +1,13 @@
-import profile
-from django.urls import path, include
-from .views import (login_view, user_create_view,
-                    password_change_view, profile_change_view, logout_view, check_email_exists, user_panel_view)
-from .api.views import (api_get_email_address, api_user_creation_view,
-                        api_user_password_change_view, api_get_province_view, api_get_city_view, api_profile_view, api_get_provinces_cities)
+from django.urls import path
+
+from .api.views import (api_get_city_view, api_get_email_address,
+                        api_get_province_view, api_get_provinces_cities,
+                        api_profile_view, api_user_creation_view,
+                        api_user_password_change_view)
+from .views import (check_email_exists, login_view, logout_view,
+                    password_change_view, profile_change_view,
+                    user_create_view, user_panel_view)
+
 app_name = 'users'
 urlpatterns = [
     # Pre Url /users/

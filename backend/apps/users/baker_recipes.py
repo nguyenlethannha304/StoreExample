@@ -1,8 +1,10 @@
 from itertools import cycle
-from model_bakery.recipe import Recipe, foreign_key
+
 from django.contrib.auth import get_user_model
+from model_bakery.recipe import Recipe, foreign_key
 
 from apps.users.models import City, Province
+
 UserModel = get_user_model()
 
 # User (hash password before test something related to password)

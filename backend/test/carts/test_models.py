@@ -1,10 +1,10 @@
-from unittest import skipUnless
-from django.db import IntegrityError, transaction
-from django.test import TestCase, tag, TransactionTestCase
-from django.contrib.auth import get_user_model
 from django.apps import apps
-from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.db import IntegrityError
+from django.test import TestCase, tag
+
 from . import setUpTestCartApp, tearDownTestCartApp
+
 # Get models
 UserModel = get_user_model()
 # Models of orders app

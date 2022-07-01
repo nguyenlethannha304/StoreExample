@@ -1,6 +1,7 @@
 from copy import deepcopy
-from django.test import Client
+
 from django.conf import settings
+from django.test import Client
 
 
 def new_data_with_change(data, field_change, new_value):

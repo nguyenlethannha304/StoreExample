@@ -1,13 +1,15 @@
-import copy
-from django.test import TestCase, tag
-from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
-from django.contrib.auth import get_user_model
-from django.test.client import RequestFactory
-from django.utils.datastructures import MultiValueDict
-from apps.users.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
-from apps.users.models import Address
 from test.utils import new_data_with_change
+
+from django.contrib.auth import get_user_model
+from django.core.exceptions import NON_FIELD_ERRORS
+from django.test import TestCase, tag
+from django.test.client import RequestFactory
+
+from apps.users.forms import (AuthenticationForm, PasswordChangeForm,
+                              UserCreationForm)
+
 from . import setUpTestUserApp, tearDownTestUserApp
+
 UserModel = get_user_model()
 
 

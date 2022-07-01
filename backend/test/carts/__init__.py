@@ -1,12 +1,13 @@
 from random import random
-
-from setuptools import setup
-from ..users import setUpTestUserApp, tearDownTestUserApp
-from ..products import setUpTestProductApp, tearDownTestProductApp
 from test import pick_random_object_from_queryset
+
 from django.apps import apps
 from django.contrib.auth import get_user_model
 from model_bakery import baker
+
+from ..products import setUpTestProductApp, tearDownTestProductApp
+from ..users import setUpTestUserApp, tearDownTestUserApp
+
 UserModel = get_user_model()
 # Model from orders app
 Cart = apps.get_model('carts', 'Cart')

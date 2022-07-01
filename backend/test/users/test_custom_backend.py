@@ -1,8 +1,9 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate, get_user_model
 from django.test import TestCase, tag
 from django.test.client import RequestFactory
-from django.contrib.auth import authenticate
+
 from . import setUpTestUserApp, tearDownTestUserApp
+
 UserModel = get_user_model()
 
 
