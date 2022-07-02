@@ -43,7 +43,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 60%;
+    min-width: 50%;
+    max-width: 70%;
     margin: 1rem auto;
     border: 1px solid black;
     border-radius: 2rem;
