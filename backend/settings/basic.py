@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-
+DEBUG  = False
 
 # Application definition
 
@@ -156,3 +156,6 @@ SIMPLE_SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
 }
+# MEDIA
+MEDIA_ROOT = os.path.join(BASE_DIR, 'apps', 'static', 'image')
+MEDIA_URL = 'media/'
