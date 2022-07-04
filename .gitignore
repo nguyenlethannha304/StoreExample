@@ -11,6 +11,7 @@ migrations/
 backend/apps/static/image
 # Node Module
 frontend/node_modules/
+frontend/dist/
 # Blue_print
 /blue_print
 # !/Blue_print/mobile.xd

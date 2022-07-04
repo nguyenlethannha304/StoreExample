@@ -1,6 +1,17 @@
+upstream django_backend {
+    
+};
 server {
+    # Common setup
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    # Django Admin
+    location ~ /admin/* {
+    } 
+    # Django API
+    location ~ /api/* {
+    }
     # Angular serving configuration
-    listen 0.0.0.0:80 default_server;
     location / {
         root /var/www/frontend;
         try_files $uri $uri/ /index.html;

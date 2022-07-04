@@ -1,0 +1,2 @@
+# Dependent: Django backend
+DJANGO_BACKEND_ADDRESS=$DJ_ADDRESS
