@@ -1,19 +1,28 @@
 upstream django_backend {
-    
-};
+    server $DJ_ADDRESS;
+}
 server {
     # Common setup
     listen 80 default_server;
     listen [::]:80 default_server;
-    # Django Admin
-    location ~ /admin/* {
-    } 
-    # Django API
-    location ~ /api/* {
+    # Django Admin and API
+    location ~ /(admin|api)/* {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host $host;
+        proxy_redirect off;
+        proxy_pass http://django_backend;
     }
-    # Angular serving configuration
+    # Django static for Admin page
+    location ^~ /static/ {
+        alias /var/www/static/;
+        autoindex on;
+    }
+    # Angular
     location / {
         root /var/www/frontend;
         try_files $uri $uri/ /index.html;
+        # Cache based on url
+        proxy_cache_key "$scheme$host$request_uri";
     }
 }
