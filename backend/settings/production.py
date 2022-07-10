@@ -17,3 +17,5 @@ DATABASES = {
         'PORT': environ.get('PG_PORT'),
     }
 }
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
