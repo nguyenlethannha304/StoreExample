@@ -1,0 +1,8 @@
+-r base.txt
+
+# fixtures for testing
+model-bakery==1.4.0
+
+# Code quality
+lake8==3.9.0  
+flake8-isort==4.0.0  
