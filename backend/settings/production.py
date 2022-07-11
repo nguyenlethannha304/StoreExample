@@ -10,11 +10,11 @@ CORS_ALLOWED_ORIGINS = ALLOWED_HOSTS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': environ.get('PG_DB'),
-        'USER': environ.get('PG_USER'),
-        'PASSWORD': environ.get('PG_PASSWORD'),
-        'HOST': environ.get('PG_HOST'),
-        'PORT': environ.get('PG_PORT'),
+        'NAME': environ.get('POSTGRES_DB'),
+        'USER': environ.get('POSTGRES_USER'),
+        'PASSWORD': environ.get('POSTGRES_PASSWORD'),
+        'HOST': environ.get('POSTGRES_HOST'),
+        'PORT': environ.get('POSTGRES_PORT'),
     }
 }
 
