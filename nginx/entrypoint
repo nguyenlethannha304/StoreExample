@@ -1,0 +1,7 @@
+#! /bin/bash
+
+mv frontend /var/www/
+
+mv static /var/www/
+
+nginx -g 'daemon off;'
