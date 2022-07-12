@@ -1,11 +1,15 @@
 from .basic import *
 from os import environ
-
+def get_allowed_origins():
+    allowed_list = environ.get('DJ_ALLOWED_HOSTS').replace('"', '').split(',')
+    for i in range(len(allowed_list)):
+        allowed_list[i] = 'http://' + allowed_list[i]
+    return allowed_list
 SECRET_KEY = environ.get('DJ_SECRET_KEY')
 
 allowed_host_list = environ.get('DJ_ALLOWED_HOSTS').replace('"', '').split(',')
 ALLOWED_HOSTS = allowed_host_list
-CORS_ALLOWED_ORIGINS = ALLOWED_HOSTS
+CORS_ALLOWED_ORIGINS = get_allowed_origins()
 
 DATABASES = {
     'default': {
