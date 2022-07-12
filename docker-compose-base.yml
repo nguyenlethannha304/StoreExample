@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  # DJANGO
+  django:
+    build: ./backend/
+    env_file:
+      - ./env/django_env
+      - ./env/post_env
+    command: ./start
+    volumes:
+      - type: bind
+        source: ./nginx/static
+        target: /src/static
+    expose:
+      - 5000
+    networks:
+      - localhost
+  # POSTGRES
+  postgres:
+    image: "postgres:14.4"
+    env_file:
+      - ./env/post_env
+    expose:
+      - 5432
+    networks:
+      - localhost
+    volumes:
+      - postgres_db:/var/lib/postgresql/data
+  # ANGULAR
+  angular:
+    build: ./frontend/
+    volumes:
+      - type: bind
+        source: ./nginx/
+        target: /src/frontend_output
+  # NGINX
+  nginx:
+    build: ./nginx/
+    ports:
+      - "80:80"
+    networks:
+      - localhost
+
+networks:
+  localhost:
+
+volumes:
+  postgres_db:

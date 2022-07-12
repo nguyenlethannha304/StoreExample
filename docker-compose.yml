@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  # DJANGO
+  django:
+    extends:
+      file: docker-compose-base.yml
+      service: django
+    depends_on:
+      - postgres
+  # POSTGRES
+  postgres:
+    extends:
+      file: docker-compose-base.yml
+      service: postgres
+  # ANGULAR
+  angular:
+    extends:
+      file: docker-compose-base.yml
+      service: angular
+  # NGINX
+  nginx:
+    extends:
+      file: docker-compose-base.yml
+      service: nginx
+    depends_on:
+      angular:
+        condition: service_completed_successfully
+
+
+networks:
+  localhost:
+
+volumes:
+  postgres_db:

@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  # DJANGO
+  django:
+    extends:
+      file: docker-compose-base.yml
+      service: django
+    depends_on:
+      - postgres
+    command: ''
+    entrypoint: sleep 1d
+    volumes:
+      - ./backend:/src
+      - type: bind
+        source: ./nginx/static
+        target: /src/static
+
+  # POSTGRES
+  postgres:
+    extends:
+      file: docker-compose-base.yml
+      service: postgres
+  # ANGULAR
+  # angular:
+  #   build: ./frontend/
+  #     - type: bind
+  #       source: ./nginx/
+  #       target: /src/frontend_output
+  # # NGINX
+  # nginx:
+  #   build: ./nginx/
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     angular:
+  #       condition: service_completed_successfully
+  #   networks:
+  #     - localhost
+
+networks:
+  localhost:
+
+volumes:
+  postgres_db:

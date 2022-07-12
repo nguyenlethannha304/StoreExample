@@ -3,17 +3,24 @@
 .env/
 source_code/
 rest_framework/
+
 # DJANGO
 *.pyc
 __pycache__/
 db.sqlite3
 migrations/
 backend/apps/static/image
+
 # Node Module
 frontend/node_modules/
 frontend/dist/
+
 # Blue_print
 /blue_print
 # !/Blue_print/mobile.xd
 # !/Blue_print/web.xd
 # !/Blue_print/icons/
+
+# Nginx
+/nginx/frontend
+/nginx/static
