@@ -31,9 +31,7 @@ services:
   angular:
     build: ./frontend/
     volumes:
-      - type: bind
-        source: ./nginx/
-        target: /src/frontend_output
+      - ./nginx/:/src/frontend_output
   # NGINX
   nginx:
     build: ./nginx/

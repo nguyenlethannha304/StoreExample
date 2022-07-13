@@ -9,5 +9,6 @@ WORKDIR /src
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 RUN chmod +x entrypoint
+RUN chmod +x local-start
 
 ENTRYPOINT ["./entrypoint"]

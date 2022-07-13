@@ -3,13 +3,13 @@ version: '3'
 services:
   # DJANGO
   django:
+    entrypoint: bash ./start
     extends:
       file: docker-compose-base.yml
       service: django
     depends_on:
       - postgres
-    command: ''
-    entrypoint: sleep 1d
+    # command: sleep 1d # Used for makemigration | migrate
     volumes:
       - ./backend:/src
       - type: bind
@@ -22,21 +22,22 @@ services:
       file: docker-compose-base.yml
       service: postgres
   # ANGULAR
-  # angular:
-  #   build: ./frontend/
-  #     - type: bind
-  #       source: ./nginx/
-  #       target: /src/frontend_output
-  # # NGINX
-  # nginx:
-  #   build: ./nginx/
-  #   ports:
-  #     - "80:80"
-  #   depends_on:
-  #     angular:
-  #       condition: service_completed_successfully
-  #   networks:
-  #     - localhost
+  angular:
+    entrypoint: ng s
+    volumes:
+      - ./frontend:/src
+    extends:
+      file: docker-compose-base.yml
+      service: angular
+  # NGINX
+  nginx:
+    extends:
+      file: docker-compose-base.yml
+      service: nginx
+    networks:
+      - localhost
+    depends_on:
+      - django
 
 networks:
   localhost:
