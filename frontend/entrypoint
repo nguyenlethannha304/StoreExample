@@ -1,5 +1,0 @@
-#! /bin/bash
-
-ng build
-
-cp -r dist/frontend frontend_output/
