@@ -8,6 +8,12 @@ services:
       service: django
     depends_on:
       - postgres
+    # command: sleep 1d # Used for makemigration | migrate
+    command: /compose/start
+    volumes:
+      - ./backend:/src
+      - ./nginx/static:/src/static
+
   # POSTGRES
   postgres:
     extends:
@@ -15,19 +21,26 @@ services:
       service: postgres
   # ANGULAR
   angular:
+    volumes:
+      - ./frontend:/src
     extends:
       file: docker-compose-base.yml
       service: angular
+    # Angular ng server
+    command: /compose/local-start
+    networks:
+      - localhost
+    expose:
+      - 4200
   # NGINX
   nginx:
-    command: './local-start'
+    command: /compose/local-start
     extends:
       file: docker-compose-base.yml
       service: nginx
     depends_on:
-      angular:
-        condition: service_completed_successfully
-
+      - angular
+      - django
 
 networks:
   localhost:

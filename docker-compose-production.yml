@@ -3,19 +3,12 @@ version: '3'
 services:
   # DJANGO
   django:
-    entrypoint: bash ./start
     extends:
       file: docker-compose-base.yml
       service: django
+    command: /compose/start
     depends_on:
       - postgres
-    # command: sleep 1d # Used for makemigration | migrate
-    volumes:
-      - ./backend:/src
-      - type: bind
-        source: ./nginx/static
-        target: /src/static
-
   # POSTGRES
   postgres:
     extends:
@@ -23,21 +16,25 @@ services:
       service: postgres
   # ANGULAR
   angular:
-    entrypoint: ng s
-    volumes:
-      - ./frontend:/src
+    command: /compose/start
     extends:
       file: docker-compose-base.yml
       service: angular
   # NGINX
   nginx:
+    command: /compose/start
     extends:
       file: docker-compose-base.yml
       service: nginx
-    networks:
-      - localhost
     depends_on:
-      - django
+      django:
+        condition: service_started
+      angular:
+        condition: service_completed_successfully
+    volumes:
+      - ./nginx:/src
+
+
 
 networks:
   localhost:

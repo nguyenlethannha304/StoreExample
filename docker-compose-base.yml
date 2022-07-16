@@ -3,15 +3,15 @@ version: '3'
 services:
   # DJANGO
   django:
-    build: ./backend/
+    build:
+      context: .
+      dockerfile: ./compose/backend/Dockerfile
     env_file:
+      - ./env/host_env
       - ./env/django_env
       - ./env/post_env
-    command: ./start
     volumes:
-      - type: bind
-        source: ./nginx/static
-        target: /src/static
+      - ./nginx/static:/src/static
     expose:
       - 5000
     networks:
@@ -29,12 +29,18 @@ services:
       - postgres_db:/var/lib/postgresql/data
   # ANGULAR
   angular:
-    build: ./frontend/
+    build:
+      context: .
+      dockerfile: ./compose/frontend/Dockerfile
+    env_file:
+      - ./env/host_env
     volumes:
       - ./nginx/:/src/frontend_output
   # NGINX
   nginx:
-    build: ./nginx/
+    build:
+      context: .
+      dockerfile: ./compose/nginx/Dockerfile
     ports:
       - "80:80"
     networks:
