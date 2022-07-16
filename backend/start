@@ -1,7 +1,0 @@
-#!/bin/bash
-
-# Export static for admin page
-python ./manage.py collectstatic --noinput --settings=settings.production
-
-# Run server
-gunicorn settings.wsgi --bind 0.0.0.0:5000

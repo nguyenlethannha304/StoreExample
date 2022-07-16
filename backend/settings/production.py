@@ -1,13 +1,13 @@
 from .basic import *
 from os import environ
 def get_allowed_origins():
-    allowed_list = environ.get('DJ_ALLOWED_HOSTS').replace('"', '').split(',')
-    for i in range(len(allowed_list)):
-        allowed_list[i] = 'http://' + allowed_list[i]
-    return allowed_list
+    PUBLIC_IP = environ.get("PUBLIC_IP")
+    PUBLIC_IP = 'http://' + str(PUBLIC_IP)
+    return [PUBLIC_IP]
+
 SECRET_KEY = environ.get('DJ_SECRET_KEY')
 
-allowed_host_list = environ.get('DJ_ALLOWED_HOSTS').replace('"', '').split(',')
+allowed_host_list = [str(environ.get("PUBLIC_IP"))]
 ALLOWED_HOSTS = allowed_host_list
 CORS_ALLOWED_ORIGINS = get_allowed_origins()
 
