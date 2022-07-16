@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Run server
+gunicorn --chdir /src settings.wsgi --bind 0.0.0.0:5000

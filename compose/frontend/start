@@ -1,0 +1,5 @@
+#!/bin/bash
+
+npm run build
+
+cp -r /src/dist/frontend /src/frontend_output/

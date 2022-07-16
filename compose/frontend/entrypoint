@@ -1,0 +1,6 @@
+#! /bin/bash
+
+envsub ./src/environments/environment-template.prod.ts ./src/environments/environment.prod.ts
+
+exec "$@"
+

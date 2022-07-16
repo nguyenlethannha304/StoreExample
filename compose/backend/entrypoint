@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Export static for admin page
+python /src/manage.py collectstatic --noinput --settings=settings.production
+
+# Execute command script
+exec "$@"
