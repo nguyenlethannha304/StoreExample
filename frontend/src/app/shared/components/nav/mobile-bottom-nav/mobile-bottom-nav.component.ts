@@ -56,10 +56,9 @@ export class MobileBottomNavComponent implements OnInit, AfterViewInit {
     this.calculate_left_attribute_cartCount();
   }
   calculate_left_attribute_cartCount() {
-    let cartIcon = this.cartContainer.nativeElement.querySelector('path');
-    let leftAttribute = cartIcon.getBoundingClientRect().x;
-    let countNumber =
+    let cartCountContainer =
       this.cartContainer.nativeElement.parentNode.querySelector('.cart-count');
-    countNumber.style.left = `${leftAttribute + 32}px`;
+    cartCountContainer.style.right = `0px`;
+    cartCountContainer.style.top = `-0.5rem`;
   }
 }
