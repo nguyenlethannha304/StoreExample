@@ -9,7 +9,7 @@
                 {{username.errors[errorKey]}}
             </p>
         </div>
-        <input InputElement formControlName="username" id="username-input" type="text" required>
+        <input InputElement formControlName="username" id="username-input" type="text" >
     </div>
     <!-- password Input -->
     <div InputContainer id="password">
@@ -19,7 +19,7 @@
                 {{password.errors[errorKey]}}
             </p>
         </div>
-        <input #passwordEle InputElement type="password" id="password-input" formControlName="password" required>
+        <input #passwordEle InputElement type="password" id="password-input" formControlName="password" >
         <div HideShowInput [TargetElement]="passwordEle"></div>
     </div>
     <!-- Buttons -->

@@ -23,6 +23,7 @@ import {
   isPhoneNumberValid,
   isEmailValid,
   isPasswordValid,
+  isRequired,
 } from '../shared/validate/validate';
 @Component({
   selector: 'app-login',
@@ -44,8 +45,8 @@ export class LoginComponent implements OnInit {
   @ViewChild('formErrorContainer') formErrorContainer: ElementRef;
   redirectAfterLogin: string = '/'; //default redirect to homepage
   loginForm: FormGroup = new FormGroup({
-    username: new FormControl('', isUsernameValid()),
-    password: new FormControl('', isPasswordValid()),
+    username: new FormControl('', [isRequired(),isUsernameValid()]),
+    password: new FormControl('', [isRequired(),isPasswordValid()]),
   });
   get username():AbstractControl {
     return this.loginForm.get('username');

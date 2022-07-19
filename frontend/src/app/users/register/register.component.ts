@@ -11,6 +11,7 @@ import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import {
   isEmailValid,
   isPasswordValid,
+  isRequired,
   isTwoPasswordSame,
 } from '../shared/validate/validate';
 import { environment as e } from 'src/environments/environment';
@@ -40,9 +41,9 @@ export class RegisterComponent implements OnInit {
   @ViewChild('formErrorContainer') formErrorContainer: ElementRef;
   registerForm = new FormGroup(
     {
-      email: new FormControl('', [isEmailValid()]),
-      pass: new FormControl('', [isPasswordValid()]),
-      confirmPass: new FormControl('', [isPasswordValid()]),
+      email: new FormControl('', [isRequired(),isEmailValid()]),
+      pass: new FormControl('', [isRequired(),isPasswordValid()]),
+      confirmPass: new FormControl('', [isRequired(),isPasswordValid()]),
     },
     isTwoPasswordSame('pass', 'confirmPass')
   );

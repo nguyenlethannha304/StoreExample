@@ -17,6 +17,7 @@ import { UserService } from 'src/app/users/shared/user.service';
 import {
   isEmailValid,
   isPhoneNumberValid,
+  isRequired,
 } from 'src/app/users/shared/validate/validate';
 import { NavigateService } from '../../shared/services/navigate/navigate.service';
 import { LogInUserAddress, ShippingInformation } from '../orders';
@@ -101,12 +102,12 @@ export class OrdersComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   // ADDRESS-FORM
   shippingInformationForm = this.fb.group({
-    email: this.fb.control('', [isEmailValid()]),
-    phone: this.fb.control('', [isPhoneNumberValid()]),
+    email: this.fb.control('', [isRequired(),isEmailValid()]),
+    phone: this.fb.control('', [isRequired(),isPhoneNumberValid()]),
     address: this.fb.group({
-      street: this.fb.control('', [Validators.required]),
-      province: this.fb.control('', [Validators.required]),
-      city: this.fb.control('', [Validators.required]),
+      street: this.fb.control('', [isRequired()]),
+      province: this.fb.control('', [isRequired()]),
+      city: this.fb.control('', [isRequired()]),
     }),
   });
   get email() {
