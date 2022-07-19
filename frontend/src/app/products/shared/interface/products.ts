@@ -1,5 +1,4 @@
 import {
-  FactoryInterface,
   PositiveInteger,
   UUID,
 } from 'src/app/shared/interface/share';
@@ -33,17 +32,6 @@ export type Product = {
 };
 
 type Rating = number;
-const Rating: FactoryInterface<Rating> = {
-  init(value: Rating) {
-    return this.isValid(value) ? value : null;
-  },
-  isValid(value: Rating) {
-    if (!(Number.isInteger(value) && value >= 0 && value <= 5)) {
-      return true;
-    }
-    throw new Error(`Giá trị đánh giá ${value} không hợp lệ`);
-  },
-};
 export type ProductCardList = {
   results: ProductCard[];
   count: number;

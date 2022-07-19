@@ -10,15 +10,11 @@ import {
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { isPhoneNumberValid } from '../shared/validate/validate';
 import { environment as e } from 'src/environments/environment';
-import { Profile, Phone, AddressForSubmit } from '../shared/interface/users';
+import { Profile } from '../shared/interface/users';
 import { EmptyResponse } from 'src/app/shared/interface/empty-response';
 import { MessageService } from 'src/app/shared/services/message/message.service';
 import { renderErrorsFromBackend } from 'src/app/shared/common-function';
 import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
-import {
-  createKeyValueForObject,
-  createObject,
-} from 'src/app/shared/interface/share';
 import { tap, zip } from 'rxjs';
 import { FormErrors } from 'src/app/shared/interface/errors';
 import { formErrorAdapter } from 'src/app/shared/utils/form-errors-adapter';
@@ -96,13 +92,12 @@ export class ProfileComponent implements AfterViewInit {
     return this.profileForm.get('city');
   }
   onSubmit() {
-    try {
-      var body = this.getBodyOnSubmit();
-    } catch (e) {
-      if (e instanceof Error) {
-        this.messageSer.createErrorMessage(e.message);
-        return;
-      }
+    if(!this.profileForm.valid){
+      return
+    }
+    let body = {
+      phone:this.phone.value,
+      address:{street:this.street.value, city:this.city.value, province:this.province.value}
     }
     this.http
       .post<EmptyResponse>(
@@ -131,16 +126,5 @@ export class ProfileComponent implements AfterViewInit {
           this.navSer.navigateTo('home');
         },
       });
-  }
-  getBodyOnSubmit() {
-    let body = createObject(
-      createKeyValueForObject('phone', this.phone.value),
-      createKeyValueForObject('address', {
-        street: this.street.value,
-        city: this.city.value,
-        province: this.province.value,
-      })
-    ) as { phone: Phone; address: AddressForSubmit };
-    return body;
   }
 }

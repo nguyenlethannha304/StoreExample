@@ -17,13 +17,8 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthTokenService } from 'src/app/shared/auth/auth-token.service';
 import { renderErrorsFromBackend } from 'src/app/shared/common-function';
 import { FormErrors } from 'src/app/shared/interface/errors';
-import {
-  createKeyValueForObject,
-  createObject,
-} from 'src/app/shared/interface/share';
 import { MessageService } from 'src/app/shared/services/message/message.service';
 import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
-import { Password, Username } from '../shared/interface/users';
 import {
   isPhoneNumberValid,
   isEmailValid,
@@ -52,10 +47,10 @@ export class LoginComponent implements OnInit {
     username: new FormControl('', isUsernameValid()),
     password: new FormControl('', isPasswordValid()),
   });
-  get username() {
+  get username():AbstractControl {
     return this.loginForm.get('username');
   }
-  get password() {
+  get password():AbstractControl {
     return this.loginForm.get('password');
   }
   renderLoginFormErrors = (errors: HttpErrorResponse) => {
@@ -70,18 +65,8 @@ export class LoginComponent implements OnInit {
     renderErrorsFromBackend(objectError, this.formErrorContainer, this.render);
   };
   onSubmit() {
-    if (this.loginForm.valid) {
-      try {
-        var body = createObject(
-          createKeyValueForObject('username', this.username.value, Username),
-          createKeyValueForObject('password', this.password.value, Password)
-        ) as { username: Username; password: Password };
-      } catch (e) {
-        if (e instanceof Error) {
-          this.messageSer.createErrorMessage(e.message);
-          return;
-        }
-      }
+    if(this.loginForm.valid){
+      let body = {username:this.username.value, password:this.password.value}
       this.authTokenSer.login(
         body.username,
         body.password,
@@ -89,8 +74,8 @@ export class LoginComponent implements OnInit {
         this.redirectAfterLogin
       );
     }
+    }
   }
-}
 
 // Username validate
 const isUsernameValid = (): ValidatorFn => {

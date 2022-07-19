@@ -17,11 +17,6 @@ import { environment as e } from 'src/environments/environment';
 import { MessageService } from 'src/app/shared/services/message/message.service';
 import { NavigateService } from 'src/app/shared/services/navigate/navigate.service';
 import { renderErrorsFromBackend } from 'src/app/shared/common-function';
-import { Email, Password } from '../shared/interface/users';
-import {
-  createKeyValueForObject,
-  createObject,
-} from 'src/app/shared/interface/share';
 import { AuthTokenService } from 'src/app/shared/auth/auth-token.service';
 @Component({
   selector: 'app-register',
@@ -61,17 +56,10 @@ export class RegisterComponent implements OnInit {
     return this.registerForm.get('confirmPass');
   }
   onSubmit() {
-    try {
-      var body = createObject(
-        createKeyValueForObject('email', this.email.value, Email),
-        createKeyValueForObject('password1', this.pass.value, Password),
-        createKeyValueForObject('password2', this.confirmPass.value, Password)
-      ) as { email: Email; password1: Password; password2: Password };
-    } catch (e) {
-      if (e instanceof Error) {
-        this.messageSer.createErrorMessage(e.message);
-        return;
-      }
+    let body = {
+      email:this.email.value,
+      password1:this.pass.value,
+      password2:this.confirmPass.value
     }
     this.http
       .post(`${e.api}/users/register/`, body, { observe: 'response' })

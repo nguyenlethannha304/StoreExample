@@ -1,4 +1,3 @@
-import { FactoryInterface } from './share';
 export interface TokenPair {
   access: AccessToken;
   refresh: RefreshToken;
