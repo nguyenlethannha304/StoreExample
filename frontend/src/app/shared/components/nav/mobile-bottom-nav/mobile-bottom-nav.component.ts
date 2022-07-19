@@ -6,6 +6,8 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ObjectUnsubscribedError } from 'rxjs';
 import { CartService } from 'src/app/carts/cart.service';
 import { renderIconToView } from 'src/app/shared/services/icons/icon-functions';
 import {
@@ -29,10 +31,18 @@ import { NavigateService } from 'src/app/shared/services/navigate/navigate.servi
 })
 export class MobileBottomNavComponent implements OnInit, AfterViewInit {
   cartCount: number = 0;
+  userInApp = {
+    home:false,
+    products:false,
+    orders:false,
+    carts:false,
+    users:false,
+  }
   constructor(
     public navi: NavigateService,
     private render: Renderer2,
-    public cartService: CartService
+    public cartService: CartService,
+    private router:Router,
   ) {}
   @ViewChild('homeContainer') homeContainer: ElementRef;
   @ViewChild('menuBarContainer') menuBarContainer: ElementRef;
@@ -43,6 +53,10 @@ export class MobileBottomNavComponent implements OnInit, AfterViewInit {
     this.cartService.cartCount$.subscribe(
       (cartCount) => (this.cartCount = cartCount)
     );
+
+    this.router.events.subscribe(value => {if (value instanceof NavigationEnd){
+      this.whereIsUser(value.url)
+    }})
   }
   ngAfterViewInit(): void {
     renderIconToView(
@@ -53,12 +67,26 @@ export class MobileBottomNavComponent implements OnInit, AfterViewInit {
       { icon: cartIcon, iconContainer: this.cartContainer },
       { icon: userIcon, iconContainer: this.userContainer }
     );
-    this.calculate_left_attribute_cartCount();
+    this.calculateCartCountPosition();
   }
-  calculate_left_attribute_cartCount() {
+  calculateCartCountPosition() {
     let cartCountContainer =
       this.cartContainer.nativeElement.parentNode.querySelector('.cart-count');
     cartCountContainer.style.right = `0px`;
     cartCountContainer.style.top = `-0.5rem`;
+  }
+  whereIsUser(url:string){
+    let urlArray = url.split('/')
+    this.changeUserInAppAttribute(urlArray[1])
+  }
+  changeUserInAppAttribute(inApp:string){
+    Object.keys(this.userInApp).forEach(key => {
+      this.userInApp[key as keyof typeof this.userInApp] = false
+    })
+    if(inApp == ''){
+      this.userInApp.home = true
+      return
+    }
+    this.userInApp[inApp as keyof typeof this.userInApp] = true
   }
 }

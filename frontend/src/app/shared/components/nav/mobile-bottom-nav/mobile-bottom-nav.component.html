@@ -1,8 +1,8 @@
-<div #homeContainer (click)="navi.navigateTo('home')"></div>
-<div #menuBarContainer (click)="navi.navigateTo('menuBar')" ></div>
-<div #orderTrackingContainer (click)="navi.navigateTo('orders:orderTracking')" class="ms-3" style="width: 16rem;"></div>
+<div #homeContainer [class.activated-app] = "userInApp.home" (click)="navi.navigateTo('home')"></div>
+<div #menuBarContainer [class.activated-app] = "userInApp.products"  (click)="navi.navigateTo('menuBar')" ></div>
+<div #orderTrackingContainer [class.activated-app] = "userInApp.orders"  (click)="navi.navigateTo('orders:orderTracking')" class="ms-3" style="width: 16rem;"></div>
 <div class="position-relative">
-    <div #cartContainer (click)="navi.navigateTo('carts')" ></div>
+    <div #cartContainer [class.activated-app] = "userInApp.carts"  (click)="navi.navigateTo('carts')" ></div>
     <div class="cart-count position-absolute d-flex align-items-center justify-content-center">{{cartCount}}</div>
 </div>
-<div #userContainer (click)="navi.navigateTo('users:panel')" ></div>
+<div #userContainer [class.activated-app] = "userInApp.users"  (click)="navi.navigateTo('users:panel')" ></div>

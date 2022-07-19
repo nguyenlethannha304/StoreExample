@@ -25,6 +25,10 @@ svg {
   fill: var(--bs-light);
   stroke-width: 0.25px;
 }
+.activated-app path, .activated-app svg, .activated-app polygon{
+  color: rgb(187, 187, 187) !important;
+  fill: rgb(187, 187, 187) !important;
+}
 .w-0 {
   width: 0;
 }
