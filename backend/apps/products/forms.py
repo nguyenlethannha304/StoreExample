@@ -77,7 +77,7 @@ class ProductModelForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ('name', 'slug', 'price', 'old_price', 'quantity',
+        fields = ('name', 'slug','rating', 'rating_count','price', 'old_price', 'quantity',
                   'image', 'thumbnail',  'description', 'type')
 
     class Media:

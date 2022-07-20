@@ -1,3 +1,4 @@
+HIDE_FIELD_LIST = ['field-thumbnail', ]
 document.onreadystatechange = () => {
     switch(document.readyState){
         case "interactive":
@@ -9,7 +10,7 @@ document.onreadystatechange = () => {
 }
 let setUp = () => {
     let productForm = document.getElementById('product_form')
-    let hideFieldClass = ['field-thumbnail', 'field-slug']
+    let hideFieldClass = HIDE_FIELD_LIST
     let fieldDivs = productForm.querySelectorAll('div')
     hideFieldClass.forEach(className => {
         fieldDivs.forEach(div => {

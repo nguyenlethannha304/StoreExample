@@ -1,6 +1,5 @@
 import uuid
 
-from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import models
 
 # Create your models here.
@@ -27,8 +26,7 @@ class Product(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     name = models.CharField(max_length=255)
     slug = models.CharField(max_length=255, blank=True)
-    rating = models.IntegerField(default=0,
-                                 validators=[MinLengthValidator(0), MaxLengthValidator(5)])
+    rating = models.IntegerField(default=0)
     rating_count = models.IntegerField(default=0)
     price = models.PositiveIntegerField()
     old_price = models.PositiveIntegerField()
