@@ -1,4 +1,8 @@
 export const environment = {
-  // Get from environment-template-prod
+    production: true,
+    django: 'http://192.168.0.109',
+    api: 'http://192.168.0.109/api',
+    accessTokenExpireIn: 5 * 60 * 1000, // 5 mins
+    refreshTokenExpireIn: 1 * 24 * 60 * 60 * 1000, // 1 days
   };
   

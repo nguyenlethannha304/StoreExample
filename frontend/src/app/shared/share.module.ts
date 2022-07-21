@@ -13,9 +13,9 @@ import { httpInterceptorProviders } from './interceptors';
 import { MessageComponent } from './components/message/message.component';
 import { CloseButtonDirective } from './directive/close-button.directive';
 import { SelectDirective } from './directive/form/select.directive';
-// import './extensions';
 import { CurrencyPipe } from './pipe/currency.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoadingIndicatorComponent } from './components/loading-indicator/loading-indicator.component';
 @NgModule({
   declarations: [
     MessageComponent,
@@ -30,6 +30,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     CloseButtonDirective,
     CurrencyPipe,
     SelectDirective,
+    LoadingIndicatorComponent,
   ],
   exports: [
     MessageComponent,
@@ -44,6 +45,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     CloseButtonDirective,
     CurrencyPipe,
     SelectDirective,
+    LoadingIndicatorComponent
   ],
   providers: [httpInterceptorProviders],
   imports: [CommonModule, HttpClientModule, ReactiveFormsModule],
