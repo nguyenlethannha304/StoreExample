@@ -14,6 +14,7 @@ import {
 } from 'src/app/shared/services/icons/icons';
 import { environment as e } from 'src/environments/environment';
 import { CartService } from 'src/app/carts/cart.service';
+import { debounceTime, Subject } from 'rxjs';
 @Component({
   selector: 'app-product-detail-render',
   templateUrl: './product-detail-render.component.html',
@@ -31,12 +32,28 @@ export class ProductDetailComponentRender implements OnInit, AfterViewInit {
   ) {}
   @ViewChild('stars') stars: ElementRef;
   ngOnInit(): void {
+    this.scrollLeft.pipe(debounceTime(50)).subscribe(value => {
+      this.calculateCurrentImageNumber(value);
+    })
   }
   ngAfterViewInit(): void {
     this.renderStars();
     if (this.product.description) {
       this.preProcessDescription();
     }
+  }
+  // IMAGE CONTAINER
+  @ViewChild('imageContainer') imageContainerRef:ElementRef;
+  scrollLeft:Subject<number> = new Subject<number>();
+  currentImageNumber:number =1 ;
+  emitScrollLeft(){
+    this.scrollLeft.next(this.imageContainerRef.nativeElement.scrollLeft)
+  }
+  calculateCurrentImageNumber(value:number){
+    this.currentImageNumber =  value/window.innerWidth + 1
+  }
+  calculateTotalImage(){
+    return this.product.sub_images.length + 1;
   }
   // CART SERVICE
   addToCart() {
