@@ -28,9 +28,11 @@ export type Product = {
   thumbnail: string;
   description: string;
   type: Type['id'];
-  sub_images: string[];
+  sub_images: SubImage[];
 };
-
+export type SubImage = {
+  image:string
+}
 type Rating = number;
 export type ProductCardList = {
   results: ProductCard[];

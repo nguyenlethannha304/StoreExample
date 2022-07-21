@@ -21,6 +21,7 @@ import { CartService } from 'src/app/carts/cart.service';
 })
 export class ProductDetailComponentRender implements OnInit, AfterViewInit {
   @Input() product: ProductDetail;
+  allImage:string[] = []
   public environment = e;
   purchaseQuantity: number = 1;
   constructor(
@@ -29,7 +30,8 @@ export class ProductDetailComponentRender implements OnInit, AfterViewInit {
     private cartService: CartService
   ) {}
   @ViewChild('stars') stars: ElementRef;
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
   ngAfterViewInit(): void {
     this.renderStars();
     if (this.product.description) {

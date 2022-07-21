@@ -1,12 +1,11 @@
 <div class="product-container" class="pt-2 pb-2 bg-white border-bottom border-dark mb-3">
     <!-- Image -->
-    <div id="image-container" class="d-flex p-0 m-0">
-        <!-- Contain images -->
-        <img src="{{environment.django}}{{product.image}}" alt="" *ngIf="product.image">
+    <div id="image-container" class="d-flex p-0 m-0 overflow-scroll">
+        <!-- Main image -->
+        <img src="{{environment.django}}{{product.image}}" alt="">
+        <!-- Sub image -->
+        <img *ngFor="let imageObject of product.sub_images" src="{{environment.django}}{{imageObject.image}}" alt="">
         <!-- Not images -->
-        <ng-template>
-            
-        </ng-template>
     </div>
     <!-- Product infor -->
     <div id="product-information" class="ps-2 pe-2">
