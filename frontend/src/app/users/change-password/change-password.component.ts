@@ -10,7 +10,7 @@ import {
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import {
   isPasswordValid,
-  isRequired,
+  required,
   isTwoPasswordSame,
 } from '../shared/validate/validate';
 import { environment as e } from 'src/environments/environment';
@@ -37,9 +37,9 @@ export class ChangePasswordComponent implements OnInit {
   @ViewChild('formErrorContainer') formErrorContainer: ElementRef;
   changePassForm: FormGroup = new FormGroup(
     {
-      oldPass: new FormControl('', [isRequired(),isPasswordValid()]),
-      newPass: new FormControl('', [isRequired(),isPasswordValid()]),
-      confirmPass: new FormControl('', [isRequired(),isPasswordValid()]),
+      oldPass: new FormControl('', [required(),isPasswordValid()]),
+      newPass: new FormControl('', [required(),isPasswordValid()]),
+      confirmPass: new FormControl('', [required(),isPasswordValid()]),
     },
     isTwoPasswordSame('newPass', 'confirmPass')
   );

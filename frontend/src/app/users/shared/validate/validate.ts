@@ -38,12 +38,12 @@ export const isTwoPasswordSame = (
     return null;
   };
 };
-export const isRequired = ():ValidatorFn => {
+export const required = ():ValidatorFn => {
   return (control:AbstractControl):ValidationErrors | null => {
     if(control.value !== ""){
       return null
     }
-    return {required: "Không được bỏ trống mục này"}
+    return {required: "Vui lòng điền thông tin vào mục này"}
   }
 }
 export const isEmailValid = (): ValidatorFn => {

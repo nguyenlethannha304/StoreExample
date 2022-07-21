@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { isPhoneNumberValid, isRequired } from 'src/app/users/shared/validate/validate';
+import { isPhoneNumberValid, required } from 'src/app/users/shared/validate/validate';
 import { OrderTrackingInformation } from '../orders';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -56,7 +56,7 @@ export class OrderTrackingComponent implements OnInit {
     });
   }
   orderTrackingForm = this.fb.group({
-    order_id: this.fb.control('', isRequired()),
+    order_id: this.fb.control('', required()),
     phone_number: this.fb.control('', [isPhoneNumberValid()]),
   });
   changeAddressToggle() {
