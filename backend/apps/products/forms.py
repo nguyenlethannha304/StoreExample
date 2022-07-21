@@ -26,6 +26,8 @@ def crop_image_to_square(image_field, field_name='image'):
             return image_field
         output_image = io.BytesIO()
         im = _crop_image_to_ratio(im, 1, 1)
+        if ext == 'jpg':
+            ext = 'jpeg'
         im.save(output_image, format=ext)
     return image_field.__class__(output_image, field_name, image_field.name, image_field.content_type, output_image.__sizeof__(), image_field.charset, image_field.content_type_extra)
 

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from .forms import ProductModelForm
+from .forms import ProductModelForm, SubImageForm
 from .models import Category, Product, SubImage, Type
 
 # Register your models here.
@@ -20,6 +20,7 @@ class TypeAdmin(admin.ModelAdmin):
 
 class ProductImageInline(admin.TabularInline):
     model = SubImage
+    form = SubImageForm
 
 
 @admin.register(Product)
