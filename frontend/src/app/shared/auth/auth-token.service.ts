@@ -65,11 +65,10 @@ export class AuthTokenService implements AuthPublisher {
           this.refreshToken = body.refresh;
           this.logInNotify();
           this.redirectURL = redirect;
+          this.router.navigateByUrl(this.redirectURL);
         },
         error: (errors) => {
           errorShownFunc(errors);
-        },
-        complete: () => {
         },
       });
   };
