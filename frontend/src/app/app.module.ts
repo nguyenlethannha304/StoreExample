@@ -27,6 +27,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     OrdersModule,
     ReactiveFormsModule,
   ],
+  providers:[
+    httpInterceptorProviders
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

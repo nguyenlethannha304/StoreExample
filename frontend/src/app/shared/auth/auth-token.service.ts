@@ -70,7 +70,6 @@ export class AuthTokenService implements AuthPublisher {
           errorShownFunc(errors);
         },
         complete: () => {
-          this.router.navigateByUrl(this.redirectURL);
         },
       });
   };
