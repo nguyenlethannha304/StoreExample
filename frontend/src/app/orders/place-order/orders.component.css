@@ -7,7 +7,7 @@
 }
 /* CART-INFOR */
 .order-information {
-    color:hsl(var(--cl-green-light));
+    color:hsl(var(--cl-primary-color));
 }
 /* ADDRESS */
 form > * {

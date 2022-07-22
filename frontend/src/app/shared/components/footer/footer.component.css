@@ -1,6 +1,6 @@
 :host {
   display: block;
-  background-color: hsl(var(--cl-green-light));
+  background-color: hsl(var(--cl-primary-color));
   color: white;
   padding: 1rem 1rem 1rem 1rem;
   min-height: 40vh;

@@ -1,12 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
-  --cl-blue-light: 210, 100%, 52%;
-  --cl-blue: 210, 100%, 50%;
-  --cl-background: var(--cl-green-dark);
-  --cl-light: var(--cl-blue);
   --cl-green-dark: 144, 55%, 29%;
   --cl-green-light: 140, 58%, 38%;
   --cl-green-normal: 140, 47%, 39%;
+  --cl-primary-color:var(--cl-green-light);
+  --cl-secondary-color:var(--cl-green-dark);
 }
 body {
   background-color: var(--bs-gray-200);
@@ -40,14 +38,11 @@ svg {
   height: 0;
 }
 /* Colors */
-.color-cl-green-light {
-  color:hsl(var(--cl-green-light));
-}
 .primary-color {
   color: hsl(var(--cl-green-light));
 }
-.primary-background-color {
-background-color: hsl(var(--cl-green-dark));
+.secondary-color {
+  color:hsl(var(--cl-green-dark))
 }
 /************ 
 FORM SECTION
@@ -74,7 +69,7 @@ FORM SECTION
 .input-container > label {
   display: block;
   font-weight: 500;
-  color: hsl(var(--cl-green-light));
+  color: hsl(var(--cl-primary-color));
 }
 .error {
   color: rgba(var(--bs-danger-rgb), 0.9);
@@ -85,8 +80,8 @@ FORM SECTION
 }
 .input-custom {
   border: 1px solid;
-  border-color: hsl(var(--cl-green-light));
-  color: hsl(var(--cl-green-light), 0.7);
+  border-color: hsl(var(--cl-primary-color));
+  color: hsl(var(--cl-primary-color), 0.7);
   border-radius: 0.3rem;
   font-size: 1rem;
   text-indent: 0.5rem;
@@ -103,15 +98,15 @@ FORM SECTION
   width: 7rem;
 }
 .button-custom.primary {
-  background-color: hsl(var(--cl-green-light));
+  background-color: hsl(var(--cl-primary-color));
   color: var(--bs-white);
 }
 .button-custom.primary:hover {
-  background-color: hsl(var(--cl-green-light), 0.7);
+  background-color: hsl(var(--cl-primary-color), 0.7);
 }
 .button-custom.secondary {
   background-color: var(--bs-white);
-  color: hsl(var(--cl-green-light));
+  color: hsl(var(--cl-primary-color));
 }
 .button-custom.secondary:hover {
   background-color: var(--bs-gray-200);

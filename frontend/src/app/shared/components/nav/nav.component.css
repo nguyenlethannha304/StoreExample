@@ -1,5 +1,5 @@
 #nav-bar {
-  background-color: hsl(var(--cl-background));
+  background-color: hsl(var(--cl-secondary-color));
 }
 #search-form-container {
   height: 3.5rem;
