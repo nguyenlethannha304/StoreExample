@@ -15,12 +15,6 @@ backend/apps/static/image
 frontend/node_modules/
 frontend/dist/
 
-# Blue_print
-/blue_print
-# !/Blue_print/mobile.xd
-# !/Blue_print/web.xd
-# !/Blue_print/icons/
-
 # Nginx
 /nginx/frontend
 /nginx/static
