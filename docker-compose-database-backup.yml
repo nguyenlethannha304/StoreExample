@@ -1,0 +1,11 @@
+version: '3'
+services:
+  ubuntu:
+    build:
+      context: .
+      dockerfile: ./compose/database-backup/Dockerfile
+    volumes:
+      - postgres_db:/src/db
+      - ./compose/database-backup/backup:/src/backup
+volumes:
+  postgres_db:
