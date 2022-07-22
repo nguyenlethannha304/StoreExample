@@ -1,4 +1,5 @@
 .image-container {
+    margin-top: 0.25rem;
     width: 80%;
 }
 .image-container > img {
