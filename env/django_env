@@ -1,7 +1,7 @@
 # General
 # ------------------------------------------------------------------------------
 # DJANGO
-DJ_DEBUG='False'
+DJ_DEBUG='True'
 DJ_SETTINGS_MODULE="backend.settings.production"
 DJ_SECRET_KEY=")qk%_6y(a60lebk8d7xeg_6izplh71y(m@5hbz^^338w6m8s-!"
 DJ_ALLOWED_HOSTS="127.0.0.1,0.0.0.0"
