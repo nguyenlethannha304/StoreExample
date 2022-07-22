@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  imageHost: '',
   django: 'http://127.0.0.1:8000',
   api: 'http://127.0.0.1:8000/api',
   accessTokenExpireIn: 60 * 60 * 1000, // 60 mins

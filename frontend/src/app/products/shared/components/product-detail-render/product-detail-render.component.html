@@ -2,9 +2,9 @@
     <!-- Image -->
     <div #imageContainer id="image-container" class="d-flex p-0 m-0 overflow-scroll" (scroll)="emitScrollLeft()">
         <!-- Main image -->
-        <img src="{{environment.django}}{{product.image}}" alt="">
+        <img src="{{environment.imageHost}}{{product.image}}" alt="">
         <!-- Sub image -->
-        <img *ngFor="let imageObject of product.sub_images" src="{{environment.django}}{{imageObject.image}}" alt="">
+        <img *ngFor="let imageObject of product.sub_images" src="{{environment.imageHost}}{{imageObject.image}}" alt="">
         <!-- Not images -->
     </div>
     <div class="imageCount position-absolute">

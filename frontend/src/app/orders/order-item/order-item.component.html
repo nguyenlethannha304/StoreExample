@@ -1,6 +1,6 @@
 <div class="thumbnail-container position-relative me-3" style="height:4rem;width: 4rem;">
     <div class="quantity position-absolute d-flex align-items-center bg-secondary text-white p-1 rounded-pill" style="top:-0.75rem; right:-0.75rem; height:1.5rem"><p class="m-0 p-0">{{orderItem.quantity}}</p></div>
-    <img src="{{env.django}}{{orderItem.product.thumbnail}}" alt="" style="width: 100%; height:100%;">
+    <img src="{{env.imageHost}}{{orderItem.product.thumbnail}}" alt="" style="width: 100%; height:100%;">
 </div>
 <h6 class="name m-0 text-capitalize" style="height:50%">{{orderItem.product.name}}</h6>
 <div class="price m-0 fw-bold ms-auto">{{getPrice() | currency}}</div>
