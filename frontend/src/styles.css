@@ -2,7 +2,11 @@
 :root {
   --cl-blue-light: 210, 100%, 52%;
   --cl-blue: 210, 100%, 50%;
-  --cl-background: var(--cl-blue-light);
+  --cl-background: var(--cl-green-dark);
+  --cl-light: var(--cl-blue);
+  --cl-green-dark: 144, 55%, 29%;
+  --cl-green-light: 140, 58%, 38%;
+  --cl-green-normal: 140, 47%, 39%;
 }
 body {
   background-color: var(--bs-gray-200);
@@ -36,23 +40,14 @@ svg {
   height: 0;
 }
 /* Colors */
-.color-cl-blue-light {
-  color: hsl(var(--cl-blue-light));
-}
-.color-cl-blue {
-  color: hsl(var(--cl-blue));
-}
-.background-cl-blue-light {
-  background-color: hsl(var(--cl-blue-light));
-}
-.background-cl-blue {
-  background-color: hsl(var(--cl-blue));
+.color-cl-green-light {
+  color:hsl(var(--cl-green-light));
 }
 .primary-color {
-  color: hsl(var(--cl-blue));
+  color: hsl(var(--cl-green-light));
 }
 .primary-background-color {
-background-color: hsl(var(--cl-blue));
+background-color: hsl(var(--cl-green-dark));
 }
 /************ 
 FORM SECTION
@@ -79,7 +74,7 @@ FORM SECTION
 .input-container > label {
   display: block;
   font-weight: 500;
-  color: hsl(var(--cl-blue-light));
+  color: hsl(var(--cl-green-light));
 }
 .error {
   color: rgba(var(--bs-danger-rgb), 0.9);
@@ -90,8 +85,8 @@ FORM SECTION
 }
 .input-custom {
   border: 1px solid;
-  border-color: hsl(var(--cl-blue-light));
-  color: hsl(var(--cl-blue-light), 0.7);
+  border-color: hsl(var(--cl-green-light));
+  color: hsl(var(--cl-green-light), 0.7);
   border-radius: 0.3rem;
   font-size: 1rem;
   text-indent: 0.5rem;
@@ -108,15 +103,15 @@ FORM SECTION
   width: 7rem;
 }
 .button-custom.primary {
-  background-color: hsl(var(--cl-blue-light));
+  background-color: hsl(var(--cl-green-light));
   color: var(--bs-white);
 }
 .button-custom.primary:hover {
-  background-color: hsl(var(--cl-blue-light), 0.7);
+  background-color: hsl(var(--cl-green-light), 0.7);
 }
 .button-custom.secondary {
   background-color: var(--bs-white);
-  color: hsl(var(--cl-blue-light));
+  color: hsl(var(--cl-green-light));
 }
 .button-custom.secondary:hover {
   background-color: var(--bs-gray-200);

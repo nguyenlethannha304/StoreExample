@@ -1,5 +1,5 @@
 #title {
-    color: hsl(var(--cl-blue));
+    color: hsl(var(--cl-green-normal));
 }
 .order-information {
     display: flex;

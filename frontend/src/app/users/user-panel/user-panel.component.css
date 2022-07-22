@@ -3,7 +3,7 @@ div {
 }
 #user-infor {
   height: 5.75rem;
-  background-color: hsl(var(--cl-blue-light), 0.4);
+  background-color: hsl(var(--cl-green-light), 0.4);
   padding: 0.5rem 2rem;
 }
 #avatar {
@@ -19,7 +19,7 @@ div {
 .panel-row {
   display: flex;
   align-items: center;
-  background-color: hsl(var(--cl-blue-light), 0.3);
+  background-color: hsl(var(--cl-green-light), 0.3);
   height: 10vh;
 }
 .panel-row p {
@@ -28,5 +28,5 @@ div {
   text-align: center;
 }
 #logout {
-  background-color: hsl(var(--cl-blue-light), 0.4);
+  background-color: hsl(var(--cl-green-light), 0.4);
 }
