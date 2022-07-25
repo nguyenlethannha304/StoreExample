@@ -20,7 +20,6 @@ export class NetworkError5xxInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    console.log(this.router.events)
     return next.handle(request).pipe(catchError((error) => {
       if(error['status'] >= 500){
         this.messageService.createErrorMessage("Máy chủ bị lỗi vui lòng thử lại sau", 5)

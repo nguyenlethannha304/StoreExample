@@ -16,5 +16,5 @@ export const httpInterceptorProviders = [
     useClass: NetworkError5xxInterceptor,
     multi: true,
   }, //Dealing with Response.status = 5xx
-  // {provide:HTTP_INTERCEPTORS, useClass:LoadingInterceptor, multi:true}
+  {provide:HTTP_INTERCEPTORS, useClass:LoadingInterceptor, multi:true} // Show loading symbol on screen
 ];

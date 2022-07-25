@@ -1,1 +1,2 @@
-<div class="lds-dual-ring" *ngIf="loadingService.isLoading$ | async"></div>
+<!-- If isLoading or isResolve true => Show component -->
+<div class="lds-dual-ring" *ngIf="(loadingService.isLoading$ | async)"></div>
