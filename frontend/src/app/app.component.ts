@@ -13,7 +13,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): void {
     if(window.innerWidth > 576){
-      this.messageService.createErrorMessage("Trang web chỉ hỗ trợ điện thoại", 30)
+      this.messageService.createErrorWithShadowMessage("Trang web chỉ hỗ trợ điện thoại", 30, null, {isBoxShadowShown:true, boxShadowDestroyMessage:false})
     }
   }
 }
