@@ -1,7 +1,3 @@
 #! /bin/bash
 
-cp -r /src/frontend /var/www/
-
-cp -r /src/static /var/www/
-
 exec "$@"
