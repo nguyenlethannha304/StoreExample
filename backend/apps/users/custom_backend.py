@@ -10,11 +10,11 @@ UserModel = get_user_model()
 class PhoneAuthenticateBackend(ModelBackend):
     def authenticate(self, request, phone, password, **kwargs):
         if phone is None or password is None:
-            return
+            return None
         try:
             user = UserModel.objects.get(phone=phone)
         except UserModel.DoesNotExist:
-            UserModel().set_password(password)
+            return None
         else:
             if user.check_password(password) and self.user_can_authenticate(user):
                 return user
@@ -23,11 +23,11 @@ class PhoneAuthenticateBackend(ModelBackend):
 class EmailAuthenticateBackend(ModelBackend):
     def authenticate(self, request, email, password, **kwargs):
         if email is None or password is None:
-            return
+            return None
         try:
             user = UserModel.objects.get(email=email)
         except UserModel.DoesNotExist:
-            UserModel.set_password(password)
+            return None
         else:
             if user.check_password(password) and self.user_can_authenticate(user):
                 return user
