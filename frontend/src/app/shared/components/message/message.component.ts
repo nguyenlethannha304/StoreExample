@@ -24,7 +24,7 @@ export class MessageComponent implements OnInit {
   actionFunction: Function = null;
   // boxShadow atributes
   isBoxShadowShown: boolean;
-  boxShadowDestroMessage: boolean;
+  boxShadowDestroyMessage: boolean;
   // Time out for destroy message
   destroyMessageTimeOut: null | ReturnType<typeof setTimeout> = null;
   constructor(
@@ -111,8 +111,8 @@ export class MessageComponent implements OnInit {
     this.actionFunction = actionFunction;
   }
   setGeneral() {
-    this.boxShadowDestroMessage =
-      this.message.messageOptions['boxShadowDestroMessage'];
+    this.boxShadowDestroyMessage =
+      this.message.messageOptions['boxShadowDestroyMessage'];
     this.isBoxShadowShown = this.message.messageOptions['isBoxShadowShown'];
   }
   //

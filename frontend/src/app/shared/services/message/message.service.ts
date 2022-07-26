@@ -24,6 +24,9 @@ export class MessageService {
   createErrorMessage(content: string, duration: number = 2) {
     this.messageFactoryMethod(content, 40, duration);
   }
+  createErrorWithShadowMessage(content:string, duration:number=2, actionFunction:Function=null, options:MessageOptions={isBoxShadowShown:true, boxShadowDestroyMessage:true}){
+    this.messageFactoryMethod(content, 40, duration, actionFunction, options)
+  }
   createConfirmMessage(content: string, actionFunction: Function) {
     this.messageFactoryMethod(content, 21, 3600, actionFunction, {
       isBoxShadowShown: true,
