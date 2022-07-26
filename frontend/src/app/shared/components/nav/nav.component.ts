@@ -37,4 +37,7 @@ export class NavComponent implements AfterViewInit {
     let searchValue = this.searchForm.get('searchInput').value;
     this.router.navigate(['products', 'search', searchValue]);
   }
+  navigateToHomePage(){
+    this.router.navigateByUrl('/')
+  }
 }
