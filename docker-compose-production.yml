@@ -7,6 +7,11 @@ services:
       file: docker-compose-base.yml
       service: django
     command: /compose/start
+    env_file:
+      - ./env/host_env
+      - ./env/django_env
+      - ./env/post_env
+      - ./env/prod/django_prod_env
     depends_on:
       - postgres
   # POSTGRES
