@@ -32,7 +32,7 @@ export class ProductDetailComponentRender implements OnInit, AfterViewInit {
   ) {}
   @ViewChild('stars') stars: ElementRef;
   ngOnInit(): void {
-    this.scrollLeft.pipe(debounceTime(50)).subscribe(value => {
+    this.scrollLeft.pipe(debounceTime(100)).subscribe(value => {
       this.calculateCurrentImageNumber(value);
     })
   }
@@ -50,7 +50,7 @@ export class ProductDetailComponentRender implements OnInit, AfterViewInit {
     this.scrollLeft.next(this.imageContainerRef.nativeElement.scrollLeft)
   }
   calculateCurrentImageNumber(value:number){
-    this.currentImageNumber =  value/window.innerWidth + 1
+    this.currentImageNumber = Math.floor(value/window.innerWidth + 1)
   }
   calculateTotalImage(){
     return this.product.sub_images.length + 1;
